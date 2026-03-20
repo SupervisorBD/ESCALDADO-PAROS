@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,26 +12,23 @@
 
 <style>
 :root{
-  --bg:#0A1624;
-  --bg-2:#07111A;
-  --panel:#102235;
-  --panel-2:#0C1826;
-  --panel-3:#08101A;
-  --line:#284055;
-  --line-2:#35506A;
-  --text:#FFFFFF;
-  --muted:#C9D5E2;
-  --muted-2:#92A4B7;
+  --bg:#07111B;
+  --bg2:#0B1522;
+  --panel:#0F2032;
+  --panel2:#0C1826;
+  --panel3:#08101A;
+  --line:#264055;
+  --line2:#35506A;
+  --text:#F8FBFF;
+  --muted:#C7D4E1;
+  --muted2:#93A7B9;
   --blue:#2563EB;
-  --blue-2:#3B82F6;
+  --blue2:#3B82F6;
   --orange:#F59E0B;
-  --orange-2:#F97316;
+  --orange2:#F97316;
   --yellow:#FACC15;
   --green:#22C55E;
   --red:#EF4444;
-  --soft-red:rgba(239,68,68,.14);
-  --soft-orange:rgba(249,115,22,.14);
-  --soft-blue:rgba(59,130,246,.14);
   --shadow:0 18px 40px rgba(0,0,0,.28);
   --radius:18px;
 }
@@ -41,17 +39,15 @@ body{
   margin:0;
   font-family:"Segoe UI", Arial, sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(245,158,11,.07), transparent 30%),
-    radial-gradient(circle at top right, rgba(59,130,246,.08), transparent 28%),
-    linear-gradient(180deg, var(--bg), var(--bg-2));
+    radial-gradient(circle at top left, rgba(59,130,246,.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(245,158,11,.08), transparent 28%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
   color:var(--text);
 }
 
 .hidden{ display:none !important; }
-
-button, input, select{
-  font:inherit;
-}
+button, input, select{ font:inherit; }
+input, select{ outline:none; }
 
 .login-wrap{
   min-height:100vh;
@@ -61,8 +57,8 @@ button, input, select{
 }
 
 .login-card{
-  width:min(430px, 100%);
-  background:linear-gradient(180deg, rgba(16,34,53,.98), rgba(12,24,38,.98));
+  width:min(480px, 100%);
+  background:linear-gradient(180deg, rgba(16,34,53,.98), rgba(10,19,30,.98));
   border:1px solid rgba(255,255,255,.06);
   border-radius:24px;
   box-shadow:var(--shadow);
@@ -73,24 +69,21 @@ button, input, select{
   display:flex;
   gap:14px;
   align-items:center;
-  margin-bottom:22px;
+  margin-bottom:20px;
 }
-
 .brand-mark{
-  width:46px;
-  height:46px;
-  border-radius:14px;
+  width:48px;
+  height:48px;
+  border-radius:15px;
   background:linear-gradient(135deg, var(--blue), var(--orange));
   box-shadow:0 10px 22px rgba(59,130,246,.22);
   flex:0 0 auto;
 }
-
 .brand h1{
   margin:0;
-  font-size:1.1rem;
+  font-size:1.12rem;
   line-height:1.2;
 }
-
 .brand p{
   margin:4px 0 0;
   color:var(--muted);
@@ -98,14 +91,12 @@ button, input, select{
 }
 
 .field{ margin-top:14px; }
-
 label{
   display:block;
   margin:0 0 8px;
   color:var(--muted);
   font-size:.9rem;
 }
-
 .input, .select{
   width:100%;
   border:1px solid var(--line);
@@ -113,13 +104,11 @@ label{
   color:var(--text);
   border-radius:12px;
   padding:11px 13px;
-  outline:none;
   transition:.18s ease;
   font-size:.95rem;
 }
-
 .input:focus, .select:focus{
-  border-color:rgba(245,158,11,.85);
+  border-color:rgba(245,158,11,.9);
   box-shadow:0 0 0 3px rgba(245,158,11,.12);
 }
 
@@ -131,9 +120,8 @@ label{
   cursor:pointer;
   transition:.2s ease;
 }
-
 .btn:hover{ transform:translateY(-1px); }
-.btn-primary{ background:linear-gradient(135deg, var(--orange-2), #fb923c); color:#fff; }
+.btn-primary{ background:linear-gradient(135deg, var(--orange2), #fb923c); color:#fff; }
 .btn-secondary{ background:linear-gradient(135deg, var(--yellow), #fde047); color:#111827; }
 .btn-danger{ background:#f87171; color:#111827; }
 .btn-ghost{
@@ -142,8 +130,13 @@ label{
   border:1px solid var(--line);
 }
 .btn-blue{
-  background:linear-gradient(135deg, var(--blue), var(--blue-2));
+  background:linear-gradient(135deg, var(--blue), var(--blue2));
   color:#fff;
+}
+.btn-soft{
+  background:rgba(255,255,255,.05);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.08);
 }
 
 .helper{
@@ -153,11 +146,18 @@ label{
   margin-top:14px;
 }
 
-/* APP */
+.password-panel{
+  margin-top:14px;
+  padding:14px;
+  border-radius:18px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+}
+
 .app{
   min-height:100vh;
   display:grid;
-  grid-template-columns:300px 1fr;
+  grid-template-columns:290px 1fr;
 }
 
 .sidebar{
@@ -177,14 +177,12 @@ label{
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.05);
 }
-
 .user-name{
   margin:0 0 6px;
-  font-size:1.02rem;
-  font-weight:800;
+  font-size:1.04rem;
+  font-weight:900;
   word-break:break-word;
 }
-
 .user-meta{
   margin:0;
   color:var(--muted);
@@ -196,7 +194,6 @@ label{
   display:grid;
   gap:10px;
 }
-
 .nav button{
   width:100%;
   text-align:left;
@@ -208,7 +205,6 @@ label{
   cursor:pointer;
   font-weight:700;
 }
-
 .nav button.active{
   border-color:rgba(245,158,11,.7);
   background:linear-gradient(135deg, rgba(245,158,11,.16), rgba(59,130,246,.08));
@@ -218,25 +214,27 @@ label{
   padding:20px;
 }
 
+.page-shell{
+  max-width:1640px;
+  margin:0 auto;
+}
+
 .topbar{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
   gap:14px;
   flex-wrap:wrap;
-  margin-bottom:16px;
+  margin-bottom:14px;
 }
-
 .title h2{
   margin:0;
-  font-size:1.35rem;
+  font-size:1.45rem;
 }
-
 .title p{
   margin:6px 0 0;
   color:var(--muted);
 }
-
 .pill{
   display:inline-flex;
   align-items:center;
@@ -249,59 +247,115 @@ label{
   font-size:.92rem;
 }
 
-.kpis{
-  display:grid;
-  grid-template-columns:repeat(4, minmax(0, 1fr));
-  gap:14px;
+.quickbar{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
   margin-bottom:16px;
 }
+.quickbar .spacer{ flex:1 1 auto; }
+.chip{
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  border-radius:999px;
+  padding:9px 13px;
+  font-weight:700;
+  cursor:pointer;
+}
+.chip.active{
+  border-color:rgba(245,158,11,.7);
+  background:linear-gradient(135deg, rgba(245,158,11,.16), rgba(59,130,246,.08));
+}
 
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(6, minmax(0, 1fr));
+  gap:12px;
+  margin-bottom:12px;
+}
 .kpi{
   background:linear-gradient(180deg, rgba(16,34,53,.95), rgba(12,24,38,.95));
   border:1px solid rgba(255,255,255,.06);
   border-radius:20px;
-  padding:16px;
+  padding:15px;
   box-shadow:var(--shadow);
-  min-height:104px;
+  min-height:110px;
   position:relative;
   overflow:hidden;
 }
-
 .kpi::after{
   content:"";
   position:absolute;
   right:-18px;
   bottom:-18px;
-  width:88px;
-  height:88px;
+  width:92px;
+  height:92px;
   border-radius:999px;
-  background:radial-gradient(circle, rgba(245,158,11,.16), transparent 65%);
+  background:radial-gradient(circle, rgba(59,130,246,.18), transparent 65%);
 }
-
-.kpi.alert::after{
-  background:radial-gradient(circle, rgba(239,68,68,.2), transparent 65%);
-}
-
-.kpi.good::after{
-  background:radial-gradient(circle, rgba(34,197,94,.18), transparent 65%);
-}
-
+.kpi.orange::after{ background:radial-gradient(circle, rgba(245,158,11,.18), transparent 65%); }
+.kpi.green::after{ background:radial-gradient(circle, rgba(34,197,94,.18), transparent 65%); }
+.kpi.red::after{ background:radial-gradient(circle, rgba(239,68,68,.18), transparent 65%); }
 .kpi .label{
   color:var(--muted);
   font-size:.86rem;
   margin-bottom:8px;
 }
-
 .kpi .value{
-  font-size:1.9rem;
+  font-size:1.95rem;
   font-weight:900;
   letter-spacing:-.02em;
 }
-
 .kpi .sub{
   margin-top:6px;
-  color:var(--muted-2);
+  color:var(--muted2);
   font-size:.82rem;
+}
+
+.insights{
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:12px;
+  margin-bottom:16px;
+}
+.insight{
+  border-radius:18px;
+  padding:14px;
+  background:linear-gradient(180deg, rgba(16,34,53,.94), rgba(10,19,30,.96));
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:var(--shadow);
+}
+.insight .label{
+  color:var(--muted);
+  font-size:.85rem;
+  margin-bottom:6px;
+}
+.insight .value{
+  font-size:1.35rem;
+  font-weight:900;
+}
+.insight .sub{
+  margin-top:6px;
+  color:var(--muted2);
+  font-size:.82rem;
+  line-height:1.35;
+}
+
+.section{ margin-top:16px; display:none; }
+.section.active{ display:block; }
+
+.panel{
+  background:linear-gradient(180deg, rgba(16,34,53,.95), rgba(10,19,30,.95));
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  padding:16px;
+}
+.panel h3{
+  margin:0 0 14px;
+  font-size:1.02rem;
 }
 
 .layout{
@@ -310,34 +364,17 @@ label{
   gap:16px;
   align-items:start;
 }
-
-.panel{
-  background:linear-gradient(180deg, rgba(16,34,53,.95), rgba(12,24,38,.95));
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:22px;
-  box-shadow:var(--shadow);
-  padding:16px;
-}
-
-.panel h3{
-  margin:0 0 14px;
-  font-size:1.02rem;
-}
-
 .stack{ display:grid; gap:12px; }
-
 .row{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:12px;
 }
-
 .actions{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
 }
-
 .actions .btn{
   width:auto;
   min-width:136px;
@@ -352,16 +389,14 @@ label{
   overflow:auto;
   border-radius:18px;
   border:1px solid rgba(255,255,255,.06);
-  margin-top:12px;
   background:rgba(7,17,27,.52);
 }
 
 table{
   width:100%;
-  min-width:1180px;
+  min-width:1620px;
   border-collapse:collapse;
 }
-
 thead th{
   position:sticky;
   top:0;
@@ -370,13 +405,12 @@ thead th{
   color:#E7F0F8;
   text-transform:uppercase;
   letter-spacing:.045em;
-  font-size:.76rem;
+  font-size:.75rem;
   text-align:left;
   padding:11px 10px;
   border-bottom:1px solid rgba(255,255,255,.08);
   white-space:nowrap;
 }
-
 tbody td{
   padding:9px 10px;
   border-bottom:1px solid rgba(255,255,255,.06);
@@ -384,32 +418,14 @@ tbody td{
   font-size:.9rem;
   white-space:nowrap;
 }
-
 tbody tr:hover{ background:rgba(255,255,255,.03); }
-
 tfoot td{
-  padding:10px 10px;
-  font-weight:800;
+  padding:11px 10px;
+  font-weight:900;
   border-top:1px solid rgba(255,255,255,.14);
   background:linear-gradient(180deg, rgba(35,43,52,.92), rgba(22,30,40,.96));
   white-space:nowrap;
 }
-
-.table-actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
-.table-actions .btn{
-  padding:7px 10px;
-  border-radius:10px;
-  font-size:.78rem;
-  min-width:auto;
-}
-
-.section{ display:none; }
-.section.active{ display:block; }
 
 .badge{
   display:inline-flex;
@@ -420,24 +436,106 @@ tfoot td{
   font-weight:800;
   border:1px solid transparent;
 }
-
 .badge.admin{
   background:rgba(37,99,235,.16);
   color:#dce8ff;
   border-color:rgba(37,99,235,.36);
 }
-
 .badge.operador{
   background:rgba(34,197,94,.14);
   color:#dfffea;
   border-color:rgba(34,197,94,.32);
 }
-
 .badge.disabled{
   background:rgba(239,68,68,.14);
   color:#ffe0e0;
   border-color:rgba(239,68,68,.32);
 }
+.badge.warn{
+  background:rgba(250,204,21,.14);
+  color:#fff4bf;
+  border-color:rgba(250,204,21,.32);
+}
+
+.table-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.table-actions .btn{
+  padding:7px 10px;
+  border-radius:10px;
+  font-size:.78rem;
+  min-width:auto;
+}
+
+.chart-grid{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:16px;
+}
+.chart-box{
+  height:300px;
+  padding:12px;
+  border-radius:18px;
+  background:rgba(7,17,27,.5);
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.summary-controls{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.summary-controls .btn.active{
+  outline:2px solid rgba(245,158,11,.35);
+  box-shadow:0 0 0 3px rgba(245,158,11,.08);
+}
+
+.dryer-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:12px;
+  margin-bottom:14px;
+}
+.dryer-card{
+  border-radius:18px;
+  padding:14px;
+  background:linear-gradient(180deg, rgba(16,34,53,.94), rgba(10,19,30,.96));
+  border:1px solid rgba(255,255,255,.06);
+}
+.dryer-card .head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+.dryer-card .name{
+  font-weight:900;
+  font-size:1rem;
+}
+.dryer-card .big{
+  font-size:1.5rem;
+  font-weight:900;
+  margin:0;
+}
+.dryer-card .tiny{
+  color:var(--muted2);
+  font-size:.82rem;
+  margin-top:6px;
+  line-height:1.4;
+}
+.status-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  display:inline-block;
+}
+.status-ok{ background:var(--green); }
+.status-warn{ background:var(--yellow); }
+.status-bad{ background:var(--red); }
 
 .user-admin-card{
   margin-top:16px;
@@ -446,7 +544,6 @@ tfoot td{
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.06);
 }
-
 .user-item{
   display:grid;
   grid-template-columns:1.2fr .8fr .8fr 1fr auto;
@@ -467,7 +564,6 @@ tfoot td{
   cursor:pointer;
   flex:0 0 auto;
 }
-
 .switch::after{
   content:"";
   position:absolute;
@@ -479,9 +575,8 @@ tfoot td{
   background:#fff;
   transition:.2s ease;
 }
-
 .switch.on{
-  background:linear-gradient(135deg, var(--orange-2), var(--yellow));
+  background:linear-gradient(135deg, var(--orange2), var(--yellow));
 }
 .switch.on::after{ left:23px; }
 
@@ -493,117 +588,49 @@ tfoot td{
   font-size:.9rem;
 }
 
-.chart-box{
-  height:260px;
-  margin-top:12px;
-  padding:12px;
-  border-radius:18px;
-  background:rgba(7,17,27,.5);
-  border:1px solid rgba(255,255,255,.06);
+.small-note{
+  color:var(--muted2);
+  font-size:.82rem;
+  line-height:1.45;
+  margin-top:10px;
 }
 
-.panel .input, .panel .select{
-  padding:10px 12px;
-  border-radius:11px;
-  font-size:.93rem;
-}
-.panel .btn{
-  padding:10px 13px;
-}
-
-.summary-controls{
+.filter-strip{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
+  align-items:center;
   margin-bottom:12px;
 }
-
-.summary-controls .btn.active{
-  outline:2px solid rgba(245,158,11,.35);
-  box-shadow:0 0 0 3px rgba(245,158,11,.08);
+.filter-strip .tag{
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  border-radius:999px;
+  padding:8px 12px;
+  cursor:pointer;
+  font-weight:700;
+}
+.filter-strip .tag.active{
+  border-color:rgba(245,158,11,.72);
+  background:linear-gradient(135deg, rgba(245,158,11,.16), rgba(59,130,246,.08));
 }
 
-.compact-note{
-  color:var(--muted-2);
-  font-size:.82rem;
-  margin-top:8px;
-  line-height:1.45;
+@media (max-width: 1320px){
+  .kpis{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .insights{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .layout{ grid-template-columns:1fr; }
+  .chart-grid{ grid-template-columns:1fr; }
+  .dryer-grid{ grid-template-columns:1fr; }
 }
-
-.summary-footer{
-  display:grid;
-  grid-template-columns:repeat(4, minmax(0, 1fr));
-  gap:10px;
-  margin-top:12px;
-}
-
-.total-card{
-  border-radius:16px;
-  padding:12px;
-  background:linear-gradient(180deg, rgba(15,24,35,.95), rgba(8,14,22,.96));
-  border:1px solid rgba(255,255,255,.06);
-}
-
-.total-card .t-label{
-  color:var(--muted);
-  font-size:.8rem;
-  margin-bottom:6px;
-}
-
-.total-card .t-value{
-  font-size:1.35rem;
-  font-weight:900;
-}
-
-.total-card.orange{ background:linear-gradient(180deg, rgba(120,53,15,.9), rgba(75,32,6,.96)); }
-.total-card.blue{ background:linear-gradient(180deg, rgba(30,58,138,.85), rgba(15,23,42,.96)); }
-.total-card.red{ background:linear-gradient(180deg, rgba(127,29,29,.85), rgba(69,10,10,.96)); }
-.total-card.green{ background:linear-gradient(180deg, rgba(20,83,45,.86), rgba(5,46,22,.96)); }
-
-.toggle-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:8px;
-}
-
-.small-btn-row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-@media (max-width: 1180px){
-  .app{ grid-template-columns:1fr; }
+@media (max-width: 760px){
+  .kpis, .insights, .row, .user-item{ grid-template-columns:1fr; }
+  .actions .btn{ width:100%; }
   .sidebar{
     position:relative;
     height:auto;
   }
-  .layout{
-    grid-template-columns:1fr;
-  }
-  .kpis{
-    grid-template-columns:repeat(2, minmax(0, 1fr));
-  }
-  .summary-footer{
-    grid-template-columns:repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 760px){
-  .kpis,
-  .row,
-  .user-item,
-  .summary-footer{
-    grid-template-columns:1fr;
-  }
-  .actions .btn{
-    width:100%;
-  }
-  .table-wrap{
-    border-radius:14px;
-  }
+  .app{ grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -630,11 +657,39 @@ tfoot td{
     </div>
 
     <div class="field">
-      <button class="btn btn-primary" id="loginBtn">Ingresar</button>
+      <div class="actions">
+        <button class="btn btn-primary" id="loginBtn">Ingresar</button>
+        <button class="btn btn-ghost" id="toggleLoginChangeBtn" type="button">Cambiar contraseña</button>
+      </div>
+    </div>
+
+    <div id="loginChangePanel" class="password-panel hidden">
+      <div class="field" style="margin-top:0;">
+        <label for="loginChangeUser">Usuario</label>
+        <input class="input" id="loginChangeUser" placeholder="Usuario" />
+      </div>
+      <div class="field">
+        <label for="loginChangeOld">Contraseña actual</label>
+        <input class="input" id="loginChangeOld" type="password" placeholder="Actual" />
+      </div>
+      <div class="field">
+        <label for="loginChangeNew">Nueva contraseña</label>
+        <input class="input" id="loginChangeNew" type="password" placeholder="Nueva" />
+      </div>
+      <div class="field">
+        <label for="loginChangeConfirm">Confirmar nueva</label>
+        <input class="input" id="loginChangeConfirm" type="password" placeholder="Confirmar" />
+      </div>
+      <div class="actions">
+        <button class="btn btn-blue" id="loginChangeBtn">Actualizar contraseña</button>
+      </div>
+      <div class="small-note">
+        Este formulario permite cambiar una contraseña antes de iniciar sesión, siempre que conozcas la contraseña actual.
+      </div>
     </div>
 
     <div class="helper">
-      Acceso por usuario y contraseña. Los administradores pueden crear, editar y eliminar usuarios y registros.
+      La sesión permanecerá abierta aunque regreses con el navegador o recargues la página, hasta que presiones “Salir” o el usuario sea deshabilitado.
     </div>
   </div>
 </div>
@@ -656,31 +711,32 @@ tfoot td{
     </div>
 
     <div class="nav">
-      <button class="active" data-section-btn="sectionRecords">Registros</button>
+      <button class="active" data-section-btn="sectionRecords" id="navRecordsBtn">Registros</button>
+      <button data-section-btn="sectionAnalytics" id="navAnalyticsBtn">Resumen ejecutivo</button>
       <button data-section-btn="sectionUsers" id="navUsersBtn" class="hidden">Gestión de usuarios</button>
     </div>
 
     <div class="userbox" style="margin-top:18px;">
-      <div class="toggle-title">
+      <div class="toggle-box" style="justify-content:space-between; margin-bottom:10px;">
         <strong style="font-size:.95rem;">Cambiar contraseña</strong>
         <span class="badge admin" id="pwdRoleBadge">Mi cuenta</span>
       </div>
 
       <div class="stack">
-        <div class="field">
-          <label for="oldPassword">Contraseña actual</label>
-          <input class="input" id="oldPassword" type="password" placeholder="Actual" />
+        <div class="field" style="margin-top:0;">
+          <label for="sidebarOldPass">Contraseña actual</label>
+          <input class="input" id="sidebarOldPass" type="password" placeholder="Actual" />
         </div>
         <div class="field">
-          <label for="newPassword">Nueva contraseña</label>
-          <input class="input" id="newPassword" type="password" placeholder="Nueva" />
+          <label for="sidebarNewPass">Nueva contraseña</label>
+          <input class="input" id="sidebarNewPass" type="password" placeholder="Nueva" />
         </div>
         <div class="field">
-          <label for="confirmPassword">Confirmar nueva</label>
-          <input class="input" id="confirmPassword" type="password" placeholder="Confirmar" />
+          <label for="sidebarConfirmPass">Confirmar nueva</label>
+          <input class="input" id="sidebarConfirmPass" type="password" placeholder="Confirmar" />
         </div>
         <div class="actions">
-          <button class="btn btn-blue" id="changePasswordBtn">Cambiar contraseña</button>
+          <button class="btn btn-blue" id="sidebarChangeBtn">Cambiar contraseña</button>
         </div>
       </div>
     </div>
@@ -693,226 +749,311 @@ tfoot td{
   </aside>
 
   <main class="content">
-    <div class="topbar">
-      <div class="title">
-        <h2>Programa de Cumplimiento de Secadas</h2>
-        <p>Captura, consulta, control y resumen de producción por turno, secadora y causa.</p>
+    <div class="page-shell">
+      <div class="topbar">
+        <div class="title">
+          <h2>Panel de cumplimiento de producción</h2>
+          <p>Vista ejecutiva por día, semana, secadora, paros y tiempos promedio de secado.</p>
+        </div>
+        <div class="pill">Sesión activa</div>
       </div>
-      <div class="pill">Sesión activa</div>
-    </div>
 
-    <div class="kpis">
-      <div class="kpi good">
-        <div class="label">Secadas totales</div>
-        <div class="value" id="kpiSecadas">0</div>
-        <div class="sub">Producción visible en pantalla</div>
+      <div class="quickbar">
+        <button class="chip" id="jumpRecordsBtn" type="button">Ir a registros</button>
+        <button class="chip" id="jumpAnalyticsBtn" type="button">Ir a resumen</button>
+        <button class="chip hidden" id="jumpUsersBtn" type="button">Ir a usuarios</button>
+        <div class="spacer"></div>
+        <button class="chip active" data-summary-view="dia" type="button">Por día</button>
+        <button class="chip" data-summary-view="semana" type="button">Por semana</button>
+        <button class="chip" data-summary-view="mes" type="button">Por mes</button>
       </div>
-      <div class="kpi">
-        <div class="label">Horas totales</div>
-        <div class="value" id="kpiHoras">0</div>
-        <div class="sub">Horas de paro acumuladas</div>
-      </div>
-      <div class="kpi alert">
-        <div class="label">Días sin secar</div>
-        <div class="value" id="kpiDiasSinSecar">0</div>
-        <div class="sub">Alertas con cero producción</div>
-      </div>
-      <div class="kpi">
-        <div class="label">Cumplimiento</div>
-        <div class="value" id="kpiCumple">0%</div>
-        <div class="sub">Sobre meta diaria</div>
-      </div>
-    </div>
 
-    <section class="section active" id="sectionRecords">
-      <div class="layout">
-        <div class="panel">
-          <h3>Nuevo registro</h3>
+      <div class="kpis">
+        <div class="kpi green">
+          <div class="label">Producción del día</div>
+          <div class="value" id="kpiDayProd">0</div>
+          <div class="sub">Producción del día actual visible</div>
+        </div>
+        <div class="kpi blue">
+          <div class="label">Meta diaria</div>
+          <div class="value" id="kpiDayMeta">6</div>
+          <div class="sub">Objetivo por día</div>
+        </div>
+        <div class="kpi orange">
+          <div class="label">Cumplimiento diario</div>
+          <div class="value" id="kpiDayComp">0%</div>
+          <div class="sub">Avance contra la meta diaria</div>
+        </div>
+        <div class="kpi green">
+          <div class="label">Producción semanal</div>
+          <div class="value" id="kpiWeekProd">0</div>
+          <div class="sub">Producción de la semana actual visible</div>
+        </div>
+        <div class="kpi blue">
+          <div class="label">Meta semanal</div>
+          <div class="value" id="kpiWeekMeta">42</div>
+          <div class="sub">Objetivo semanal</div>
+        </div>
+        <div class="kpi orange">
+          <div class="label">Cumplimiento semanal</div>
+          <div class="value" id="kpiWeekComp">0%</div>
+          <div class="sub">Avance contra la meta semanal</div>
+        </div>
+      </div>
 
-          <div class="stack">
-            <div class="field">
-              <label for="regDate">Fecha</label>
-              <input class="input" type="date" id="regDate" />
-            </div>
+      <div class="insights">
+        <div class="insight">
+          <div class="label">Días sin secar</div>
+          <div class="value" id="insightDaysNoProd">0</div>
+          <div class="sub">Días con producción total igual a cero.</div>
+        </div>
+        <div class="insight">
+          <div class="label">Días bajo meta</div>
+          <div class="value" id="insightDaysBelow">0</div>
+          <div class="sub">Días con producción entre 1 y 5 secadas.</div>
+        </div>
+        <div class="insight">
+          <div class="label">Secadora con más paro</div>
+          <div class="value" id="insightTopStop">—</div>
+          <div class="sub">Según horas de paro acumuladas.</div>
+        </div>
+        <div class="insight">
+          <div class="label">Secadora más productiva</div>
+          <div class="value" id="insightTopProd">—</div>
+          <div class="sub">Según secadas acumuladas.</div>
+        </div>
+      </div>
 
-            <div class="row">
-              <div class="field">
-                <label for="regTurn">Turno</label>
-                <select class="select" id="regTurn">
-                  <option value="Día">Día</option>
-                  <option value="Noche">Noche</option>
-                </select>
+      <section class="section active" id="sectionRecords">
+        <div class="layout">
+          <div class="panel">
+            <h3>Nuevo registro</h3>
+
+            <div class="stack">
+              <div class="field" style="margin-top:0;">
+                <label for="regDate">Fecha</label>
+                <input class="input" type="date" id="regDate" />
               </div>
-              <div class="field">
-                <label for="regDryer">Secadora</label>
-                <select class="select" id="regDryer">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                </select>
+
+              <div class="row">
+                <div class="field">
+                  <label for="regTurn">Turno</label>
+                  <select class="select" id="regTurn">
+                    <option value="Día">Día</option>
+                    <option value="Noche">Noche</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="regDryer">Secadora</label>
+                  <select class="select" id="regDryer">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <div class="field">
-              <label for="regSecadas">Secadas</label>
-              <input class="input" type="number" min="0" step="1" id="regSecadas" placeholder="Ingrese 0 o un número entero" />
-            </div>
+              <div class="field">
+                <label for="regSecadas">Secadas</label>
+                <input class="input" type="number" min="0" step="1" id="regSecadas" placeholder="0 o un número entero" />
+              </div>
 
-            <div class="field hidden" id="blockTime">
-              <label for="regAvgTime">Tiempo promedio de secada</label>
-              <input class="input" type="time" id="regAvgTime" step="60" />
-            </div>
+              <div class="field hidden" id="blockTime">
+                <label for="regAvgTime">Tiempo promedio de secada (duración)</label>
+                <input class="input" type="text" id="regAvgTime" placeholder="HH:MM" inputmode="numeric" />
+              </div>
 
-            <div class="field hidden" id="blockStop">
-              <label for="regStopHours">Horas de paro</label>
-              <input class="input" type="number" min="0" step="0.1" id="regStopHours" placeholder="Horas de paro" />
-            </div>
+              <div class="field hidden" id="blockStop">
+                <label for="regStopHours">Horas de paro</label>
+                <input class="input" type="number" min="0" step="0.1" id="regStopHours" placeholder="Horas de paro" />
+              </div>
 
-            <div class="field hidden" id="blockCause">
-              <label for="regCause">Causa / justificación</label>
-              <input class="input" type="text" id="regCause" placeholder="Por qué no se alcanzó la meta" />
-            </div>
+              <div class="field hidden" id="blockCause">
+                <label for="regCause">Causa / justificación</label>
+                <input class="input" type="text" id="regCause" placeholder="Justificación" />
+              </div>
 
-            <div class="actions">
-              <button class="btn btn-primary" id="saveRecordBtn">Guardar</button>
-              <button class="btn btn-secondary" id="exportCsvBtn">Exportar CSV</button>
-            </div>
+              <div class="actions">
+                <button class="btn btn-primary" id="saveRecordBtn">Guardar</button>
+                <button class="btn btn-secondary" id="exportCsvBtn">Exportar CSV</button>
+              </div>
 
-            <div class="compact-note">
-              El comentario se mostrará en versión resumida para facilitar lectura. El texto completo queda guardado en la base de datos.
+              <div class="small-note">
+                El tiempo promedio se registra como duración, por ejemplo <strong>12:40</strong>, no como hora del reloj.
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="panel">
-          <h3>Consulta y visualización</h3>
+          <div class="panel">
+            <h3>Consulta y visualización</h3>
 
-          <div class="stack">
-            <div class="row">
+            <div class="stack">
+              <div class="row">
+                <div class="field" style="margin-top:0;">
+                  <label for="searchBox">Buscar</label>
+                  <input class="input" type="text" id="searchBox" placeholder="Usuario, causa, secadora o turno" />
+                </div>
+                <div class="field" style="margin-top:0;">
+                  <label for="filterDate">Filtrar por fecha</label>
+                  <input class="input" type="date" id="filterDate" />
+                </div>
+              </div>
+
               <div class="field">
-                <label for="searchBox">Buscar</label>
-                <input class="input" type="text" id="searchBox" placeholder="Buscar por usuario, causa o secadora" />
-              </div>
-              <div class="field">
-                <label for="filterDate">Filtrar por fecha</label>
-                <input class="input" type="date" id="filterDate" />
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="filterUser">Filtrar por usuario</label>
-              <select class="select" id="filterUser"></select>
-            </div>
-
-            <div class="chart-box">
-              <canvas id="chart"></canvas>
-            </div>
-
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Usuario</th>
-                    <th>Fecha</th>
-                    <th>Semana</th>
-                    <th>Turno</th>
-                    <th>Secadora</th>
-                    <th>Secadas</th>
-                    <th>Tiempo prom.</th>
-                    <th>Horas paro</th>
-                    <th>Tipo de paro</th>
-                    <th>Causa resumida</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-                <tbody id="recordsBody"></tbody>
-              </table>
-            </div>
-
-            <div class="panel" style="margin-top:16px; padding:16px;">
-              <div class="toggle-title">
-                <h3 style="margin:0;">Resumen consolidado</h3>
-                <span class="badge admin">Automático</span>
-              </div>
-
-              <div class="summary-controls">
-                <button class="btn btn-primary active" type="button" data-summary-view="dia">Por día</button>
-                <button class="btn btn-secondary" type="button" data-summary-view="semana">Por semana</button>
-                <button class="btn btn-ghost" type="button" data-summary-view="mes">Por mes</button>
+                <label for="filterUser">Filtrar por usuario</label>
+                <select class="select" id="filterUser"></select>
               </div>
 
               <div class="table-wrap">
-                <table style="min-width:1120px;">
+                <table>
                   <thead>
                     <tr>
-                      <th>Periodo</th>
+                      <th>Usuario</th>
+                      <th>Fecha</th>
                       <th>Semana</th>
-                      <th>Días</th>
+                      <th>Turno</th>
+                      <th>Secadora</th>
                       <th>Secadas</th>
-                      <th>Meta</th>
-                      <th>Faltante</th>
-                      <th>Cumplimiento</th>
+                      <th>Meta D</th>
+                      <th>Cump. D</th>
+                      <th>Meta S</th>
+                      <th>Cump. S</th>
+                      <th>Tiempo prom.</th>
                       <th>Horas paro</th>
-                      <th>Secadora #1</th>
-                      <th>Secadora #2</th>
-                      <th>Secadora #3</th>
-                      <th>Justificación / Causa</th>
+                      <th>Tipo</th>
+                      <th>Causa resumida</th>
+                      <th>Acción</th>
                     </tr>
                   </thead>
-                  <tbody id="summaryBody"></tbody>
-                  <tfoot id="summaryFoot"></tfoot>
+                  <tbody id="recordsBody"></tbody>
                 </table>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section" id="sectionUsers">
-      <div class="panel">
-        <h3>Gestión de usuarios</h3>
-        <div class="subtle">Visible solo para ADMIN.</div>
+      <section class="section" id="sectionAnalytics">
+        <div class="panel">
+          <h3>Resumen ejecutivo</h3>
 
-        <div class="user-admin-card">
-          <div class="row">
-            <div class="field">
-              <label for="newUserName">Nuevo usuario</label>
-              <input class="input" id="newUserName" placeholder="Nombre de usuario" />
+          <div class="filter-strip">
+            <button class="tag active" data-summary-view="dia" type="button">Por día</button>
+            <button class="tag" data-summary-view="semana" type="button">Por semana</button>
+            <button class="tag" data-summary-view="mes" type="button">Por mes</button>
+          </div>
+
+          <div class="chart-grid">
+            <div class="chart-box">
+              <canvas id="trendChart"></canvas>
             </div>
-            <div class="field">
-              <label for="newUserPass">Contraseña</label>
-              <input class="input" id="newUserPass" type="password" placeholder="Contraseña" />
+            <div class="chart-box">
+              <canvas id="dryerChart"></canvas>
             </div>
           </div>
 
-          <div class="row">
-            <div class="field">
-              <label for="newUserRole">Rol</label>
-              <select class="select" id="newUserRole">
-                <option value="operador">Operador</option>
-                <option value="admin">Administrador</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="newUserActive">Estado</label>
-              <select class="select" id="newUserActive">
-                <option value="true">Habilitado</option>
-                <option value="false">Deshabilitado</option>
-              </select>
-            </div>
+          <div style="height:14px;"></div>
+
+          <h3 style="margin-top:0;">Resumen por secadora</h3>
+          <div class="dryer-grid" id="dryerCards"></div>
+
+          <div class="table-wrap" style="margin-bottom:14px;">
+            <table style="min-width:980px;">
+              <thead>
+                <tr>
+                  <th>Secadora</th>
+                  <th>Secadas</th>
+                  <th>Horas de paro</th>
+                  <th>Prom. secado</th>
+                  <th>Registros</th>
+                  <th>% del total</th>
+                  <th>Último registro</th>
+                </tr>
+              </thead>
+              <tbody id="dryerTableBody"></tbody>
+            </table>
           </div>
 
-          <div class="actions">
-            <button class="btn btn-primary" id="createUserBtn">Crear usuario</button>
+          <h3 style="margin-top:0;">Resumen consolidado</h3>
+          <div class="summary-controls">
+            <button class="btn btn-primary active" type="button" data-summary-view="dia">Por día</button>
+            <button class="btn btn-secondary" type="button" data-summary-view="semana">Por semana</button>
+            <button class="btn btn-ghost" type="button" data-summary-view="mes">Por mes</button>
+          </div>
+
+          <div class="table-wrap">
+            <table style="min-width:1320px;">
+              <thead>
+                <tr>
+                  <th>Periodo</th>
+                  <th>Semana</th>
+                  <th>Días</th>
+                  <th>Secadas</th>
+                  <th>Meta</th>
+                  <th>Faltante</th>
+                  <th>Cumplimiento</th>
+                  <th>Horas paro</th>
+                  <th>Secadora #1</th>
+                  <th>Secadora #2</th>
+                  <th>Secadora #3</th>
+                  <th>Prom. S1</th>
+                  <th>Prom. S2</th>
+                  <th>Prom. S3</th>
+                  <th>Justificación / Causa</th>
+                </tr>
+              </thead>
+              <tbody id="summaryBody"></tbody>
+              <tfoot id="summaryFoot"></tfoot>
+            </table>
           </div>
         </div>
+      </section>
 
-        <div class="user-admin-card">
-          <div id="usersList"></div>
+      <section class="section" id="sectionUsers">
+        <div class="panel">
+          <h3>Gestión de usuarios</h3>
+          <div class="subtle">Visible solo para ADMIN.</div>
+
+          <div class="user-admin-card">
+            <div class="row">
+              <div class="field" style="margin-top:0;">
+                <label for="newUserName">Nuevo usuario</label>
+                <input class="input" id="newUserName" placeholder="Nombre de usuario" />
+              </div>
+              <div class="field" style="margin-top:0;">
+                <label for="newUserPass">Contraseña</label>
+                <input class="input" id="newUserPass" type="password" placeholder="Contraseña" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="newUserRole">Rol</label>
+                <select class="select" id="newUserRole">
+                  <option value="operador">Operador</option>
+                  <option value="admin">Administrador</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="newUserActive">Estado</label>
+                <select class="select" id="newUserActive">
+                  <option value="true">Habilitado</option>
+                  <option value="false">Deshabilitado</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-primary" id="createUserBtn">Crear usuario</button>
+            </div>
+          </div>
+
+          <div class="user-admin-card">
+            <div id="usersList"></div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 </div>
 
@@ -933,6 +1074,8 @@ const usersRef = db.ref("users");
 const recordsRef = db.ref("records");
 
 const DAILY_META = 6;
+const WEEKLY_META = 42;
+const SESSION_KEY = "planta_escaldado_session_v3";
 
 const defaultUsers = {
   "ADMIN":  { name:"ADMIN",  pass:"1234", role:"admin",    active:true },
@@ -950,9 +1093,10 @@ let users = {};
 let records = [];
 let currentUser = null;
 let editingRecordId = null;
-let chart = null;
 let usersReady = false;
 let summaryView = "dia";
+let trendChart = null;
+let dryerChart = null;
 
 function clone(obj){
   return JSON.parse(JSON.stringify(obj));
@@ -971,26 +1115,10 @@ function escapeHtml(value){
     .replaceAll("'", "&#039;");
 }
 
-function showView(view){
-  $("loginView").classList.toggle("hidden", view !== "login");
-  $("appView").classList.toggle("hidden", view !== "app");
-}
-
-function setSection(sectionId){
-  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-  document.querySelectorAll("[data-section-btn]").forEach(b => b.classList.remove("active"));
-  const section = $(sectionId);
-  if(section) section.classList.add("active");
-  const btn = document.querySelector(`[data-section-btn="${sectionId}"]`);
-  if(btn) btn.classList.add("active");
-}
-
-function openPicker(input){
-  if(typeof input.showPicker === "function") input.showPicker();
-  else{
-    input.focus();
-    input.click();
-  }
+function localISODate(date = new Date()){
+  const d = new Date(date);
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 10);
 }
 
 function parseDateISO(iso){
@@ -1012,37 +1140,105 @@ function getISOWeekInfo(date){
   return { year: d.getUTCFullYear(), week };
 }
 
+function weekKeyFromISO(iso){
+  const info = getISOWeekInfo(parseDateISO(iso));
+  return `${info.year}-W${String(info.week).padStart(2, "0")}`;
+}
+
+function sameISOWeek(iso, refInfo){
+  const info = getISOWeekInfo(parseDateISO(iso));
+  return info.year === refInfo.year && info.week === refInfo.week;
+}
+
+function fmtNum(value, digits = 0){
+  const n = Number(value) || 0;
+  if(digits === 0) return String(Math.round(n));
+  return Number.isInteger(n) ? String(n) : n.toFixed(digits);
+}
+
+function fmtHours(value){
+  const n = Number(value) || 0;
+  return Number.isInteger(n) ? String(n) : n.toFixed(1);
+}
+
+function getCurrentUserObject(){
+  if(!currentUser) return null;
+  return users[currentUser] || null;
+}
+
+function saveSession(user){
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ user, ts: Date.now() }));
+}
+
+function clearSession(){
+  localStorage.removeItem(SESSION_KEY);
+}
+
+function loadSession(){
+  try{
+    const raw = localStorage.getItem(SESSION_KEY);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch{
+    return null;
+  }
+}
+
+function showView(view){
+  $("loginView").classList.toggle("hidden", view !== "login");
+  $("appView").classList.toggle("hidden", view !== "app");
+}
+
+function setSection(sectionId){
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  const section = $(sectionId);
+  if(section) section.classList.add("active");
+  document.querySelectorAll("[data-section-btn]").forEach(b => b.classList.remove("active"));
+  const btn = document.querySelector(`[data-section-btn="${sectionId}"]`);
+  if(btn) btn.classList.add("active");
+}
+
+function openPicker(input){
+  if(typeof input.showPicker === "function") input.showPicker();
+  else{
+    input.focus();
+    input.click();
+  }
+}
+
 function summarizeCause(text){
   const raw = String(text || "").trim();
   if(!raw) return "—";
-
   const lower = raw.toLowerCase();
 
-  if(lower.includes("sin justificación")) return "Sin justificación";
-  if(lower.includes("paro total")) return "Paro total";
-  if(lower.includes("sin registro")) return "Sin registro";
-  if(lower.includes("arranque")) return "Arranque de turno";
-  if(lower.includes("eléctr")) return "Paro eléctrico";
-  if(lower.includes("electric")) return "Paro eléctrico";
-  if(lower.includes("mecán")) return "Falla mecánica";
-  if(lower.includes("motor")) return "Falla de motor";
-  if(lower.includes("bomba")) return "Bomba de circulación";
-  if(lower.includes("obstrucción")) return "Obstrucción";
-  if(lower.includes("tanque")) return "Falla en tanque";
-  if(lower.includes("leito") || lower.includes("leito")) return "Problema en leito";
-  if(lower.includes("vap")) return "Falla por vapor";
+  const rules = [
+    ["sin justificación", "Sin justificación"],
+    ["paro total", "Paro total"],
+    ["paro parcial", "Paro parcial"],
+    ["arranque", "Arranque de turno"],
+    ["eléctr", "Paro eléctrico"],
+    ["electric", "Paro eléctrico"],
+    ["mecán", "Falla mecánica"],
+    ["motor", "Falla de motor"],
+    ["bomba", "Bomba de circulación"],
+    ["obstrucción", "Obstrucción"],
+    ["tanque", "Falla en tanque"],
+    ["vapor", "Falla por vapor"],
+    ["leito", "Problema en leito"]
+  ];
+  for(const [k, v] of rules){
+    if(lower.includes(k)) return v;
+  }
 
-  const cleaned = raw.replace(/\s+/g, " ").replace(/[;|]+/g, ",");
-  const firstChunk = cleaned.split(",")[0].trim();
-  const words = firstChunk.split(" ").filter(Boolean);
-  if(words.length <= 8) return firstChunk;
-  return words.slice(0, 8).join(" ") + "...";
+  const firstSentence = raw.split(/[.;:]/)[0].trim();
+  const words = firstSentence.split(/\s+/).filter(Boolean);
+  if(words.length <= 8) return firstSentence;
+  return words.slice(0, 8).join(" ") + "…";
 }
 
 function classifyStop(record){
   const secadas = Number(record.secadas) || 0;
   const cause = String(record.cause || "").toLowerCase();
-
   if(secadas === 0) return "Paro total";
   if(secadas < DAILY_META) return "Paro parcial";
   if(cause.includes("eléctr") || cause.includes("electric")) return "Eléctrico";
@@ -1054,9 +1250,37 @@ function classifyStop(record){
   return "N/A";
 }
 
-function shortTime(value){
-  if(!value) return "—";
-  return String(value);
+function durationToMinutes(value){
+  const raw = String(value || "").trim();
+  if(!raw) return null;
+  const m = raw.match(/^(\d+):([0-5]\d)$/);
+  if(!m) return null;
+  const hours = Number(m[1]);
+  const mins = Number(m[2]);
+  if(!Number.isFinite(hours) || hours < 0) return null;
+  return (hours * 60) + mins;
+}
+
+function minutesToDuration(totalMinutes){
+  if(totalMinutes === null || totalMinutes === undefined || !Number.isFinite(Number(totalMinutes))) return "—";
+  const mins = Math.max(0, Math.round(Number(totalMinutes)));
+  const h = Math.floor(mins / 60);
+  const mm = mins % 60;
+  return `${String(h).padStart(2, "0")}:${String(mm).padStart(2, "0")} h`;
+}
+
+function averageMinutes(values){
+  const valid = values.filter(v => Number.isFinite(Number(v)));
+  if(valid.length === 0) return null;
+  const sum = valid.reduce((a,b) => a + Number(b), 0);
+  return sum / valid.length;
+}
+
+function getVisibleRecords(){
+  const me = getCurrentUserObject();
+  if(!me) return [];
+  if(me.role === "admin") return records.slice();
+  return records.filter(r => r.user === currentUser);
 }
 
 function sortRecordsForDisplay(list){
@@ -1068,47 +1292,95 @@ function sortRecordsForDisplay(list){
   });
 }
 
-function getVisibleRecords(){
-  if(!currentUser) return [];
-  const me = users[currentUser];
-  if(!me) return [];
-  if(me.role === "admin") return records.slice();
-  return records.filter(r => r.user === currentUser);
-}
-
-function buildDailyStats(list){
-  const byDate = {};
+function buildDateTotals(list){
+  const map = {};
   list.forEach(r => {
     if(!r.date) return;
-    if(!byDate[r.date]){
-      byDate[r.date] = {
-        date: r.date,
-        secadas: 0,
-        stopHours: 0,
-        count: 0
-      };
-    }
-    byDate[r.date].secadas += Number(r.secadas) || 0;
-    byDate[r.date].stopHours += Number(r.stopHours) || 0;
-    byDate[r.date].count += 1;
+    if(!map[r.date]) map[r.date] = 0;
+    map[r.date] += Number(r.secadas) || 0;
   });
-  return Object.values(byDate).sort((a,b) => a.date.localeCompare(b.date));
+  return map;
 }
 
-function buildDashboardStats(list){
-  const daily = buildDailyStats(list);
-  const totalSecadas = daily.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
-  const totalStop = daily.reduce((acc, r) => acc + (Number(r.stopHours) || 0), 0);
-  const daysWithout = daily.filter(r => (Number(r.secadas) || 0) === 0).length;
-  const totalMeta = daily.length * DAILY_META;
-  const cump = totalMeta > 0 ? (totalSecadas / totalMeta) * 100 : 0;
+function buildWeekTotals(list){
+  const map = {};
+  list.forEach(r => {
+    if(!r.date) return;
+    const key = weekKeyFromISO(r.date);
+    if(!map[key]) map[key] = 0;
+    map[key] += Number(r.secadas) || 0;
+  });
+  return map;
+}
+
+function buildDailyTotals(list){
+  const map = {};
+  list.forEach(r => {
+    if(!r.date) return;
+    if(!map[r.date]){
+      map[r.date] = { secadas:0, stopHours:0, records:0 };
+    }
+    map[r.date].secadas += Number(r.secadas) || 0;
+    map[r.date].stopHours += Number(r.stopHours) || 0;
+    map[r.date].records += 1;
+  });
+  return map;
+}
+
+function buildDryerStats(list){
+  const stats = {
+    "1": { dryer:"1", secadas:0, stopHours:0, records:0, lastDate:"", avgDurations:[] },
+    "2": { dryer:"2", secadas:0, stopHours:0, records:0, lastDate:"", avgDurations:[] },
+    "3": { dryer:"3", secadas:0, stopHours:0, records:0, lastDate:"", avgDurations:[] }
+  };
+
+  list.forEach(r => {
+    const key = String(r.secadora || "");
+    if(!stats[key]) return;
+    stats[key].secadas += Number(r.secadas) || 0;
+    stats[key].stopHours += Number(r.stopHours) || 0;
+    stats[key].records += 1;
+    if(Number.isFinite(Number(r.avgTimeMinutes))){
+      stats[key].avgDurations.push(Number(r.avgTimeMinutes));
+    }
+    if(r.date && (!stats[key].lastDate || r.date > stats[key].lastDate)){
+      stats[key].lastDate = r.date;
+    }
+  });
+
+  return stats;
+}
+
+function buildExecutiveStats(list){
+  const today = localISODate();
+  const weekRef = getISOWeekInfo(new Date());
+  const dailyTotals = buildDailyTotals(list);
+  const dryerStats = buildDryerStats(list);
+
+  const dayRecords = list.filter(r => r.date === today);
+  const weekRecords = list.filter(r => r.date && sameISOWeek(r.date, weekRef));
+
+  const dayProduced = dayRecords.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
+  const weekProduced = weekRecords.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
+
+  const dayCompliance = DAILY_META > 0 ? (dayProduced / DAILY_META) * 100 : 0;
+  const weekCompliance = WEEKLY_META > 0 ? (weekProduced / WEEKLY_META) * 100 : 0;
+
+  const daysWithout = Object.values(dailyTotals).filter(v => v.secadas === 0).length;
+  const daysBelow = Object.values(dailyTotals).filter(v => v.secadas > 0 && v.secadas < DAILY_META).length;
+
+  const dryerByStop = Object.values(dryerStats).sort((a, b) => b.stopHours - a.stopHours)[0];
+  const dryerByProd = Object.values(dryerStats).sort((a, b) => b.secadas - a.secadas)[0];
 
   return {
-    totalSecadas,
-    totalStop,
+    dayProduced,
+    weekProduced,
+    dayCompliance,
+    weekCompliance,
     daysWithout,
-    totalMeta,
-    cump
+    daysBelow,
+    dryerByStop,
+    dryerByProd
   };
 }
 
@@ -1120,6 +1392,12 @@ function summarizeRecords(list, mode){
     if(!isoDate) return;
 
     const date = parseDateISO(isoDate);
+    const secadas = Number(r.secadas) || 0;
+    const stopHours = Number(r.stopHours) || 0;
+    const secadora = String(r.secadora || "");
+    const cause = String(r.cause || "").trim();
+    const avgMin = Number(r.avgTimeMinutes);
+
     let key = "";
     let periodo = "";
     let sortKey = "";
@@ -1146,11 +1424,6 @@ function summarizeRecords(list, mode){
       semanaLabel = "Mes";
     }
 
-    const secadas = Number(r.secadas) || 0;
-    const stopHours = Number(r.stopHours) || 0;
-    const secadora = String(r.secadora || "");
-    const cause = String(r.cause || "").trim();
-
     if(!map[key]){
       map[key] = {
         key,
@@ -1163,6 +1436,9 @@ function summarizeRecords(list, mode){
         s1: 0,
         s2: 0,
         s3: 0,
+        s1avg: [],
+        s2avg: [],
+        s3avg: [],
         causas: new Set()
       };
     }
@@ -1172,9 +1448,18 @@ function summarizeRecords(list, mode){
     row.secadas += secadas;
     row.stopHours += stopHours;
 
-    if(secadora === "1") row.s1 += secadas;
-    if(secadora === "2") row.s2 += secadas;
-    if(secadora === "3") row.s3 += secadas;
+    if(secadora === "1"){
+      row.s1 += secadas;
+      if(Number.isFinite(avgMin)) row.s1avg.push(avgMin);
+    }
+    if(secadora === "2"){
+      row.s2 += secadas;
+      if(Number.isFinite(avgMin)) row.s2avg.push(avgMin);
+    }
+    if(secadora === "3"){
+      row.s3 += secadas;
+      if(Number.isFinite(avgMin)) row.s3avg.push(avgMin);
+    }
 
     if(cause){
       row.causas.add(summarizeCause(cause));
@@ -1187,7 +1472,10 @@ function summarizeRecords(list, mode){
     .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
     .map(row => {
       const dias = row.diasSet.size;
-      const meta = dias * DAILY_META;
+      let meta = DAILY_META;
+      if(mode === "semana") meta = WEEKLY_META;
+      else if(mode === "mes") meta = dias * DAILY_META;
+
       const faltante = Math.max(0, meta - row.secadas);
       const cumplimiento = meta > 0 ? (row.secadas / meta) * 100 : 0;
 
@@ -1203,64 +1491,155 @@ function summarizeRecords(list, mode){
         s1: row.s1,
         s2: row.s2,
         s3: row.s3,
+        s1avg: minutesToDuration(averageMinutes(row.s1avg)),
+        s2avg: minutesToDuration(averageMinutes(row.s2avg)),
+        s3avg: minutesToDuration(averageMinutes(row.s3avg)),
         causa: [...row.causas].join(" | ")
       };
     });
 }
 
-function refreshKPIs(list){
-  const stats = buildDashboardStats(list);
+function renderExecutiveKpis(list){
+  const stats = buildExecutiveStats(list);
+  $("kpiDayProd").textContent = fmtNum(stats.dayProduced, 0);
+  $("kpiDayMeta").textContent = DAILY_META;
+  $("kpiDayComp").textContent = `${isFinite(stats.dayCompliance) ? stats.dayCompliance.toFixed(1) : "0.0"}%`;
 
-  $("kpiSecadas").textContent = stats.totalSecadas;
-  $("kpiHoras").textContent = stats.totalStop.toFixed(1).replace(/\.0$/, "");
-  $("kpiDiasSinSecar").textContent = stats.daysWithout;
-  $("kpiCumple").textContent = `${isFinite(stats.cump) ? stats.cump.toFixed(1) : "0.0"}%`;
+  $("kpiWeekProd").textContent = fmtNum(stats.weekProduced, 0);
+  $("kpiWeekMeta").textContent = WEEKLY_META;
+  $("kpiWeekComp").textContent = `${isFinite(stats.weekCompliance) ? stats.weekCompliance.toFixed(1) : "0.0"}%`;
+
+  $("insightDaysNoProd").textContent = fmtNum(stats.daysWithout, 0);
+  $("insightDaysBelow").textContent = fmtNum(stats.daysBelow, 0);
+  $("insightTopStop").textContent = stats.dryerByStop ? `Secadora ${stats.dryerByStop.dryer}` : "—";
+  $("insightTopProd").textContent = stats.dryerByProd ? `Secadora ${stats.dryerByProd.dryer}` : "—";
 }
 
-function renderChart(list){
-  const daily = buildDailyStats(list);
+function renderChartTrend(list){
+  const totals = buildDailyTotals(list);
+  const dates = Object.keys(totals).sort((a, b) => a.localeCompare(b));
 
-  if(chart){
-    chart.destroy();
-    chart = null;
+  if(trendChart){
+    trendChart.destroy();
+    trendChart = null;
   }
 
-  const labels = daily.map(r => formatDateES(r.date));
-  const data = daily.map(r => r.secadas);
-
-  const ctx = $("chart").getContext("2d");
-  chart = new Chart(ctx, {
+  const ctx = $("trendChart").getContext("2d");
+  trendChart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels,
+      labels: dates.map(formatDateES),
       datasets: [{
-        label: "Secadas",
-        data,
+        label: "Secadas por día",
+        data: dates.map(d => totals[d].secadas),
         backgroundColor: "rgba(245,158,11,.9)",
         borderColor: "rgba(245,158,11,1)",
         borderWidth: 1
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          labels: { color: "#ffffff" }
-        }
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{ labels:{ color:"#fff" } }
       },
-      scales: {
-        x: {
-          ticks: { color: "#c9d5e2" },
-          grid: { color: "rgba(255,255,255,.06)" }
-        },
-        y: {
-          beginAtZero: true,
-          ticks: { color: "#c9d5e2" },
-          grid: { color: "rgba(255,255,255,.06)" }
+      scales:{
+        x:{ ticks:{ color:"#c7d4e1" }, grid:{ color:"rgba(255,255,255,.06)" } },
+        y:{ beginAtZero:true, ticks:{ color:"#c7d4e1" }, grid:{ color:"rgba(255,255,255,.06)" } }
+      }
+    }
+  });
+}
+
+function renderChartDryers(list){
+  const dryerStats = buildDryerStats(list);
+
+  if(dryerChart){
+    dryerChart.destroy();
+    dryerChart = null;
+  }
+
+  const ctx = $("dryerChart").getContext("2d");
+  dryerChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Secadora 1", "Secadora 2", "Secadora 3"],
+      datasets: [{
+        data: [
+          dryerStats["1"].secadas,
+          dryerStats["2"].secadas,
+          dryerStats["3"].secadas
+        ],
+        backgroundColor: [
+          "rgba(59,130,246,.9)",
+          "rgba(245,158,11,.9)",
+          "rgba(34,197,94,.9)"
+        ],
+        borderColor: "#0B1522",
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{
+          position:"bottom",
+          labels:{ color:"#fff" }
         }
       }
     }
+  });
+}
+
+function renderDryerCards(list){
+  const container = $("dryerCards");
+  const tableBody = $("dryerTableBody");
+  const dryerStats = buildDryerStats(list);
+  const totalSecadas = list.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
+
+  container.innerHTML = "";
+  tableBody.innerHTML = "";
+
+  ["1", "2", "3"].forEach(num => {
+    const s = dryerStats[num];
+    const stopClass = s.stopHours >= 8 ? "status-bad" : (s.stopHours >= 4 ? "status-warn" : "status-ok");
+    const last = s.lastDate ? formatDateES(s.lastDate) : "—";
+    const percent = totalSecadas > 0 ? ((s.secadas / totalSecadas) * 100) : 0;
+    const avgDur = minutesToDuration(averageMinutes(s.avgDurations));
+
+    const card = document.createElement("div");
+    card.className = "dryer-card";
+    card.innerHTML = `
+      <div class="head">
+        <div class="name">Secadora ${num}</div>
+        <span class="badge ${s.stopHours >= 8 ? "disabled" : s.stopHours >= 4 ? "warn" : "admin"}">
+          <span class="status-dot ${stopClass}"></span>
+          ${s.stopHours >= 8 ? "Crítica" : s.stopHours >= 4 ? "Alerta" : "Normal"}
+        </span>
+      </div>
+      <p class="big">${fmtNum(s.secadas, 0)} secadas</p>
+      <div class="tiny">
+        Horas de paro: <strong>${fmtHours(s.stopHours)}</strong><br/>
+        Promedio de secado: <strong>${avgDur}</strong><br/>
+        Registros: <strong>${fmtNum(s.records, 0)}</strong><br/>
+        Aporte al total: <strong>${percent.toFixed(1)}%</strong><br/>
+        Último registro: <strong>${last}</strong>
+      </div>
+    `;
+    container.appendChild(card);
+
+    tableBody.innerHTML += `
+      <tr>
+        <td>Secadora ${num}</td>
+        <td>${escapeHtml(s.secadas)}</td>
+        <td>${escapeHtml(fmtHours(s.stopHours))}</td>
+        <td>${escapeHtml(avgDur)}</td>
+        <td>${escapeHtml(s.records)}</td>
+        <td>${escapeHtml(percent.toFixed(1))}%</td>
+        <td>${escapeHtml(last)}</td>
+      </tr>
+    `;
   });
 }
 
@@ -1269,27 +1648,39 @@ function renderTable(list){
   tbody.innerHTML = "";
 
   if(list.length === 0){
-    tbody.innerHTML = `<tr><td colspan="11" style="padding:16px;color:#c8d2dd;">No hay registros para mostrar.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="15" style="padding:16px;color:#c8d2dd;">No hay registros para mostrar.</td></tr>`;
     return;
   }
 
-  const isAdmin = users[currentUser] && users[currentUser].role === "admin";
+  const isAdmin = getCurrentUserObject() && getCurrentUserObject().role === "admin";
+  const dateTotals = buildDateTotals(list);
+  const weekTotals = buildWeekTotals(list);
   const sorted = sortRecordsForDisplay(list);
 
   sorted.forEach(r => {
-    const avgTime = r.secadas > 0 ? shortTime(r.avgTime || "—") : "—";
+    const dayTotal = dateTotals[r.date] || 0;
+    const weekTotal = weekTotals[weekKeyFromISO(r.date)] || 0;
+    const dayComp = DAILY_META > 0 ? ((dayTotal / DAILY_META) * 100) : 0;
+    const weekComp = WEEKLY_META > 0 ? ((weekTotal / WEEKLY_META) * 100) : 0;
+
+    const avgTime = r.secadas > 0 ? (r.avgTime || "—") : "—";
     const stopHours = r.secadas === 0 ? (r.stopHours ?? "—") : "—";
     const type = classifyStop(r);
     const cause = summarizeCause(r.cause);
+    const rowStatus = r.secadas === 0 ? "background:rgba(239,68,68,.08);" : (r.secadas < DAILY_META ? "background:rgba(250,204,21,.06);" : "");
 
     tbody.innerHTML += `
-      <tr>
+      <tr style="${rowStatus}">
         <td>${escapeHtml(r.user)}</td>
         <td>${escapeHtml(r.date)}</td>
         <td>${escapeHtml(r.date ? `S${String(getISOWeekInfo(parseDateISO(r.date)).week).padStart(2, "0")}` : "—")}</td>
         <td>${escapeHtml(r.turno)}</td>
         <td>${escapeHtml(r.secadora)}</td>
         <td>${escapeHtml(r.secadas)}</td>
+        <td>${escapeHtml(DAILY_META)}</td>
+        <td style="font-weight:800; color:${dayComp >= 100 ? '#22C55E' : dayComp >= 80 ? '#FACC15' : '#EF4444'};">${escapeHtml(dayComp.toFixed(1))}%</td>
+        <td>${escapeHtml(WEEKLY_META)}</td>
+        <td style="font-weight:800; color:${weekComp >= 100 ? '#22C55E' : weekComp >= 80 ? '#FACC15' : '#EF4444'};">${escapeHtml(weekComp.toFixed(1))}%</td>
         <td>${escapeHtml(avgTime)}</td>
         <td>${escapeHtml(stopHours)}</td>
         <td>${escapeHtml(type)}</td>
@@ -1316,14 +1707,13 @@ function renderSummaryTable(list){
   const rows = summarizeRecords(list, summaryView);
 
   if(rows.length === 0){
-    tbody.innerHTML = `<tr><td colspan="12" style="padding:16px;color:#c8d2dd;">No hay datos para resumir.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="15" style="padding:16px;color:#c8d2dd;">No hay datos para resumir.</td></tr>`;
     return;
   }
 
   rows.forEach(r => {
     const cumplimiento = Number(r.cumplimiento);
     const stateColor = cumplimiento >= 100 ? "color:#22C55E;" : (cumplimiento >= 80 ? "color:#FACC15;" : "color:#EF4444;");
-
     tbody.innerHTML += `
       <tr>
         <td>${escapeHtml(r.periodo)}</td>
@@ -1332,47 +1722,57 @@ function renderSummaryTable(list){
         <td>${escapeHtml(r.secadas)}</td>
         <td>${escapeHtml(r.meta)}</td>
         <td>${escapeHtml(r.faltante)}</td>
-        <td style="${stateColor} font-weight:800;">${escapeHtml(r.cumplimiento)}%</td>
-        <td>${escapeHtml(r.stopHours)}</td>
+        <td style="${stateColor} font-weight:900;">${escapeHtml(r.cumplimiento)}%</td>
+        <td>${escapeHtml(fmtHours(r.stopHours))}</td>
         <td>${escapeHtml(r.s1)}</td>
         <td>${escapeHtml(r.s2)}</td>
         <td>${escapeHtml(r.s3)}</td>
+        <td>${escapeHtml(r.s1avg)}</td>
+        <td>${escapeHtml(r.s2avg)}</td>
+        <td>${escapeHtml(r.s3avg)}</td>
         <td>${escapeHtml(r.causa || "—")}</td>
       </tr>
     `;
   });
 
-  const totals = list.reduce((acc, r) => {
-    acc.secadas += Number(r.secadas) || 0;
-    acc.stopHours += Number(r.stopHours) || 0;
-    acc.s1 += String(r.secadora) === "1" ? (Number(r.secadas) || 0) : 0;
-    acc.s2 += String(r.secadora) === "2" ? (Number(r.secadas) || 0) : 0;
-    acc.s3 += String(r.secadora) === "3" ? (Number(r.secadas) || 0) : 0;
-    acc.days.add(r.date);
-    return acc;
-  }, { secadas:0, stopHours:0, s1:0, s2:0, s3:0, days:new Set() });
+  const totalSecadas = rows.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
+  const totalMeta = rows.reduce((acc, r) => acc + (Number(r.meta) || 0), 0);
+  const totalFaltante = rows.reduce((acc, r) => acc + (Number(r.faltante) || 0), 0);
+  const totalStop = rows.reduce((acc, r) => acc + (Number(r.stopHours) || 0), 0);
+  const s1 = rows.reduce((acc, r) => acc + (Number(r.s1) || 0), 0);
+  const s2 = rows.reduce((acc, r) => acc + (Number(r.s2) || 0), 0);
+  const s3 = rows.reduce((acc, r) => acc + (Number(r.s3) || 0), 0);
+  const totalCumpl = totalMeta > 0 ? (totalSecadas / totalMeta) * 100 : 0;
 
-  const totalDays = totals.days.size;
-  const meta = totalDays * DAILY_META;
-  const faltante = Math.max(0, meta - totals.secadas);
-  const cump = meta > 0 ? ((totals.secadas / meta) * 100) : 0;
-  const causaShort = list.some(r => Number(r.secadas) === 0)
-    ? "Incluye días sin producción"
-    : "Sin alertas severas";
+  const s1All = [];
+  const s2All = [];
+  const s3All = [];
+  rows.forEach(r => {
+    if(r.s1avg && r.s1avg !== "—") s1All.push(durationToMinutes(r.s1avg));
+    if(r.s2avg && r.s2avg !== "—") s2All.push(durationToMinutes(r.s2avg));
+    if(r.s3avg && r.s3avg !== "—") s3All.push(durationToMinutes(r.s3avg));
+  });
+
+  const footerS1 = minutesToDuration(averageMinutes(s1All));
+  const footerS2 = minutesToDuration(averageMinutes(s2All));
+  const footerS3 = minutesToDuration(averageMinutes(s3All));
 
   tfoot.innerHTML = `
     <tr>
       <td colspan="2">TOTALES</td>
-      <td>${escapeHtml(totalDays)}</td>
-      <td>${escapeHtml(totals.secadas)}</td>
-      <td>${escapeHtml(meta)}</td>
-      <td>${escapeHtml(faltante)}</td>
-      <td style="color:${cump >= 100 ? '#22C55E' : cump >= 80 ? '#FACC15' : '#EF4444'};">${escapeHtml(cump.toFixed(1))}%</td>
-      <td>${escapeHtml(totals.stopHours.toFixed(1).replace(/\.0$/, ""))}</td>
-      <td>${escapeHtml(totals.s1)}</td>
-      <td>${escapeHtml(totals.s2)}</td>
-      <td>${escapeHtml(totals.s3)}</td>
-      <td>${escapeHtml(causaShort)}</td>
+      <td>${escapeHtml(rows.reduce((acc, r) => acc + (Number(r.dias) || 0), 0))}</td>
+      <td>${escapeHtml(totalSecadas)}</td>
+      <td>${escapeHtml(totalMeta)}</td>
+      <td>${escapeHtml(totalFaltante)}</td>
+      <td style="color:${totalCumpl >= 100 ? '#22C55E' : totalCumpl >= 80 ? '#FACC15' : '#EF4444'};">${escapeHtml(totalCumpl.toFixed(1))}%</td>
+      <td>${escapeHtml(fmtHours(totalStop))}</td>
+      <td>${escapeHtml(s1)}</td>
+      <td>${escapeHtml(s2)}</td>
+      <td>${escapeHtml(s3)}</td>
+      <td>${escapeHtml(footerS1)}</td>
+      <td>${escapeHtml(footerS2)}</td>
+      <td>${escapeHtml(footerS3)}</td>
+      <td>${list.some(r => Number(r.secadas) === 0) ? "Incluye días sin producción" : "Sin alertas severas"}</td>
     </tr>
   `;
 }
@@ -1392,13 +1792,24 @@ function renderUserFilter(){
   unique.forEach(name => {
     select.innerHTML += `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`;
   });
+
+  const me = getCurrentUserObject();
+  if(me && me.role === "admin"){
+    $("navUsersBtn").classList.remove("hidden");
+    $("jumpUsersBtn").classList.remove("hidden");
+  }else{
+    $("navUsersBtn").classList.add("hidden");
+    $("jumpUsersBtn").classList.add("hidden");
+  }
 }
 
 function renderUsersAdmin(){
   const container = $("usersList");
-  const isAdmin = users[currentUser] && users[currentUser].role === "admin";
+  const me = getCurrentUserObject();
+  const isAdmin = me && me.role === "admin";
 
   $("navUsersBtn").classList.toggle("hidden", !isAdmin);
+  $("jumpUsersBtn").classList.toggle("hidden", !isAdmin);
 
   if(!isAdmin){
     container.innerHTML = "";
@@ -1458,50 +1869,73 @@ function renderUsersAdmin(){
 
   container.querySelectorAll("[data-active]").forEach(btn => {
     btn.addEventListener("click", async () => {
-      const name = btn.getAttribute("data-active");
-      if(name === "ADMIN") return;
-      const updated = clone(users[name]);
-      updated.active = !updated.active;
-      await usersRef.child(name).set(updated);
+      try{
+        const name = btn.getAttribute("data-active");
+        if(name === "ADMIN") return;
+        const updated = clone(users[name]);
+        updated.active = !updated.active;
+        await usersRef.child(name).set(updated);
+      }catch(err){
+        console.error(err);
+        alert("No se pudo actualizar el estado del usuario.");
+      }
     });
   });
 
   container.querySelectorAll("[data-saveuser]").forEach(btn => {
     btn.addEventListener("click", async () => {
-      const name = btn.getAttribute("data-saveuser");
-      const roleSel = container.querySelector(`[data-role="${CSS.escape(name)}"]`);
-      const passInp = container.querySelector(`[data-pass="${CSS.escape(name)}"]`);
-      const newRole = roleSel ? roleSel.value : users[name].role;
-      const newPass = passInp ? passInp.value.trim() : "";
+      try{
+        const name = btn.getAttribute("data-saveuser");
+        const roleSel = container.querySelector(`[data-role="${name}"]`);
+        const passInp = container.querySelector(`[data-pass="${name}"]`);
+        const newRole = roleSel ? roleSel.value : users[name].role;
+        const newPass = passInp ? passInp.value.trim() : "";
 
-      if(name === "ADMIN" && newRole !== "admin"){
-        alert("ADMIN siempre debe conservar rol de administrador.");
-        return;
+        if(name === "ADMIN" && newRole !== "admin"){
+          alert("ADMIN siempre debe conservar rol de administrador.");
+          return;
+        }
+
+        const updated = clone(users[name]);
+        updated.role = newRole;
+        if(newPass) updated.pass = newPass;
+
+        await usersRef.child(name).set(updated);
+        if(passInp) passInp.value = "";
+        alert("Usuario actualizado.");
+      }catch(err){
+        console.error(err);
+        alert("No se pudo actualizar el usuario.");
       }
-
-      const updated = clone(users[name]);
-      updated.role = newRole;
-      if(newPass) updated.pass = newPass;
-
-      await usersRef.child(name).set(updated);
-      if(passInp) passInp.value = "";
-      alert("Usuario actualizado.");
     });
   });
 
   container.querySelectorAll("[data-deluser]").forEach(btn => {
     btn.addEventListener("click", async () => {
-      const name = btn.getAttribute("data-deluser");
+      try{
+        const name = btn.getAttribute("data-deluser");
 
-      if(name === currentUser){
-        alert("No puedes eliminar tu propio usuario.");
-        return;
+        if(name === currentUser){
+          alert("No puedes eliminar tu propio usuario.");
+          return;
+        }
+        if(!confirm(`¿Eliminar al usuario ${name}?`)) return;
+
+        await usersRef.child(name).remove();
+      }catch(err){
+        console.error(err);
+        alert("No se pudo eliminar el usuario.");
       }
-      if(!confirm(`¿Eliminar al usuario ${name}?`)) return;
-
-      await usersRef.child(name).remove();
     });
   });
+}
+
+function renderChartsAndReports(list){
+  renderExecutiveKpis(list);
+  renderChartTrend(list);
+  renderChartDryers(list);
+  renderDryerCards(list);
+  renderSummaryTable(list);
 }
 
 function refreshAll(){
@@ -1522,7 +1956,8 @@ function refreshAll(){
       String(r.user || "").toLowerCase().includes(search) ||
       String(r.cause || "").toLowerCase().includes(search) ||
       String(r.secadora || "").includes(search) ||
-      String(r.turno || "").toLowerCase().includes(search);
+      String(r.turno || "").toLowerCase().includes(search) ||
+      String(r.date || "").includes(search);
 
     const matchesDate = !filterDate || r.date === filterDate;
     const matchesUser = !filterUser || r.user === filterUser;
@@ -1530,15 +1965,14 @@ function refreshAll(){
     return matchesSearch && matchesDate && matchesUser;
   });
 
-  refreshKPIs(base);
+  renderChartsAndReports(filtered);
   renderTable(filtered);
-  renderSummaryTable(filtered);
-  renderChart(base);
+  renderUserFilter();
   renderUsersAdmin();
 }
 
 function clearRecordForm(){
-  $("regDate").value = "";
+  $("regDate").value = localISODate();
   $("regTurn").value = "Día";
   $("regDryer").value = "1";
   $("regSecadas").value = "";
@@ -1548,8 +1982,37 @@ function clearRecordForm(){
   syncRecordFields();
 }
 
+function syncRecordFields(){
+  const value = $("regSecadas").value;
+
+  if(value === ""){
+    $("blockTime").classList.add("hidden");
+    $("blockStop").classList.add("hidden");
+    $("blockCause").classList.add("hidden");
+    return;
+  }
+
+  const secadas = Number(value);
+  const isZero = secadas === 0;
+  const isPositive = Number.isInteger(secadas) && secadas > 0;
+  const needsJustify = Number.isInteger(secadas) && secadas > 0 && secadas < DAILY_META;
+
+  $("blockTime").classList.toggle("hidden", !isPositive);
+  $("blockStop").classList.toggle("hidden", !isZero);
+  $("blockCause").classList.toggle("hidden", !(isZero || needsJustify));
+
+  if(isZero){
+    $("regAvgTime").value = "";
+    $("regCause").placeholder = "Justifica el paro total";
+  }else if(needsJustify){
+    $("regCause").placeholder = "Justifica por qué no se alcanzó la meta diaria";
+  }else{
+    $("regCause").placeholder = "Justificación opcional";
+  }
+}
+
 function syncCurrentUserUI(){
-  const me = users[currentUser];
+  const me = getCurrentUserObject();
   if(!me) return;
 
   $("currentUserName").textContent = me.name;
@@ -1558,6 +2021,7 @@ function syncCurrentUserUI(){
   $("pwdRoleBadge").textContent = me.role === "admin" ? "Admin" : "Operador";
 
   $("navUsersBtn").classList.toggle("hidden", me.role !== "admin");
+  $("jumpUsersBtn").classList.toggle("hidden", me.role !== "admin");
 
   if(me.role !== "admin"){
     $("sectionUsers").classList.remove("active");
@@ -1565,134 +2029,250 @@ function syncCurrentUserUI(){
   }
 }
 
+function tryRestoreSession(){
+  const session = loadSession();
+  if(!session || !session.user || !usersReady) return;
+
+  const account = users[session.user];
+  if(account && account.active){
+    currentUser = session.user;
+    showView("app");
+    syncCurrentUserUI();
+    clearRecordForm();
+    renderUserFilter();
+    renderUsersAdmin();
+    refreshAll();
+  }else{
+    clearSession();
+  }
+}
+
 async function login(){
-  if(!usersReady){
-    alert("Firebase todavía está cargando. Espera un momento.");
-    return;
-  }
+  try{
+    if(!usersReady){
+      alert("Firebase todavía está cargando. Espera un momento.");
+      return;
+    }
 
-  const user = normalizeUser($("loginUser").value);
-  const pass = String($("loginPass").value || "");
+    const user = normalizeUser($("loginUser").value);
+    const pass = String($("loginPass").value || "");
 
-  if(!user || !pass){
-    alert("Datos incompletos.");
-    return;
-  }
+    if(!user || !pass){
+      alert("Datos incompletos.");
+      return;
+    }
 
-  const account = users[user];
+    const account = users[user];
 
-  if(!account){
-    alert("Usuario o contraseña incorrectos.");
-    return;
-  }
-  if(!account.active){
-    alert("Este usuario está deshabilitado.");
-    return;
-  }
-  if(account.pass !== pass){
-    alert("Usuario o contraseña incorrectos.");
-    return;
-  }
+    if(!account){
+      alert("Usuario o contraseña incorrectos.");
+      return;
+    }
+    if(!account.active){
+      alert("Este usuario está deshabilitado.");
+      return;
+    }
+    if(account.pass !== pass){
+      alert("Usuario o contraseña incorrectos.");
+      return;
+    }
 
-  currentUser = user;
-  editingRecordId = null;
-  $("loginPass").value = "";
-  showView("app");
-  syncCurrentUserUI();
-  renderUserFilter();
-  renderUsersAdmin();
-  refreshAll();
+    currentUser = user;
+    editingRecordId = null;
+    $("loginPass").value = "";
+    saveSession(user);
+    showView("app");
+    syncCurrentUserUI();
+    clearRecordForm();
+    renderUserFilter();
+    renderUsersAdmin();
+    refreshAll();
+  }catch(err){
+    console.error(err);
+    alert("No se pudo iniciar sesión.");
+  }
 }
 
 function logout(){
   currentUser = null;
   editingRecordId = null;
+  clearSession();
   $("loginPass").value = "";
-  $("loginUser").value = "";
+  $("loginChangeOld").value = "";
+  $("loginChangeNew").value = "";
+  $("loginChangeConfirm").value = "";
+  $("sidebarOldPass").value = "";
+  $("sidebarNewPass").value = "";
+  $("sidebarConfirmPass").value = "";
   showView("login");
   renderUserFilter();
   renderUsersAdmin();
 }
 
+async function updatePassword(userName, oldPass, newPass, confirmPass){
+  const user = normalizeUser(userName);
+  const account = users[user];
+
+  if(!user || !account){
+    alert("Usuario no encontrado.");
+    return false;
+  }
+  if(!oldPass || !newPass || !confirmPass){
+    alert("Completa todos los campos de contraseña.");
+    return false;
+  }
+  if(account.pass !== oldPass){
+    alert("La contraseña actual no coincide.");
+    return false;
+  }
+  if(newPass.length < 4){
+    alert("La nueva contraseña debe tener al menos 4 caracteres.");
+    return false;
+  }
+  if(newPass !== confirmPass){
+    alert("La nueva contraseña y la confirmación no coinciden.");
+    return false;
+  }
+
+  const updated = clone(account);
+  updated.pass = newPass;
+  await usersRef.child(user).set(updated);
+  return true;
+}
+
+async function changePasswordFromLogin(){
+  try{
+    const user = $("loginChangeUser").value;
+    const oldPass = $("loginChangeOld").value;
+    const newPass = $("loginChangeNew").value;
+    const confirmPass = $("loginChangeConfirm").value;
+
+    const ok = await updatePassword(user, oldPass, newPass, confirmPass);
+    if(ok){
+      $("loginChangeOld").value = "";
+      $("loginChangeNew").value = "";
+      $("loginChangeConfirm").value = "";
+      alert("Contraseña actualizada correctamente.");
+    }
+  }catch(err){
+    console.error(err);
+    alert("No se pudo cambiar la contraseña.");
+  }
+}
+
+async function changePasswordFromSidebar(){
+  try{
+    if(!currentUser){
+      alert("Primero inicia sesión.");
+      return;
+    }
+
+    const oldPass = $("sidebarOldPass").value;
+    const newPass = $("sidebarNewPass").value;
+    const confirmPass = $("sidebarConfirmPass").value;
+
+    const ok = await updatePassword(currentUser, oldPass, newPass, confirmPass);
+    if(ok){
+      $("sidebarOldPass").value = "";
+      $("sidebarNewPass").value = "";
+      $("sidebarConfirmPass").value = "";
+      alert("Contraseña actualizada correctamente.");
+    }
+  }catch(err){
+    console.error(err);
+    alert("No se pudo cambiar la contraseña.");
+  }
+}
+
 async function saveRecord(){
-  if(!currentUser){
-    alert("Primero inicia sesión.");
-    return;
-  }
-
-  const date = $("regDate").value;
-  const turno = $("regTurn").value;
-  const secadora = Number($("regDryer").value);
-  const secadas = Number($("regSecadas").value);
-
-  if(!date){
-    alert("Selecciona una fecha.");
-    return;
-  }
-  if(!Number.isInteger(secadas) || secadas < 0){
-    alert("Secadas debe ser un número entero igual o mayor que 0.");
-    return;
-  }
-
-  const isZero = secadas === 0;
-  const needsJustify = secadas > 0 && secadas < DAILY_META;
-  const isPositive = secadas > 0;
-
-  let avgTime = "";
-  let stopHours = 0;
-  let cause = String($("regCause").value || "").trim();
-
-  if(isZero){
-    stopHours = Number($("regStopHours").value);
-    if(!Number.isFinite(stopHours) || stopHours < 0){
-      alert("Ingresa horas de paro válidas.");
+  try{
+    if(!currentUser){
+      alert("Primero inicia sesión.");
       return;
     }
-    if(!cause){
-      cause = "Paro total / sin producción";
-    }
-  }
 
-  if(needsJustify && !cause){
-    cause = `No se alcanzó la meta diaria (${secadas}/${DAILY_META})`;
-  }
+    const date = $("regDate").value;
+    const turno = $("regTurn").value;
+    const secadora = Number($("regDryer").value);
+    const secadas = Number($("regSecadas").value);
 
-  if(isPositive){
-    avgTime = String($("regAvgTime").value || "").trim();
-    if(!avgTime){
-      alert("Selecciona el tiempo promedio de secada.");
+    if(!date){
+      alert("Selecciona una fecha.");
       return;
     }
+    if(!Number.isInteger(secadas) || secadas < 0){
+      alert("Secadas debe ser un número entero igual o mayor que 0.");
+      return;
+    }
+
+    const isZero = secadas === 0;
+    const needsJustify = secadas > 0 && secadas < DAILY_META;
+    const isPositive = secadas > 0;
+
+    let avgTime = "";
+    let avgTimeMinutes = null;
+    let stopHours = 0;
+    let cause = String($("regCause").value || "").trim();
+
+    if(isZero){
+      stopHours = Number($("regStopHours").value);
+      if(!Number.isFinite(stopHours) || stopHours < 0){
+        alert("Ingresa horas de paro válidas.");
+        return;
+      }
+      if(!cause){
+        cause = "Paro total / sin producción";
+      }
+    }
+
+    if(isPositive){
+      avgTime = String($("regAvgTime").value || "").trim();
+      avgTimeMinutes = durationToMinutes(avgTime);
+      if(avgTimeMinutes === null){
+        alert("El tiempo promedio debe tener formato HH:MM, por ejemplo 12:40.");
+        return;
+      }
+    }
+
+    if(needsJustify && !cause){
+      alert("Ingresa la justificación porque no se alcanzó la meta diaria.");
+      return;
+    }
+
+    const record = {
+      id: editingRecordId || "",
+      user: currentUser,
+      date,
+      turno,
+      secadora,
+      secadas,
+      avgTime: isPositive ? avgTime : "",
+      avgTimeMinutes: isPositive ? avgTimeMinutes : null,
+      stopHours: isZero ? stopHours : 0,
+      cause: (isZero || needsJustify) ? cause : "",
+      createdAt: new Date().toISOString()
+    };
+
+    if(editingRecordId){
+      record.id = editingRecordId;
+      await recordsRef.child(editingRecordId).set(record);
+      editingRecordId = null;
+    }else{
+      const newRef = recordsRef.push();
+      record.id = newRef.key;
+      await newRef.set(record);
+    }
+
+    clearRecordForm();
+    refreshAll();
+  }catch(err){
+    console.error(err);
+    alert("No se pudo guardar el registro.");
   }
-
-  const record = {
-    id: editingRecordId || "",
-    user: currentUser,
-    date,
-    turno,
-    secadora,
-    secadas,
-    avgTime: isPositive ? avgTime : "",
-    stopHours: isZero ? stopHours : 0,
-    cause: (isZero || needsJustify) ? cause : "",
-    createdAt: new Date().toISOString()
-  };
-
-  if(editingRecordId){
-    record.id = editingRecordId;
-    await recordsRef.child(editingRecordId).set(record);
-    editingRecordId = null;
-  }else{
-    const newRef = recordsRef.push();
-    record.id = newRef.key;
-    await newRef.set(record);
-  }
-
-  clearRecordForm();
 }
 
 function editRecord(id){
-  const me = users[currentUser];
+  const me = getCurrentUserObject();
   if(!me || me.role !== "admin"){
     alert("Solo ADMIN puede editar.");
     return;
@@ -1702,13 +2282,13 @@ function editRecord(id){
   if(!r) return;
 
   editingRecordId = id;
-  $("regDate").value = r.date;
-  $("regTurn").value = r.turno;
-  $("regDryer").value = String(r.secadora);
-  $("regSecadas").value = String(r.secadas);
+  $("regDate").value = r.date || localISODate();
+  $("regTurn").value = r.turno || "Día";
+  $("regDryer").value = String(r.secadora || "1");
+  $("regSecadas").value = String(r.secadas ?? "");
   syncRecordFields();
 
-  if(r.secadas === 0){
+  if(Number(r.secadas) === 0){
     $("regStopHours").value = r.stopHours ?? "";
     $("regCause").value = r.cause || "";
   }else{
@@ -1721,78 +2301,56 @@ function editRecord(id){
 }
 
 async function deleteRecord(id){
-  const me = users[currentUser];
-  if(!me || me.role !== "admin"){
-    alert("Solo ADMIN puede eliminar.");
-    return;
+  try{
+    const me = getCurrentUserObject();
+    if(!me || me.role !== "admin"){
+      alert("Solo ADMIN puede eliminar.");
+      return;
+    }
+    if(!confirm("¿Eliminar este registro?")) return;
+    await recordsRef.child(id).remove();
+  }catch(err){
+    console.error(err);
+    alert("No se pudo eliminar el registro.");
   }
-  if(!confirm("¿Eliminar este registro?")) return;
-
-  await recordsRef.child(id).remove();
-}
-
-async function changePassword(){
-  if(!currentUser){
-    alert("Primero inicia sesión.");
-    return;
-  }
-
-  const oldPass = String($("oldPassword").value || "").trim();
-  const newPass = String($("newPassword").value || "").trim();
-  const confirmPass = String($("confirmPassword").value || "").trim();
-
-  if(!oldPass || !newPass || !confirmPass){
-    alert("Completa todos los campos de contraseña.");
-    return;
-  }
-
-  const me = users[currentUser];
-  if(!me){
-    alert("No se encontró tu usuario.");
-    return;
-  }
-
-  if(me.pass !== oldPass){
-    alert("La contraseña actual no coincide.");
-    return;
-  }
-
-  if(newPass.length < 4){
-    alert("La nueva contraseña debe tener al menos 4 caracteres.");
-    return;
-  }
-
-  if(newPass !== confirmPass){
-    alert("La nueva contraseña y la confirmación no coinciden.");
-    return;
-  }
-
-  const updated = clone(me);
-  updated.pass = newPass;
-  await usersRef.child(currentUser).set(updated);
-
-  $("oldPassword").value = "";
-  $("newPassword").value = "";
-  $("confirmPassword").value = "";
-  alert("Contraseña actualizada correctamente.");
 }
 
 function exportCsv(){
   const list = getVisibleRecords();
-  const headers = ["Usuario","Fecha","Turno","Secadora","Secadas","Tiempo promedio","Horas de paro","Causa"];
-  const rows = list.map(r => [
-    r.user,
-    r.date,
-    r.turno,
-    r.secadora,
-    r.secadas,
-    r.avgTime || "",
-    r.stopHours ?? "",
-    r.cause || ""
-  ]);
+  const headers = [
+    "Usuario","Fecha","Semana","Turno","Secadora","Secadas","Meta diaria","Cump. diaria","Meta semanal","Cump. semanal",
+    "Tiempo promedio","Horas de paro","Tipo","Causa"
+  ];
+
+  const dateTotals = buildDateTotals(list);
+  const weekTotals = buildWeekTotals(list);
+
+  const rows = list.map(r => {
+    const dayTotal = dateTotals[r.date] || 0;
+    const weekTotal = weekTotals[weekKeyFromISO(r.date)] || 0;
+    const dayComp = DAILY_META > 0 ? ((dayTotal / DAILY_META) * 100) : 0;
+    const weekComp = WEEKLY_META > 0 ? ((weekTotal / WEEKLY_META) * 100) : 0;
+
+    return [
+      r.user,
+      r.date,
+      r.date ? `S${String(getISOWeekInfo(parseDateISO(r.date)).week).padStart(2,"0")}` : "",
+      r.turno,
+      r.secadora,
+      r.secadas,
+      DAILY_META,
+      dayComp.toFixed(1),
+      WEEKLY_META,
+      weekComp.toFixed(1),
+      r.avgTime || "",
+      r.stopHours ?? "",
+      classifyStop(r),
+      r.cause || ""
+    ];
+  });
 
   const csv = [headers, ...rows]
-    .map(row => row.map(v => `"${String(v ?? "").replaceAll('"','""')}"`).join(","))
+    .map(row => row.map(v => `"${String(v ?? "").replaceAll('"', '""')}"`).join(","))
     .join("\n");
 
   const blob = new Blob([csv], { type:"text/csv;charset=utf-8;" });
@@ -1805,37 +2363,42 @@ function exportCsv(){
 }
 
 async function createUser(){
-  const me = users[currentUser];
-  if(!me || me.role !== "admin"){
-    alert("Solo ADMIN puede crear usuarios.");
-    return;
-  }
+  try{
+    const me = getCurrentUserObject();
+    if(!me || me.role !== "admin"){
+      alert("Solo ADMIN puede crear usuarios.");
+      return;
+    }
 
-  const name = normalizeUser($("newUserName").value);
-  const pass = String($("newUserPass").value || "").trim();
-  const role = $("newUserRole").value;
-  const active = $("newUserActive").value === "true";
+    const name = normalizeUser($("newUserName").value);
+    const pass = String($("newUserPass").value || "").trim();
+    const role = $("newUserRole").value;
+    const active = $("newUserActive").value === "true";
 
-  if(!name){
-    alert("Escribe un nombre de usuario.");
-    return;
-  }
-  if(!pass){
-    alert("Escribe una contraseña.");
-    return;
-  }
-  if(users[name]){
-    alert("Ese usuario ya existe.");
-    return;
-  }
+    if(!name){
+      alert("Escribe un nombre de usuario.");
+      return;
+    }
+    if(!pass){
+      alert("Escribe una contraseña.");
+      return;
+    }
+    if(users[name]){
+      alert("Ese usuario ya existe.");
+      return;
+    }
 
-  const newUser = { name, pass, role, active };
-  await usersRef.child(name).set(newUser);
+    const newUser = { name, pass, role, active };
+    await usersRef.child(name).set(newUser);
 
-  $("newUserName").value = "";
-  $("newUserPass").value = "";
-  $("newUserRole").value = "operador";
-  $("newUserActive").value = "true";
+    $("newUserName").value = "";
+    $("newUserPass").value = "";
+    $("newUserRole").value = "operador";
+    $("newUserActive").value = "true";
+  }catch(err){
+    console.error(err);
+    alert("No se pudo crear el usuario.");
+  }
 }
 
 function bindEvents(){
@@ -1844,7 +2407,14 @@ function bindEvents(){
   $("saveRecordBtn").addEventListener("click", saveRecord);
   $("exportCsvBtn").addEventListener("click", exportCsv);
   $("createUserBtn").addEventListener("click", createUser);
-  $("changePasswordBtn").addEventListener("click", changePassword);
+  $("sidebarChangeBtn").addEventListener("click", changePasswordFromSidebar);
+  $("loginChangeBtn").addEventListener("click", changePasswordFromLogin);
+
+  $("toggleLoginChangeBtn").addEventListener("click", () => {
+    const panel = $("loginChangePanel");
+    panel.classList.toggle("hidden");
+    $("toggleLoginChangeBtn").textContent = panel.classList.contains("hidden") ? "Cambiar contraseña" : "Ocultar cambio";
+  });
 
   $("regSecadas").addEventListener("input", syncRecordFields);
   $("searchBox").addEventListener("input", refreshAll);
@@ -1854,6 +2424,10 @@ function bindEvents(){
   $("regDate").addEventListener("dblclick", () => openPicker($("regDate")));
   $("filterDate").addEventListener("dblclick", () => openPicker($("filterDate")));
 
+  $("jumpRecordsBtn").addEventListener("click", () => setSection("sectionRecords"));
+  $("jumpAnalyticsBtn").addEventListener("click", () => setSection("sectionAnalytics"));
+  $("jumpUsersBtn").addEventListener("click", () => setSection("sectionUsers"));
+
   document.querySelectorAll("[data-section-btn]").forEach(btn => {
     btn.addEventListener("click", () => setSection(btn.getAttribute("data-section-btn")));
   });
@@ -1861,8 +2435,12 @@ function bindEvents(){
   document.querySelectorAll("[data-summary-view]").forEach(btn => {
     btn.addEventListener("click", () => {
       summaryView = btn.getAttribute("data-summary-view");
+
       document.querySelectorAll("[data-summary-view]").forEach(x => x.classList.remove("active"));
-      btn.classList.add("active");
+      document.querySelectorAll(".filter-strip .tag").forEach(x => x.classList.remove("active"));
+
+      document.querySelectorAll(`[data-summary-view="${summaryView}"]`).forEach(x => x.classList.add("active"));
+
       refreshAll();
     });
   });
@@ -1870,26 +2448,32 @@ function bindEvents(){
 
 function attachRealtimeListeners(){
   usersRef.on("value", async (snapshot) => {
-    if(!snapshot.exists()){
-      await usersRef.set(defaultUsers);
-      return;
-    }
-
-    users = snapshot.val() || {};
-    usersReady = true;
-    renderUserFilter();
-
-    if(currentUser){
-      const me = users[currentUser];
-      if(!me || !me.active){
-        logout();
+    try{
+      if(!snapshot.exists()){
+        await usersRef.set(defaultUsers);
         return;
       }
-      syncCurrentUserUI();
-      renderUsersAdmin();
-      refreshAll();
-    }else{
-      renderUsersAdmin();
+
+      users = snapshot.val() || {};
+      usersReady = true;
+      renderUserFilter();
+
+      if(currentUser){
+        const me = users[currentUser];
+        if(!me || !me.active){
+          logout();
+          return;
+        }
+        syncCurrentUserUI();
+        renderUsersAdmin();
+        refreshAll();
+      }else{
+        tryRestoreSession();
+        renderUsersAdmin();
+      }
+    }catch(error){
+      console.error("Error leyendo users:", error);
+      alert("Error leyendo usuarios desde Firebase.");
     }
   }, (error) => {
     console.error("Error leyendo users:", error);
@@ -1897,10 +2481,15 @@ function attachRealtimeListeners(){
   });
 
   recordsRef.on("value", (snapshot) => {
-    const raw = snapshot.exists() ? snapshot.val() : {};
-    records = Object.values(raw);
-    if(currentUser){
-      refreshAll();
+    try{
+      const raw = snapshot.exists() ? snapshot.val() : {};
+      records = Object.entries(raw).map(([id, val]) => ({ ...val, id: val.id || id }));
+      if(currentUser){
+        refreshAll();
+      }
+    }catch(error){
+      console.error("Error leyendo records:", error);
+      alert("Error leyendo registros desde Firebase.");
     }
   }, (error) => {
     console.error("Error leyendo records:", error);
@@ -1914,6 +2503,8 @@ window.deleteRecord = deleteRecord;
 function init(){
   bindEvents();
   attachRealtimeListeners();
+  $("regDate").value = localISODate();
+  $("filterDate").value = "";
   syncRecordFields();
   renderUserFilter();
   showView("login");
