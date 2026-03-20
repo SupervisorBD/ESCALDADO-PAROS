@@ -453,6 +453,17 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   padding:10px 13px;
 }
 
+.summary-controls{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.summary-controls .btn.active{
+  outline:2px solid rgba(249,115,22,.35);
+  box-shadow:0 0 0 3px rgba(249,115,22,.08);
+}
+
 @media (max-width: 1180px){
   .app{ grid-template-columns:1fr; }
   .sidebar{
@@ -549,8 +560,8 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
         <div class="value" id="kpiReal">0</div>
       </div>
       <div class="kpi">
-        <div class="label">Meta</div>
-        <div class="value">42</div>
+        <div class="label">Meta diaria</div>
+        <div class="value">6</div>
       </div>
       <div class="kpi">
         <div class="label">Cumplimiento</div>
@@ -607,8 +618,8 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
             </div>
 
             <div class="field hidden" id="blockCause">
-              <label for="regCause">Causa</label>
-              <input class="input" type="text" id="regCause" placeholder="Por qué no se generó" />
+              <label for="regCause">Causa / justificación</label>
+              <input class="input" type="text" id="regCause" placeholder="Por qué no se alcanzó la meta" />
             </div>
 
             <div class="actions">
@@ -659,6 +670,38 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
                 </thead>
                 <tbody id="recordsBody"></tbody>
               </table>
+            </div>
+
+            <div class="panel" style="margin-top:16px; padding:16px;">
+              <h3>Resumen consolidado</h3>
+
+              <div class="summary-controls">
+                <button class="btn btn-primary active" type="button" data-summary-view="dia">Por día</button>
+                <button class="btn btn-secondary" type="button" data-summary-view="semana">Por semana</button>
+                <button class="btn btn-ghost" type="button" data-summary-view="mes">Por mes</button>
+              </div>
+
+              <div class="table-wrap">
+                <table style="min-width:1120px;">
+                  <thead>
+                    <tr>
+                      <th>Periodo</th>
+                      <th>Semana</th>
+                      <th>Días</th>
+                      <th>Secadas</th>
+                      <th>Meta</th>
+                      <th>Faltante</th>
+                      <th>Cumplimiento</th>
+                      <th>Horas de paro</th>
+                      <th>Secadora #1</th>
+                      <th>Secadora #2</th>
+                      <th>Secadora #3</th>
+                      <th>Justificación / Causa</th>
+                    </tr>
+                  </thead>
+                  <tbody id="summaryBody"></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -728,6 +771,8 @@ const db = firebase.database();
 const usersRef = db.ref("users");
 const recordsRef = db.ref("records");
 
+const DAILY_META = 6;
+
 const defaultUsers = {
   "ADMIN":  { name:"ADMIN",  pass:"1234", role:"admin",    active:true },
   "SELVIN": { name:"SELVIN", pass:"1234", role:"operador", active:true },
@@ -746,6 +791,7 @@ let currentUser = null;
 let editingRecordId = null;
 let chart = null;
 let usersReady = false;
+let summaryView = "dia";
 
 function clone(obj){
   return JSON.parse(JSON.stringify(obj));
@@ -797,23 +843,31 @@ function syncRecordFields(){
     $("blockTime").classList.add("hidden");
     $("blockStop").classList.add("hidden");
     $("blockCause").classList.add("hidden");
+    $("regCause").placeholder = "Por qué no se alcanzó la meta";
     return;
   }
 
   const secadas = Number(value);
   const isZero = secadas === 0;
   const isPositive = Number.isInteger(secadas) && secadas > 0;
+  const needsJustify = Number.isInteger(secadas) && secadas > 0 && secadas < DAILY_META;
 
   $("blockTime").classList.toggle("hidden", !isPositive);
   $("blockStop").classList.toggle("hidden", !isZero);
-  $("blockCause").classList.toggle("hidden", !isZero);
+  $("blockCause").classList.toggle("hidden", !(isZero || needsJustify));
 
   if(isPositive){
     $("regStopHours").value = "";
-    $("regCause").value = "";
+    if(!needsJustify && !isZero) $("regCause").value = "";
   }
+
   if(isZero){
     $("regAvgTime").value = "";
+    $("regCause").placeholder = "Justifica el paro total";
+  }else if(needsJustify){
+    $("regCause").placeholder = "Justifica por qué no se alcanzó la meta de 6";
+  }else{
+    $("regCause").placeholder = "Por qué no se alcanzó la meta";
   }
 }
 
@@ -825,20 +879,139 @@ function getVisibleRecords(){
   return records.filter(r => r.user === currentUser);
 }
 
-function refreshKPIs(list){
-  const total = list.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
-  const stop = list.reduce((acc, r) => acc + (Number(r.stopHours) || 0), 0);
-  const cump = (total / 42) * 100;
+function parseDateISO(iso){
+  return new Date(`${iso}T00:00:00`);
+}
 
-  $("kpiReal").textContent = total;
-  $("kpiHoras").textContent = stop;
+function formatDateES(iso){
+  if(!iso) return "";
+  const [y, m, d] = iso.split("-");
+  return `${Number(d)}/${Number(m)}/${y}`;
+}
+
+function getISOWeekInfo(date){
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const week = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  return { year: d.getUTCFullYear(), week };
+}
+
+function summarizeRecords(list, mode){
+  const map = {};
+
+  list.forEach(r => {
+    const isoDate = r.date;
+    if(!isoDate) return;
+
+    const date = parseDateISO(isoDate);
+    let key = "";
+    let periodo = "";
+    let sortKey = "";
+    let semanaLabel = "";
+
+    if(mode === "dia"){
+      const info = getISOWeekInfo(date);
+      key = isoDate;
+      periodo = formatDateES(isoDate);
+      sortKey = isoDate;
+      semanaLabel = `S${String(info.week).padStart(2, "0")}`;
+    }else if(mode === "semana"){
+      const info = getISOWeekInfo(date);
+      const wk = String(info.week).padStart(2, "0");
+      key = `${info.year}-W${wk}`;
+      periodo = `Semana ${wk} / ${info.year}`;
+      sortKey = `${info.year}-${wk}`;
+      semanaLabel = `Semana ${wk}`;
+    }else{
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      key = `${date.getFullYear()}-${month}`;
+      periodo = `${month}/${date.getFullYear()}`;
+      sortKey = `${date.getFullYear()}-${month}`;
+      semanaLabel = "Mes";
+    }
+
+    const secadas = Number(r.secadas) || 0;
+    const stopHours = Number(r.stopHours) || 0;
+    const secadora = String(r.secadora || "");
+    const cause = String(r.cause || "").trim();
+
+    if(!map[key]){
+      map[key] = {
+        key,
+        periodo,
+        sortKey,
+        semana: semanaLabel,
+        diasSet: new Set(),
+        secadas: 0,
+        stopHours: 0,
+        s1: 0,
+        s2: 0,
+        s3: 0,
+        causas: new Set()
+      };
+    }
+
+    const row = map[key];
+    row.diasSet.add(isoDate);
+    row.secadas += secadas;
+    row.stopHours += stopHours;
+
+    if(secadora === "1") row.s1 += secadas;
+    if(secadora === "2") row.s2 += secadas;
+    if(secadora === "3") row.s3 += secadas;
+
+    if(cause){
+      row.causas.add(cause);
+    }else if(secadas < DAILY_META){
+      row.causas.add("Sin justificación registrada");
+    }
+  });
+
+  return Object.values(map)
+    .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
+    .map(row => {
+      const dias = row.diasSet.size;
+      const meta = dias * DAILY_META;
+      const faltante = Math.max(0, meta - row.secadas);
+      const cumplimiento = meta > 0 ? (row.secadas / meta) * 100 : 0;
+
+      return {
+        periodo: row.periodo,
+        semana: row.semana,
+        dias,
+        secadas: row.secadas,
+        meta,
+        faltante,
+        cumplimiento: cumplimiento.toFixed(1),
+        stopHours: row.stopHours,
+        s1: row.s1,
+        s2: row.s2,
+        s3: row.s3,
+        causa: [...row.causas].join(" | ")
+      };
+    });
+}
+
+function refreshKPIs(list){
+  const daily = summarizeRecords(list, "dia");
+  const totalSecadas = daily.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
+  const totalMeta = daily.reduce((acc, r) => acc + (Number(r.meta) || 0), 0);
+  const totalStop = daily.reduce((acc, r) => acc + (Number(r.stopHours) || 0), 0);
+  const cump = totalMeta > 0 ? (totalSecadas / totalMeta) * 100 : 0;
+
+  $("kpiReal").textContent = totalSecadas;
+  $("kpiHoras").textContent = totalStop;
   $("kpiCumple").textContent = `${isFinite(cump) ? cump.toFixed(1) : "0.0"}%`;
 }
 
 function renderChart(list){
+  const daily = summarizeRecords(list, "dia");
   const byDate = {};
-  list.forEach(r => {
-    byDate[r.date] = (byDate[r.date] || 0) + (Number(r.secadas) || 0);
+
+  daily.forEach(r => {
+    byDate[r.periodo] = r.secadas;
   });
 
   if(chart){
@@ -850,10 +1023,10 @@ function renderChart(list){
   chart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: Object.keys(byDate).sort(),
+      labels: Object.keys(byDate),
       datasets: [{
         label: "Secadas",
-        data: Object.keys(byDate).sort().map(k => byDate[k]),
+        data: Object.keys(byDate).map(k => byDate[k]),
         backgroundColor: "#F97316",
         borderColor: "#F97316",
         borderWidth: 1
@@ -894,7 +1067,7 @@ function renderTable(list){
   list.forEach(r => {
     const avgTime = r.secadas > 0 ? (r.avgTime || "—") : "—";
     const stopHours = r.secadas === 0 ? (r.stopHours ?? "—") : "—";
-    const cause = r.secadas === 0 ? (r.cause || "—") : "—";
+    const cause = (Number(r.secadas) < DAILY_META) ? (r.cause || "—") : "—";
 
     tbody.innerHTML += `
       <tr>
@@ -914,6 +1087,40 @@ function renderTable(list){
             </div>
           ` : "—"}
         </td>
+      </tr>
+    `;
+  });
+}
+
+function renderSummaryTable(list){
+  const tbody = $("summaryBody");
+  tbody.innerHTML = "";
+
+  const rows = summarizeRecords(list, summaryView);
+
+  if(rows.length === 0){
+    tbody.innerHTML = `<tr><td colspan="12" style="padding:16px;color:#c8d2dd;">No hay datos para resumir.</td></tr>`;
+    return;
+  }
+
+  rows.forEach(r => {
+    const cumplimiento = Number(r.cumplimiento);
+    const stateColor = cumplimiento >= 100 ? "color:#22C55E;" : (cumplimiento >= 80 ? "color:#FACC15;" : "color:#EF4444;");
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${escapeHtml(r.periodo)}</td>
+        <td>${escapeHtml(r.semana)}</td>
+        <td>${escapeHtml(r.dias)}</td>
+        <td>${escapeHtml(r.secadas)}</td>
+        <td>${escapeHtml(r.meta)}</td>
+        <td>${escapeHtml(r.faltante)}</td>
+        <td style="${stateColor} font-weight:800;">${escapeHtml(r.cumplimiento)}%</td>
+        <td>${escapeHtml(r.stopHours)}</td>
+        <td>${escapeHtml(r.s1)}</td>
+        <td>${escapeHtml(r.s2)}</td>
+        <td>${escapeHtml(r.s3)}</td>
+        <td>${escapeHtml(r.causa || "—")}</td>
       </tr>
     `;
   });
@@ -1062,11 +1269,13 @@ function refreshAll(){
 
     const matchesDate = !filterDate || r.date === filterDate;
     const matchesUser = !filterUser || r.user === filterUser;
+
     return matchesSearch && matchesDate && matchesUser;
   });
 
   refreshKPIs(base);
   renderTable(filtered);
+  renderSummaryTable(filtered);
   renderChart(base);
   renderUsersAdmin();
 }
@@ -1168,24 +1377,26 @@ async function saveRecord(){
   }
 
   const isZero = secadas === 0;
+  const needsJustify = secadas > 0 && secadas < DAILY_META;
   const isPositive = secadas > 0;
 
   let avgTime = "";
   let stopHours = 0;
-  let cause = "";
+  let cause = String($("regCause").value || "").trim();
 
   if(isZero){
     stopHours = Number($("regStopHours").value);
-    cause = String($("regCause").value || "").trim();
-
     if(!Number.isFinite(stopHours) || stopHours < 0){
       alert("Ingresa horas de paro válidas.");
       return;
     }
     if(!cause){
-      alert("Indica la causa.");
-      return;
+      cause = "Paro total / sin producción";
     }
+  }
+
+  if(needsJustify && !cause){
+    cause = `No se alcanzó la meta diaria (${secadas}/${DAILY_META})`;
   }
 
   if(isPositive){
@@ -1205,7 +1416,7 @@ async function saveRecord(){
     secadas,
     avgTime: isPositive ? avgTime : "",
     stopHours: isZero ? stopHours : 0,
-    cause: isZero ? cause : "",
+    cause: (isZero || needsJustify) ? cause : "",
     createdAt: new Date().toISOString()
   };
 
@@ -1244,6 +1455,7 @@ function editRecord(id){
     $("regCause").value = r.cause || "";
   }else{
     $("regAvgTime").value = r.avgTime || "";
+    $("regCause").value = r.cause || "";
   }
 
   setSection("sectionRecords");
@@ -1339,6 +1551,15 @@ function bindEvents(){
 
   document.querySelectorAll("[data-section-btn]").forEach(btn => {
     btn.addEventListener("click", () => setSection(btn.getAttribute("data-section-btn")));
+  });
+
+  document.querySelectorAll("[data-summary-view]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      summaryView = btn.getAttribute("data-summary-view");
+      document.querySelectorAll("[data-summary-view]").forEach(x => x.classList.remove("active"));
+      btn.classList.add("active");
+      refreshAll();
+    });
   });
 }
 
