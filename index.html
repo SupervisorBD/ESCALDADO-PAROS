@@ -7,8 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="format-detection" content="telephone=no" />
   <title>Planta de Escaldado | Supervisión</title>
-  <script type="text/javascript" src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=r2eViVOHOB62MC51aSlebAy3OHFjjh1wZC6BY--NkveLxzsVLW9twN9F-K3Z35SusbDEiRvYfGqxNumKHIlu2ehOeABA9GY7xQLxiDNTucG6lYUxc9I_qxAzo0_R4sI5vzZgz7UEKyfigilKGHrMM1yeDYHFb6Nl_mY7_eiKkeHCnln63ieH8cDCoLygthU__nSjeLPTItxUsbkC6z2qEy_WOwkraYmg53smpzuOiHyaickWrjHkJkanGYs9IFeZMZz59Gyj2t8DB13BQeAIpg" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script type="text/javascript" src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=gy2aZdQRblRUZcMfIMoW5LEAheaINJUE6KF37tP4t7r7mvukJlXJ1yFWhLtAsjuzD7zNgo5LXhk1xteTVf-E8paxsYAzgWBcc5niYLx4m3jp42mwlkIhiQRmODj-7g3_1bWiXeIg9xqiBBiO-iIKNcO36LQ5SfEOFFdS-STeyX3Kyj64CblYPtP-sUw1ebNOcjVMQ7FNUJ66O55PjO-LxyWtSY-O1L54Q1ZMxPYxYa_NxDFV4mLPddLIlsvTfQLqdOvHNuEmYleVhdL7SBpZmg" charset="UTF-8"></script><script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
   <style>
     :root{
@@ -849,20 +848,138 @@
     .section-title .sec-ico{width:28px;height:28px;border-radius:10px;background:#eef4fb;display:grid;place-items:center;color:var(--blue)}
     .section-title .sec-ico svg{width:15px;height:15px;stroke:currentColor}
 
-    @media (max-width: 760px){
+    @media (max-width: 980px){
       .app{grid-template-columns:1fr}
       .sidebar{
         position:relative;
         height:auto;
+        overflow:visible;
+        padding:12px;
       }
-      .grid-kpis,.info-row{grid-template-columns:repeat(2, minmax(0, 1fr))}
-      .row,.two-col{grid-template-columns:1fr}
-      .content{padding:14px}
-      .panel{padding:14px}
-      .login-card{padding:18px}
-      .login-card{grid-template-columns:1fr}
+      .brand{
+        margin-bottom:10px;
+        padding-bottom:12px;
+      }
+      .side-card{
+        margin-top:10px;
+        padding:12px;
+      }
+      .nav{
+        margin-top:10px;
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:8px;
+      }
+      .nav button{
+        padding:10px 12px;
+        border-radius:12px;
+      }
+      .content{padding:12px}
+      .page{max-width:none}
+      .topbar{
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+      }
+      .headline h2{font-size:1.18rem}
+      .headline p{font-size:.95rem}
+      .status-line{justify-content:flex-start}
+      .toolbar{
+        gap:10px;
+        margin-bottom:12px;
+      }
+      .chips{width:100%}
+      .chip{padding:8px 11px}
+      .grid-kpis{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+      }
+      .info-row{grid-template-columns:1fr}
+      .layout,.split,.grid-2,.row,.two-col{
+        grid-template-columns:1fr;
+      }
+      .panel{
+        padding:12px;
+        border-radius:18px;
+      }
+      .card{
+        padding:12px;
+        border-radius:16px;
+      }
+      .kpi{
+        min-height:96px;
+        padding:11px;
+      }
+      .kpi .value{font-size:1.18rem}
+      .kpi .label{font-size:.7rem}
+      .kpi .sub,
+      .info-card .sub,
+      .user-card .user-meta,
+      .helper,
+      .small-note,
+      .subtle{
+        font-size:.76rem;
+      }
+      .login-wrap{padding:12px}
+      .login-card{
+        grid-template-columns:1fr;
+        width:100%;
+        border-radius:22px;
+      }
       .login-aside{display:none}
+      .login-main{padding:16px}
+      .login-hero{padding:14px;border-radius:18px}
+      .login-hero-grid{grid-template-columns:1fr;gap:8px}
+      .login-metrics{grid-template-columns:1fr;gap:8px}
+      .login-chip{justify-content:flex-start}
+      .table-wrap{
+        border-radius:14px;
+      }
+      table{
+        min-width:880px;
+      }
+      .role-admin .grid-kpis.admin-only,
+      .role-admin .info-row.admin-only{
+        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      }
     }
+
+    @media (max-width: 520px){
+      .nav{grid-template-columns:1fr}
+      .grid-kpis,
+      .role-admin .grid-kpis.admin-only,
+      .role-admin .info-row.admin-only{
+        grid-template-columns:1fr !important;
+      }
+      .content{padding:10px}
+      .panel{padding:10px}
+      .card{padding:10px}
+      .kpi{min-height:92px}
+      .kpi .kpi-head{align-items:flex-start}
+      .kpi .kpi-icon{
+        width:30px;height:30px;border-radius:11px;
+      }
+      .headline .ribbon .badge{font-size:.68rem}
+      .user-card .user-top{
+        flex-direction:column;
+      }
+      .user-card .user-top-right{
+        align-items:flex-start;
+        text-align:left;
+        max-width:none;
+        flex:auto;
+      }
+      .user-actions{justify-content:flex-start}
+      .actions .btn,
+      .actions .chip{
+        width:100%;
+      }
+      .table-wrap{
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1630,6 +1747,9 @@
   let currentUser = null;
   let summaryView = localStorage.getItem(SUMMARY_VIEW_KEY) || 'dia';
   let editingRecordId = null;
+  let refreshTimer = null;
+  let coreListenersReady = false;
+  let heavyListenersReady = false;
   let loadedUsers = false;
   let loadedRecords = false;
   let loadedSettings = false;
@@ -1679,6 +1799,13 @@
   function sameISOWeek(iso, ref){
     const info = getISOWeekInfo(parseDateISO(iso));
     return info.year === ref.year && info.week === ref.week;
+  }
+
+  function scheduleRefresh(){
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(function(){
+      refreshAll();
+    }, 180);
   }
   function fmt(n, digits = 0){
     const v = Number(n) || 0;
@@ -2323,17 +2450,26 @@
   }
 
   function refreshAll(){
-    const filtered = filterRecords();
+    var filtered = filterRecords();
     renderExecutiveKpis(filtered);
     renderNarrative(filtered);
     renderCauseSummary(filtered);
     renderDryerRank(filtered);
     renderSummaryTable(filtered);
     renderRecords(filtered);
-    renderUsers();
-    renderLogs();
-    renderSettings();
-    fillUserFilter();
+
+    if(isAdmin()){
+      var activeSection = document.querySelector('.section.active');
+      var activeId = activeSection ? activeSection.id : '';
+      if(activeId === 'sectionUsers'){
+        renderUsers();
+      }else if(activeId === 'sectionLogs'){
+        renderLogs();
+      }else if(activeId === 'sectionSettings'){
+        renderSettings();
+      }
+    }
+
     refreshSummaryButtons();
   }
 
@@ -2393,6 +2529,7 @@
 
     $('loginPass').value = '';
     setView('app');
+    attachHeavyListeners();
     showRoleUI();
     updateHeader();
     clearRecordForm();
@@ -2637,6 +2774,7 @@
     if(acc && acc.active){
       currentUser = ses.user;
       setView('app');
+      attachHeavyListeners();
       showRoleUI();
       updateHeader();
       clearRecordForm();
@@ -2704,75 +2842,87 @@
 
   function initDefaultData(){
     return Promise.all([
-      usersRef.once('value').then(snap => {
+      usersRef.once('value').then(function(snap){
         if(!snap.exists()) return usersRef.set(defaultUsers);
       }),
-      recordsRef.once('value').then(snap => {
-        if(!snap.exists()) return recordsRef.set({});
-      }),
-      logsRef.once('value').then(snap => {
-        if(!snap.exists()) return logsRef.set({});
-      }),
-      settingsRef.once('value').then(snap => {
+      settingsRef.once('value').then(function(snap){
         if(!snap.exists()) return settingsRef.set(defaultSettings);
       })
     ]);
   }
 
-  function attachRealtimeListeners(){
-    usersRef.on('value', (snapshot) => {
+  function attachCoreListeners(){
+    if(coreListenersReady) return;
+    coreListenersReady = true;
+
+    usersRef.on('value', function(snapshot){
       users = snapshot.val() || {};
       loadedUsers = true;
       fillUserFilter();
-      renderUsers();
       if(currentUser){
-        const me = users[currentUser];
+        var me = users[currentUser];
         if(!me || !me.active){
           logout();
           return;
         }
         showRoleUI();
         updateHeader();
-        refreshAll();
+        if(document.querySelector('.section.active') && document.querySelector('.section.active').id === 'sectionUsers'){
+          renderUsers();
+        }else{
+          refreshAll();
+        }
       }else{
         restoreSession();
       }
-    }, (error) => {
+    }, function(error){
       console.error('Error leyendo users:', error);
       alert('Error leyendo usuarios desde Firebase.');
     });
 
-    recordsRef.on('value', (snapshot) => {
-      const raw = snapshot.val() || {};
-      records = Object.entries(raw).map(([id, val]) => ({ ...val, id: val.id || id }));
-      loadedRecords = true;
-      if(currentUser) refreshAll();
-    }, (error) => {
-      console.error('Error leyendo records:', error);
-      alert('Error leyendo registros desde Firebase.');
-    });
-
-    logsRef.on('value', (snapshot) => {
-      const raw = snapshot.val() || {};
-      logs = Object.values(raw);
-      loadedLogs = true;
-      if(currentUser) renderLogs();
-    }, (error) => {
-      console.error('Error leyendo logs:', error);
-      alert('Error leyendo bitácora desde Firebase.');
-    });
-
-    settingsRef.on('value', (snapshot) => {
-      settings = snapshot.val() || { ...defaultSettings };
-      loadedSettings = true;
+    settingsRef.on('value', function(snapshot){
+      settings = snapshot.val() || defaultSettings;
       localStorage.setItem(DAILY_META_KEY, String(settings.metaDaily || 6));
       localStorage.setItem(WEEKLY_META_KEY, String(settings.metaWeekly || 42));
       syncMeta();
       renderSettings();
-      refreshAll();
-    }, (error) => {
+      if(currentUser){
+        if(document.querySelector('.section.active') && document.querySelector('.section.active').id === 'sectionSettings'){
+          renderSettings();
+        }
+        scheduleRefresh();
+      }
+    }, function(error){
       console.error('Error leyendo settings:', error);
       alert('Error leyendo configuración desde Firebase.');
+    });
+  }
+
+  function attachHeavyListeners(){
+    if(heavyListenersReady) return;
+    heavyListenersReady = true;
+
+    recordsRef.on('value', function(snapshot){
+      var raw = snapshot.val() || {};
+      records = Object.keys(raw).map(function(id){
+        var val = raw[id] || {};
+        return Object.assign({}, val, { id: val.id || id });
+      });
+      loadedRecords = true;
+      if(currentUser) scheduleRefresh();
+    }, function(error){
+      console.error('Error leyendo records:', error);
+      alert('Error leyendo registros desde Firebase.');
+    });
+
+    logsRef.on('value', function(snapshot){
+      var raw = snapshot.val() || {};
+      logs = Object.keys(raw).map(function(key){ return raw[key]; });
+      loadedLogs = true;
+      if(currentUser) renderLogs();
+    }, function(error){
+      console.error('Error leyendo logs:', error);
+      alert('Error leyendo bitácora desde Firebase.');
     });
   }
 
@@ -2792,9 +2942,9 @@
     populateInitialUI();
     setView('login');
     await initDefaultData();
-    attachRealtimeListeners();
-    const waitReady = setInterval(() => {
-      if(loadedUsers && loadedRecords && loadedSettings && loadedLogs){
+    attachCoreListeners();
+    const waitReady = setInterval(function(){
+      if(loadedUsers){
         clearInterval(waitReady);
         restoreSession();
         if(!currentUser) setView('login');
