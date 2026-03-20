@@ -11,18 +11,26 @@
 
 <style>
 :root{
-  --bg:#0D1B2A;
-  --bg-2:#091320;
-  --panel:#132336;
-  --panel-2:#0B1522;
-  --line:#2B3C51;
+  --bg:#0A1624;
+  --bg-2:#07111A;
+  --panel:#102235;
+  --panel-2:#0C1826;
+  --panel-3:#08101A;
+  --line:#284055;
+  --line-2:#35506A;
   --text:#FFFFFF;
-  --muted:#C8D2DD;
-  --orange:#F97316;
+  --muted:#C9D5E2;
+  --muted-2:#92A4B7;
+  --blue:#2563EB;
+  --blue-2:#3B82F6;
+  --orange:#F59E0B;
+  --orange-2:#F97316;
   --yellow:#FACC15;
-  --blue:#3B82F6;
   --green:#22C55E;
   --red:#EF4444;
+  --soft-red:rgba(239,68,68,.14);
+  --soft-orange:rgba(249,115,22,.14);
+  --soft-blue:rgba(59,130,246,.14);
   --shadow:0 18px 40px rgba(0,0,0,.28);
   --radius:18px;
 }
@@ -33,13 +41,17 @@ body{
   margin:0;
   font-family:"Segoe UI", Arial, sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(249,115,22,.08), transparent 30%),
-    radial-gradient(circle at top right, rgba(250,204,21,.06), transparent 26%),
-    var(--bg);
+    radial-gradient(circle at top left, rgba(245,158,11,.07), transparent 30%),
+    radial-gradient(circle at top right, rgba(59,130,246,.08), transparent 28%),
+    linear-gradient(180deg, var(--bg), var(--bg-2));
   color:var(--text);
 }
 
 .hidden{ display:none !important; }
+
+button, input, select{
+  font:inherit;
+}
 
 .login-wrap{
   min-height:100vh;
@@ -50,7 +62,7 @@ body{
 
 .login-card{
   width:min(430px, 100%);
-  background:linear-gradient(180deg, rgba(19,35,54,.98), rgba(11,21,34,.98));
+  background:linear-gradient(180deg, rgba(16,34,53,.98), rgba(12,24,38,.98));
   border:1px solid rgba(255,255,255,.06);
   border-radius:24px;
   box-shadow:var(--shadow);
@@ -65,11 +77,11 @@ body{
 }
 
 .brand-mark{
-  width:44px;
-  height:44px;
+  width:46px;
+  height:46px;
   border-radius:14px;
-  background:linear-gradient(135deg, var(--orange), var(--yellow));
-  box-shadow:0 10px 22px rgba(249,115,22,.25);
+  background:linear-gradient(135deg, var(--blue), var(--orange));
+  box-shadow:0 10px 22px rgba(59,130,246,.22);
   flex:0 0 auto;
 }
 
@@ -105,9 +117,10 @@ label{
   transition:.18s ease;
   font-size:.95rem;
 }
+
 .input:focus, .select:focus{
-  border-color:rgba(249,115,22,.8);
-  box-shadow:0 0 0 3px rgba(249,115,22,.12);
+  border-color:rgba(245,158,11,.85);
+  box-shadow:0 0 0 3px rgba(245,158,11,.12);
 }
 
 .btn{
@@ -118,14 +131,19 @@ label{
   cursor:pointer;
   transition:.2s ease;
 }
+
 .btn:hover{ transform:translateY(-1px); }
-.btn-primary{ background:linear-gradient(135deg, var(--orange), #fb923c); color:#fff; }
+.btn-primary{ background:linear-gradient(135deg, var(--orange-2), #fb923c); color:#fff; }
 .btn-secondary{ background:linear-gradient(135deg, var(--yellow), #fde047); color:#111827; }
 .btn-danger{ background:#f87171; color:#111827; }
 .btn-ghost{
   background:transparent;
   color:var(--muted);
   border:1px solid var(--line);
+}
+.btn-blue{
+  background:linear-gradient(135deg, var(--blue), var(--blue-2));
+  color:#fff;
 }
 
 .helper{
@@ -135,17 +153,17 @@ label{
   margin-top:14px;
 }
 
-/* APP LAYOUT */
+/* APP */
 .app{
   min-height:100vh;
   display:grid;
-  grid-template-columns:280px 1fr;
+  grid-template-columns:300px 1fr;
 }
 
 .sidebar{
-  background:linear-gradient(180deg, rgba(11,21,34,.98), rgba(7,13,20,.98));
+  background:linear-gradient(180deg, rgba(10,18,29,.98), rgba(8,14,22,.98));
   border-right:1px solid rgba(255,255,255,.06);
-  padding:20px 16px;
+  padding:18px 16px;
   position:sticky;
   top:0;
   height:100vh;
@@ -190,9 +208,10 @@ label{
   cursor:pointer;
   font-weight:700;
 }
+
 .nav button.active{
-  border-color:rgba(249,115,22,.65);
-  background:linear-gradient(135deg, rgba(249,115,22,.18), rgba(250,204,21,.08));
+  border-color:rgba(245,158,11,.7);
+  background:linear-gradient(135deg, rgba(245,158,11,.16), rgba(59,130,246,.08));
 }
 
 .content{
@@ -202,15 +221,17 @@ label{
 .topbar{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:flex-start;
   gap:14px;
   flex-wrap:wrap;
   margin-bottom:16px;
 }
+
 .title h2{
   margin:0;
   font-size:1.35rem;
 }
+
 .title p{
   margin:6px 0 0;
   color:var(--muted);
@@ -236,7 +257,7 @@ label{
 }
 
 .kpi{
-  background:linear-gradient(180deg, rgba(19,35,54,.95), rgba(11,21,34,.95));
+  background:linear-gradient(180deg, rgba(16,34,53,.95), rgba(12,24,38,.95));
   border:1px solid rgba(255,255,255,.06);
   border-radius:20px;
   padding:16px;
@@ -245,6 +266,7 @@ label{
   position:relative;
   overflow:hidden;
 }
+
 .kpi::after{
   content:"";
   position:absolute;
@@ -253,28 +275,44 @@ label{
   width:88px;
   height:88px;
   border-radius:999px;
-  background:radial-gradient(circle, rgba(249,115,22,.16), transparent 65%);
+  background:radial-gradient(circle, rgba(245,158,11,.16), transparent 65%);
 }
+
+.kpi.alert::after{
+  background:radial-gradient(circle, rgba(239,68,68,.2), transparent 65%);
+}
+
+.kpi.good::after{
+  background:radial-gradient(circle, rgba(34,197,94,.18), transparent 65%);
+}
+
 .kpi .label{
   color:var(--muted);
   font-size:.86rem;
   margin-bottom:8px;
 }
+
 .kpi .value{
   font-size:1.9rem;
   font-weight:900;
   letter-spacing:-.02em;
 }
 
+.kpi .sub{
+  margin-top:6px;
+  color:var(--muted-2);
+  font-size:.82rem;
+}
+
 .layout{
   display:grid;
-  grid-template-columns:390px 1fr;
+  grid-template-columns:360px 1fr;
   gap:16px;
   align-items:start;
 }
 
 .panel{
-  background:linear-gradient(180deg, rgba(19,35,54,.95), rgba(11,21,34,.95));
+  background:linear-gradient(180deg, rgba(16,34,53,.95), rgba(12,24,38,.95));
   border:1px solid rgba(255,255,255,.06);
   border-radius:22px;
   box-shadow:var(--shadow);
@@ -299,6 +337,7 @@ label{
   gap:10px;
   flex-wrap:wrap;
 }
+
 .actions .btn{
   width:auto;
   min-width:136px;
@@ -314,44 +353,58 @@ label{
   border-radius:18px;
   border:1px solid rgba(255,255,255,.06);
   margin-top:12px;
+  background:rgba(7,17,27,.52);
 }
 
 table{
   width:100%;
-  min-width:980px;
+  min-width:1180px;
   border-collapse:collapse;
-  background:rgba(7,17,27,.68);
 }
+
 thead th{
   position:sticky;
   top:0;
-  z-index:1;
-  background:#08101A;
-  color:#D7E2EE;
+  z-index:2;
+  background:linear-gradient(180deg, #173252, #11263E);
+  color:#E7F0F8;
   text-transform:uppercase;
-  letter-spacing:.04em;
-  font-size:.78rem;
+  letter-spacing:.045em;
+  font-size:.76rem;
   text-align:left;
-  padding:13px 12px;
-  border-bottom:1px solid var(--line);
+  padding:11px 10px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  white-space:nowrap;
 }
+
 tbody td{
-  padding:11px 12px;
+  padding:9px 10px;
   border-bottom:1px solid rgba(255,255,255,.06);
   vertical-align:top;
-  font-size:.93rem;
+  font-size:.9rem;
+  white-space:nowrap;
 }
+
 tbody tr:hover{ background:rgba(255,255,255,.03); }
+
+tfoot td{
+  padding:10px 10px;
+  font-weight:800;
+  border-top:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg, rgba(35,43,52,.92), rgba(22,30,40,.96));
+  white-space:nowrap;
+}
 
 .table-actions{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
 }
+
 .table-actions .btn{
-  padding:8px 10px;
+  padding:7px 10px;
   border-radius:10px;
-  font-size:.8rem;
+  font-size:.78rem;
   min-width:auto;
 }
 
@@ -367,16 +420,19 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   font-weight:800;
   border:1px solid transparent;
 }
+
 .badge.admin{
   background:rgba(37,99,235,.16);
   color:#dce8ff;
   border-color:rgba(37,99,235,.36);
 }
+
 .badge.operador{
   background:rgba(34,197,94,.14);
   color:#dfffea;
   border-color:rgba(34,197,94,.32);
 }
+
 .badge.disabled{
   background:rgba(239,68,68,.14);
   color:#ffe0e0;
@@ -411,6 +467,7 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   cursor:pointer;
   flex:0 0 auto;
 }
+
 .switch::after{
   content:"";
   position:absolute;
@@ -422,8 +479,9 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   background:#fff;
   transition:.2s ease;
 }
+
 .switch.on{
-  background:linear-gradient(135deg, var(--orange), var(--yellow));
+  background:linear-gradient(135deg, var(--orange-2), var(--yellow));
 }
 .switch.on::after{ left:23px; }
 
@@ -436,7 +494,7 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 }
 
 .chart-box{
-  height:300px;
+  height:260px;
   margin-top:12px;
   padding:12px;
   border-radius:18px;
@@ -459,9 +517,61 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   flex-wrap:wrap;
   margin-bottom:12px;
 }
+
 .summary-controls .btn.active{
-  outline:2px solid rgba(249,115,22,.35);
-  box-shadow:0 0 0 3px rgba(249,115,22,.08);
+  outline:2px solid rgba(245,158,11,.35);
+  box-shadow:0 0 0 3px rgba(245,158,11,.08);
+}
+
+.compact-note{
+  color:var(--muted-2);
+  font-size:.82rem;
+  margin-top:8px;
+  line-height:1.45;
+}
+
+.summary-footer{
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:10px;
+  margin-top:12px;
+}
+
+.total-card{
+  border-radius:16px;
+  padding:12px;
+  background:linear-gradient(180deg, rgba(15,24,35,.95), rgba(8,14,22,.96));
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.total-card .t-label{
+  color:var(--muted);
+  font-size:.8rem;
+  margin-bottom:6px;
+}
+
+.total-card .t-value{
+  font-size:1.35rem;
+  font-weight:900;
+}
+
+.total-card.orange{ background:linear-gradient(180deg, rgba(120,53,15,.9), rgba(75,32,6,.96)); }
+.total-card.blue{ background:linear-gradient(180deg, rgba(30,58,138,.85), rgba(15,23,42,.96)); }
+.total-card.red{ background:linear-gradient(180deg, rgba(127,29,29,.85), rgba(69,10,10,.96)); }
+.total-card.green{ background:linear-gradient(180deg, rgba(20,83,45,.86), rgba(5,46,22,.96)); }
+
+.toggle-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+}
+
+.small-btn-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 @media (max-width: 1180px){
@@ -476,15 +586,23 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   .kpis{
     grid-template-columns:repeat(2, minmax(0, 1fr));
   }
+  .summary-footer{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
 }
+
 @media (max-width: 760px){
   .kpis,
   .row,
-  .user-item{
+  .user-item,
+  .summary-footer{
     grid-template-columns:1fr;
   }
   .actions .btn{
     width:100%;
+  }
+  .table-wrap{
+    border-radius:14px;
   }
 }
 </style>
@@ -514,6 +632,10 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
     <div class="field">
       <button class="btn btn-primary" id="loginBtn">Ingresar</button>
     </div>
+
+    <div class="helper">
+      Acceso por usuario y contraseña. Los administradores pueden crear, editar y eliminar usuarios y registros.
+    </div>
   </div>
 </div>
 
@@ -539,6 +661,31 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
     </div>
 
     <div class="userbox" style="margin-top:18px;">
+      <div class="toggle-title">
+        <strong style="font-size:.95rem;">Cambiar contraseña</strong>
+        <span class="badge admin" id="pwdRoleBadge">Mi cuenta</span>
+      </div>
+
+      <div class="stack">
+        <div class="field">
+          <label for="oldPassword">Contraseña actual</label>
+          <input class="input" id="oldPassword" type="password" placeholder="Actual" />
+        </div>
+        <div class="field">
+          <label for="newPassword">Nueva contraseña</label>
+          <input class="input" id="newPassword" type="password" placeholder="Nueva" />
+        </div>
+        <div class="field">
+          <label for="confirmPassword">Confirmar nueva</label>
+          <input class="input" id="confirmPassword" type="password" placeholder="Confirmar" />
+        </div>
+        <div class="actions">
+          <button class="btn btn-blue" id="changePasswordBtn">Cambiar contraseña</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="userbox" style="margin-top:18px;">
       <div class="actions">
         <button class="btn btn-ghost" id="logoutBtn">Salir</button>
       </div>
@@ -548,28 +695,32 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   <main class="content">
     <div class="topbar">
       <div class="title">
-        <h2>Registrar Datos de Planta de Escaldado</h2>
-        <p>Captura, consulta y control de producción por turno, secadora y causa.</p>
+        <h2>Programa de Cumplimiento de Secadas</h2>
+        <p>Captura, consulta, control y resumen de producción por turno, secadora y causa.</p>
       </div>
       <div class="pill">Sesión activa</div>
     </div>
 
     <div class="kpis">
-      <div class="kpi">
-        <div class="label">Producción visible</div>
-        <div class="value" id="kpiReal">0</div>
+      <div class="kpi good">
+        <div class="label">Secadas totales</div>
+        <div class="value" id="kpiSecadas">0</div>
+        <div class="sub">Producción visible en pantalla</div>
       </div>
       <div class="kpi">
-        <div class="label">Meta diaria</div>
-        <div class="value">6</div>
+        <div class="label">Horas totales</div>
+        <div class="value" id="kpiHoras">0</div>
+        <div class="sub">Horas de paro acumuladas</div>
+      </div>
+      <div class="kpi alert">
+        <div class="label">Días sin secar</div>
+        <div class="value" id="kpiDiasSinSecar">0</div>
+        <div class="sub">Alertas con cero producción</div>
       </div>
       <div class="kpi">
         <div class="label">Cumplimiento</div>
         <div class="value" id="kpiCumple">0%</div>
-      </div>
-      <div class="kpi">
-        <div class="label">Horas de paro</div>
-        <div class="value" id="kpiHoras">0</div>
+        <div class="sub">Sobre meta diaria</div>
       </div>
     </div>
 
@@ -626,6 +777,10 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
               <button class="btn btn-primary" id="saveRecordBtn">Guardar</button>
               <button class="btn btn-secondary" id="exportCsvBtn">Exportar CSV</button>
             </div>
+
+            <div class="compact-note">
+              El comentario se mostrará en versión resumida para facilitar lectura. El texto completo queda guardado en la base de datos.
+            </div>
           </div>
         </div>
 
@@ -659,12 +814,14 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
                   <tr>
                     <th>Usuario</th>
                     <th>Fecha</th>
+                    <th>Semana</th>
                     <th>Turno</th>
                     <th>Secadora</th>
                     <th>Secadas</th>
-                    <th>Tiempo promedio</th>
-                    <th>Horas de paro</th>
-                    <th>Causa</th>
+                    <th>Tiempo prom.</th>
+                    <th>Horas paro</th>
+                    <th>Tipo de paro</th>
+                    <th>Causa resumida</th>
                     <th>Acción</th>
                   </tr>
                 </thead>
@@ -673,7 +830,10 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
             </div>
 
             <div class="panel" style="margin-top:16px; padding:16px;">
-              <h3>Resumen consolidado</h3>
+              <div class="toggle-title">
+                <h3 style="margin:0;">Resumen consolidado</h3>
+                <span class="badge admin">Automático</span>
+              </div>
 
               <div class="summary-controls">
                 <button class="btn btn-primary active" type="button" data-summary-view="dia">Por día</button>
@@ -692,7 +852,7 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
                       <th>Meta</th>
                       <th>Faltante</th>
                       <th>Cumplimiento</th>
-                      <th>Horas de paro</th>
+                      <th>Horas paro</th>
                       <th>Secadora #1</th>
                       <th>Secadora #2</th>
                       <th>Secadora #3</th>
@@ -700,6 +860,7 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
                     </tr>
                   </thead>
                   <tbody id="summaryBody"></tbody>
+                  <tfoot id="summaryFoot"></tfoot>
                 </table>
               </div>
             </div>
@@ -797,11 +958,6 @@ function clone(obj){
   return JSON.parse(JSON.stringify(obj));
 }
 
-function makeId(){
-  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
-  return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
-}
-
 function normalizeUser(value){
   return String(value || "").trim().toUpperCase();
 }
@@ -823,7 +979,8 @@ function showView(view){
 function setSection(sectionId){
   document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
   document.querySelectorAll("[data-section-btn]").forEach(b => b.classList.remove("active"));
-  $(sectionId).classList.add("active");
+  const section = $(sectionId);
+  if(section) section.classList.add("active");
   const btn = document.querySelector(`[data-section-btn="${sectionId}"]`);
   if(btn) btn.classList.add("active");
 }
@@ -834,49 +991,6 @@ function openPicker(input){
     input.focus();
     input.click();
   }
-}
-
-function syncRecordFields(){
-  const value = $("regSecadas").value;
-
-  if(value === ""){
-    $("blockTime").classList.add("hidden");
-    $("blockStop").classList.add("hidden");
-    $("blockCause").classList.add("hidden");
-    $("regCause").placeholder = "Por qué no se alcanzó la meta";
-    return;
-  }
-
-  const secadas = Number(value);
-  const isZero = secadas === 0;
-  const isPositive = Number.isInteger(secadas) && secadas > 0;
-  const needsJustify = Number.isInteger(secadas) && secadas > 0 && secadas < DAILY_META;
-
-  $("blockTime").classList.toggle("hidden", !isPositive);
-  $("blockStop").classList.toggle("hidden", !isZero);
-  $("blockCause").classList.toggle("hidden", !(isZero || needsJustify));
-
-  if(isPositive){
-    $("regStopHours").value = "";
-    if(!needsJustify && !isZero) $("regCause").value = "";
-  }
-
-  if(isZero){
-    $("regAvgTime").value = "";
-    $("regCause").placeholder = "Justifica el paro total";
-  }else if(needsJustify){
-    $("regCause").placeholder = "Justifica por qué no se alcanzó la meta de 6";
-  }else{
-    $("regCause").placeholder = "Por qué no se alcanzó la meta";
-  }
-}
-
-function getVisibleRecords(){
-  if(!currentUser) return [];
-  const me = users[currentUser];
-  if(!me) return [];
-  if(me.role === "admin") return records.slice();
-  return records.filter(r => r.user === currentUser);
 }
 
 function parseDateISO(iso){
@@ -896,6 +1010,106 @@ function getISOWeekInfo(date){
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
   const week = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
   return { year: d.getUTCFullYear(), week };
+}
+
+function summarizeCause(text){
+  const raw = String(text || "").trim();
+  if(!raw) return "—";
+
+  const lower = raw.toLowerCase();
+
+  if(lower.includes("sin justificación")) return "Sin justificación";
+  if(lower.includes("paro total")) return "Paro total";
+  if(lower.includes("sin registro")) return "Sin registro";
+  if(lower.includes("arranque")) return "Arranque de turno";
+  if(lower.includes("eléctr")) return "Paro eléctrico";
+  if(lower.includes("electric")) return "Paro eléctrico";
+  if(lower.includes("mecán")) return "Falla mecánica";
+  if(lower.includes("motor")) return "Falla de motor";
+  if(lower.includes("bomba")) return "Bomba de circulación";
+  if(lower.includes("obstrucción")) return "Obstrucción";
+  if(lower.includes("tanque")) return "Falla en tanque";
+  if(lower.includes("leito") || lower.includes("leito")) return "Problema en leito";
+  if(lower.includes("vap")) return "Falla por vapor";
+
+  const cleaned = raw.replace(/\s+/g, " ").replace(/[;|]+/g, ",");
+  const firstChunk = cleaned.split(",")[0].trim();
+  const words = firstChunk.split(" ").filter(Boolean);
+  if(words.length <= 8) return firstChunk;
+  return words.slice(0, 8).join(" ") + "...";
+}
+
+function classifyStop(record){
+  const secadas = Number(record.secadas) || 0;
+  const cause = String(record.cause || "").toLowerCase();
+
+  if(secadas === 0) return "Paro total";
+  if(secadas < DAILY_META) return "Paro parcial";
+  if(cause.includes("eléctr") || cause.includes("electric")) return "Eléctrico";
+  if(cause.includes("mecán")) return "Mecánico";
+  if(cause.includes("arranque")) return "Arranque";
+  if(cause.includes("bomba")) return "Bomba";
+  if(cause.includes("motor")) return "Motor";
+  if(cause.includes("obstrucción")) return "Obstrucción";
+  return "N/A";
+}
+
+function shortTime(value){
+  if(!value) return "—";
+  return String(value);
+}
+
+function sortRecordsForDisplay(list){
+  return list.slice().sort((a, b) => {
+    const da = a.date || "";
+    const dbv = b.date || "";
+    if(da !== dbv) return dbv.localeCompare(da);
+    return String(b.createdAt || "").localeCompare(String(a.createdAt || ""));
+  });
+}
+
+function getVisibleRecords(){
+  if(!currentUser) return [];
+  const me = users[currentUser];
+  if(!me) return [];
+  if(me.role === "admin") return records.slice();
+  return records.filter(r => r.user === currentUser);
+}
+
+function buildDailyStats(list){
+  const byDate = {};
+  list.forEach(r => {
+    if(!r.date) return;
+    if(!byDate[r.date]){
+      byDate[r.date] = {
+        date: r.date,
+        secadas: 0,
+        stopHours: 0,
+        count: 0
+      };
+    }
+    byDate[r.date].secadas += Number(r.secadas) || 0;
+    byDate[r.date].stopHours += Number(r.stopHours) || 0;
+    byDate[r.date].count += 1;
+  });
+  return Object.values(byDate).sort((a,b) => a.date.localeCompare(b.date));
+}
+
+function buildDashboardStats(list){
+  const daily = buildDailyStats(list);
+  const totalSecadas = daily.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
+  const totalStop = daily.reduce((acc, r) => acc + (Number(r.stopHours) || 0), 0);
+  const daysWithout = daily.filter(r => (Number(r.secadas) || 0) === 0).length;
+  const totalMeta = daily.length * DAILY_META;
+  const cump = totalMeta > 0 ? (totalSecadas / totalMeta) * 100 : 0;
+
+  return {
+    totalSecadas,
+    totalStop,
+    daysWithout,
+    totalMeta,
+    cump
+  };
 }
 
 function summarizeRecords(list, mode){
@@ -963,7 +1177,7 @@ function summarizeRecords(list, mode){
     if(secadora === "3") row.s3 += secadas;
 
     if(cause){
-      row.causas.add(cause);
+      row.causas.add(summarizeCause(cause));
     }else if(secadas < DAILY_META){
       row.causas.add("Sin justificación registrada");
     }
@@ -995,40 +1209,35 @@ function summarizeRecords(list, mode){
 }
 
 function refreshKPIs(list){
-  const daily = summarizeRecords(list, "dia");
-  const totalSecadas = daily.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
-  const totalMeta = daily.reduce((acc, r) => acc + (Number(r.meta) || 0), 0);
-  const totalStop = daily.reduce((acc, r) => acc + (Number(r.stopHours) || 0), 0);
-  const cump = totalMeta > 0 ? (totalSecadas / totalMeta) * 100 : 0;
+  const stats = buildDashboardStats(list);
 
-  $("kpiReal").textContent = totalSecadas;
-  $("kpiHoras").textContent = totalStop;
-  $("kpiCumple").textContent = `${isFinite(cump) ? cump.toFixed(1) : "0.0"}%`;
+  $("kpiSecadas").textContent = stats.totalSecadas;
+  $("kpiHoras").textContent = stats.totalStop.toFixed(1).replace(/\.0$/, "");
+  $("kpiDiasSinSecar").textContent = stats.daysWithout;
+  $("kpiCumple").textContent = `${isFinite(stats.cump) ? stats.cump.toFixed(1) : "0.0"}%`;
 }
 
 function renderChart(list){
-  const daily = summarizeRecords(list, "dia");
-  const byDate = {};
-
-  daily.forEach(r => {
-    byDate[r.periodo] = r.secadas;
-  });
+  const daily = buildDailyStats(list);
 
   if(chart){
     chart.destroy();
     chart = null;
   }
 
+  const labels = daily.map(r => formatDateES(r.date));
+  const data = daily.map(r => r.secadas);
+
   const ctx = $("chart").getContext("2d");
   chart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: Object.keys(byDate),
+      labels,
       datasets: [{
         label: "Secadas",
-        data: Object.keys(byDate).map(k => byDate[k]),
-        backgroundColor: "#F97316",
-        borderColor: "#F97316",
+        data,
+        backgroundColor: "rgba(245,158,11,.9)",
+        borderColor: "rgba(245,158,11,1)",
         borderWidth: 1
       }]
     },
@@ -1036,16 +1245,18 @@ function renderChart(list){
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { labels: { color: "#ffffff" } }
+        legend: {
+          labels: { color: "#ffffff" }
+        }
       },
       scales: {
         x: {
-          ticks: { color: "#c8d2dd" },
+          ticks: { color: "#c9d5e2" },
           grid: { color: "rgba(255,255,255,.06)" }
         },
         y: {
           beginAtZero: true,
-          ticks: { color: "#c8d2dd" },
+          ticks: { color: "#c9d5e2" },
           grid: { color: "rgba(255,255,255,.06)" }
         }
       }
@@ -1058,27 +1269,31 @@ function renderTable(list){
   tbody.innerHTML = "";
 
   if(list.length === 0){
-    tbody.innerHTML = `<tr><td colspan="9" style="padding:16px;color:#c8d2dd;">No hay registros para mostrar.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="11" style="padding:16px;color:#c8d2dd;">No hay registros para mostrar.</td></tr>`;
     return;
   }
 
   const isAdmin = users[currentUser] && users[currentUser].role === "admin";
+  const sorted = sortRecordsForDisplay(list);
 
-  list.forEach(r => {
-    const avgTime = r.secadas > 0 ? (r.avgTime || "—") : "—";
+  sorted.forEach(r => {
+    const avgTime = r.secadas > 0 ? shortTime(r.avgTime || "—") : "—";
     const stopHours = r.secadas === 0 ? (r.stopHours ?? "—") : "—";
-    const cause = (Number(r.secadas) < DAILY_META) ? (r.cause || "—") : "—";
+    const type = classifyStop(r);
+    const cause = summarizeCause(r.cause);
 
     tbody.innerHTML += `
       <tr>
         <td>${escapeHtml(r.user)}</td>
         <td>${escapeHtml(r.date)}</td>
+        <td>${escapeHtml(r.date ? `S${String(getISOWeekInfo(parseDateISO(r.date)).week).padStart(2, "0")}` : "—")}</td>
         <td>${escapeHtml(r.turno)}</td>
         <td>${escapeHtml(r.secadora)}</td>
         <td>${escapeHtml(r.secadas)}</td>
         <td>${escapeHtml(avgTime)}</td>
         <td>${escapeHtml(stopHours)}</td>
-        <td>${escapeHtml(cause)}</td>
+        <td>${escapeHtml(type)}</td>
+        <td title="${escapeHtml(r.cause || "")}">${escapeHtml(cause)}</td>
         <td>
           ${isAdmin ? `
             <div class="table-actions">
@@ -1094,7 +1309,9 @@ function renderTable(list){
 
 function renderSummaryTable(list){
   const tbody = $("summaryBody");
+  const tfoot = $("summaryFoot");
   tbody.innerHTML = "";
+  tfoot.innerHTML = "";
 
   const rows = summarizeRecords(list, summaryView);
 
@@ -1124,12 +1341,52 @@ function renderSummaryTable(list){
       </tr>
     `;
   });
+
+  const totals = list.reduce((acc, r) => {
+    acc.secadas += Number(r.secadas) || 0;
+    acc.stopHours += Number(r.stopHours) || 0;
+    acc.s1 += String(r.secadora) === "1" ? (Number(r.secadas) || 0) : 0;
+    acc.s2 += String(r.secadora) === "2" ? (Number(r.secadas) || 0) : 0;
+    acc.s3 += String(r.secadora) === "3" ? (Number(r.secadas) || 0) : 0;
+    acc.days.add(r.date);
+    return acc;
+  }, { secadas:0, stopHours:0, s1:0, s2:0, s3:0, days:new Set() });
+
+  const totalDays = totals.days.size;
+  const meta = totalDays * DAILY_META;
+  const faltante = Math.max(0, meta - totals.secadas);
+  const cump = meta > 0 ? ((totals.secadas / meta) * 100) : 0;
+  const causaShort = list.some(r => Number(r.secadas) === 0)
+    ? "Incluye días sin producción"
+    : "Sin alertas severas";
+
+  tfoot.innerHTML = `
+    <tr>
+      <td colspan="2">TOTALES</td>
+      <td>${escapeHtml(totalDays)}</td>
+      <td>${escapeHtml(totals.secadas)}</td>
+      <td>${escapeHtml(meta)}</td>
+      <td>${escapeHtml(faltante)}</td>
+      <td style="color:${cump >= 100 ? '#22C55E' : cump >= 80 ? '#FACC15' : '#EF4444'};">${escapeHtml(cump.toFixed(1))}%</td>
+      <td>${escapeHtml(totals.stopHours.toFixed(1).replace(/\.0$/, ""))}</td>
+      <td>${escapeHtml(totals.s1)}</td>
+      <td>${escapeHtml(totals.s2)}</td>
+      <td>${escapeHtml(totals.s3)}</td>
+      <td>${escapeHtml(causaShort)}</td>
+    </tr>
+  `;
 }
 
 function renderUserFilter(){
   const select = $("filterUser");
+  if(!select) return;
+
   const allNames = Object.values(users).map(u => u.name);
-  const unique = [...new Set(allNames)];
+  const unique = [...new Set(allNames)].sort((a,b) => {
+    if(a === "ADMIN") return -1;
+    if(b === "ADMIN") return 1;
+    return a.localeCompare(b);
+  });
 
   select.innerHTML = `<option value="">Todos</option>`;
   unique.forEach(name => {
@@ -1298,6 +1555,7 @@ function syncCurrentUserUI(){
   $("currentUserName").textContent = me.name;
   $("currentUserMeta").textContent = me.role === "admin" ? "Administrador" : "Operador";
   $("currentUserState").textContent = me.active ? "Activo" : "Deshabilitado";
+  $("pwdRoleBadge").textContent = me.role === "admin" ? "Admin" : "Operador";
 
   $("navUsersBtn").classList.toggle("hidden", me.role !== "admin");
 
@@ -1473,6 +1731,52 @@ async function deleteRecord(id){
   await recordsRef.child(id).remove();
 }
 
+async function changePassword(){
+  if(!currentUser){
+    alert("Primero inicia sesión.");
+    return;
+  }
+
+  const oldPass = String($("oldPassword").value || "").trim();
+  const newPass = String($("newPassword").value || "").trim();
+  const confirmPass = String($("confirmPassword").value || "").trim();
+
+  if(!oldPass || !newPass || !confirmPass){
+    alert("Completa todos los campos de contraseña.");
+    return;
+  }
+
+  const me = users[currentUser];
+  if(!me){
+    alert("No se encontró tu usuario.");
+    return;
+  }
+
+  if(me.pass !== oldPass){
+    alert("La contraseña actual no coincide.");
+    return;
+  }
+
+  if(newPass.length < 4){
+    alert("La nueva contraseña debe tener al menos 4 caracteres.");
+    return;
+  }
+
+  if(newPass !== confirmPass){
+    alert("La nueva contraseña y la confirmación no coinciden.");
+    return;
+  }
+
+  const updated = clone(me);
+  updated.pass = newPass;
+  await usersRef.child(currentUser).set(updated);
+
+  $("oldPassword").value = "";
+  $("newPassword").value = "";
+  $("confirmPassword").value = "";
+  alert("Contraseña actualizada correctamente.");
+}
+
 function exportCsv(){
   const list = getVisibleRecords();
   const headers = ["Usuario","Fecha","Turno","Secadora","Secadas","Tiempo promedio","Horas de paro","Causa"];
@@ -1540,6 +1844,7 @@ function bindEvents(){
   $("saveRecordBtn").addEventListener("click", saveRecord);
   $("exportCsvBtn").addEventListener("click", exportCsv);
   $("createUserBtn").addEventListener("click", createUser);
+  $("changePasswordBtn").addEventListener("click", changePassword);
 
   $("regSecadas").addEventListener("input", syncRecordFields);
   $("searchBox").addEventListener("input", refreshAll);
@@ -1592,7 +1897,8 @@ function attachRealtimeListeners(){
   });
 
   recordsRef.on("value", (snapshot) => {
-    records = snapshot.exists() ? Object.values(snapshot.val()) : [];
+    const raw = snapshot.exists() ? snapshot.val() : {};
+    records = Object.values(raw);
     if(currentUser){
       refreshAll();
     }
