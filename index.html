@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="format-detection" content="telephone=no" />
   <title>Planta de Escaldado | Supervisión</title>
-  <script type="text/javascript" src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=TLc8xElwQnXfZSth86NwuIH5sPoFU76ZPjcKmOU58jDElcbUOxYTjhInvt4xrRQJhyBOlwY18Mj9bB23J2kcrjvNzvKxSgoW5FBox7gq7Z3V_XA4JXFv2BX3Quv0cYdZtRvnEyz0oCEOm6PH4PxaOPYdvUM_O40qoxMR-Vqdw9E2DRQCYce70GSPq8YoDjKfrWmG_Khja66KQpfpu0oYVIIGao6eWIrYCr-t6sCx74a0jIOpGDO9H3j2oJCn8i86UqzmsJrOupRxnqWzjQEplg" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="text/javascript" src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=r2eViVOHOB62MC51aSlebAy3OHFjjh1wZC6BY--NkveLxzsVLW9twN9F-K3Z35SusbDEiRvYfGqxNumKHIlu2ehOeABA9GY7xQLxiDNTucG6lYUxc9I_qxAzo0_R4sI5vzZgz7UEKyfigilKGHrMM1yeDYHFb6Nl_mY7_eiKkeHCnln63ieH8cDCoLygthU__nSjeLPTItxUsbkC6z2qEy_WOwkraYmg53smpzuOiHyaickWrjHkJkanGYs9IFeZMZz59Gyj2t8DB13BQeAIpg" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
   <style>
@@ -1504,7 +1504,7 @@
       if (!parts.length) return;
       let node = store;
       for (let i = 0; i < parts.length - 1; i++) {
-        node = (node && node[parts[i]]);
+        node = (node && typeof node === 'object') ? node[parts[i]] : undefined;
         if (!node || typeof node !== "object") return;
       }
       delete node[parts[parts.length - 1]];
@@ -1646,12 +1646,12 @@
     return 'u_' + String(name || '').replace(/[^a-zA-Z0-9_-]/g, '_');
   }
   function escapeHtml(v){
-    return String((v !== undefined && v !== null) ? v : '')
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;')
-      .replace(/'/g,'&#039;');
+    return String(v == null ? '' : v)
+      .split('&').join('&amp;')
+      .split('<').join('&lt;')
+      .split('>').join('&gt;')
+      .split('\"').join('&quot;')
+      .split("'").join('&#039;');
   }
   function localISODate(date = new Date()){
     const d = new Date(date);
@@ -1713,7 +1713,7 @@
     const e = String(entered || '');
     return s === e || s === hashPass(e);
   }
-  function getCurrentRole(){ return currentUser ? (((users[currentUser] && users[currentUser].role) || '')) : ''; }
+  function getCurrentRole(){ return currentUser ? ((users[currentUser] && users[currentUser].role) || '') : ''; }
   function isAdmin(){ return getCurrentRole() === 'admin'; }
   function getDevice(){
     const ua = navigator.userAgent || '';
@@ -1859,7 +1859,7 @@
 
   function filterRecords(){
     const base = getVisibleRecords();
-    const search = ($('searchBox') && $('searchBox').value).trim().toLowerCase() || '';
+    const search = ($('searchBox') && $('searchBox').value ? $('searchBox').value : '').trim().toLowerCase() || '';
     const filterDate = ($('filterDate') && $('filterDate').value) || '';
     const filterUser = ($('filterUser') && $('filterUser').value) || '';
     return base.filter(r => {
@@ -2192,7 +2192,7 @@
             <td>${escapeHtml(r.secadora)}</td>
             <td>${escapeHtml(r.secadas)}</td>
             <td>${escapeHtml(r.secadas > 0 ? (r.avgTime || '—') : '—')}</td>
-            <td>${escapeHtml(r.secadas === 0 ? (((r.stopHours !== undefined && r.stopHours !== null) ? r.stopHours : '—')) : '—')}</td>
+            <td>${escapeHtml(r.secadas === 0 ? (r.stopHours != null ? r.stopHours : '—') : '—')}</td>
             <td><span class="badge ${Number(r.secadas) === 0 ? 'danger' : Number(r.secadas) < settings.metaDaily ? 'warn' : 'operador'}">${escapeHtml(status)}</span></td>
             <td title="${escapeHtml(r.cause || '')}">${escapeHtml(cause)}</td>
             <td>${escapeHtml(r.device || '—')}</td>
@@ -2382,7 +2382,7 @@
       return;
     }
     if(!account || !account.active || !verifyPass(account.pass, pass)){
-      logAccess({ user: user || '—', role: ((account && account.role) || '—'), device: ua.device, platform: ua.platform, browser: ua.browser, origin:'Login', ok:false });
+      logAccess({ user: user || '—', role: (account && account.role) || '—', device: ua.device, platform: ua.platform, browser: ua.browser, origin:'Login', ok:false });
       alert('Usuario o contraseña incorrectos.');
       return;
     }
@@ -2403,7 +2403,7 @@
     if(currentUser){
       const ua = detectDevice();
       const account = users[currentUser];
-      logAccess({ user: currentUser, role: ((account && account.role) || '—'), device: ua.device, platform: ua.platform, browser: ua.browser, origin:'Logout', ok:true });
+      logAccess({ user: currentUser, role: (account && account.role) || '—', device: ua.device, platform: ua.platform, browser: ua.browser, origin:'Logout', ok:true });
     }
     currentUser = null;
     clearSession();
@@ -2499,10 +2499,10 @@
     $('regDate').value = r.date || localISODate();
     $('regTurn').value = r.turno || 'Día';
     $('regDryer').value = String(r.secadora || '1');
-    $('regSecadas').value = String(((r.secadas !== undefined && r.secadas !== null) ? r.secadas : ''));
+    $('regSecadas').value = String(r.secadas != null ? r.secadas : '');
     syncRecordFields();
     if(Number(r.secadas) === 0){
-      $('regStopHours').value = ((r.stopHours !== undefined && r.stopHours !== null) ? r.stopHours : '');
+      $('regStopHours').value = (r.stopHours != null ? r.stopHours : '');
       $('regCause').value = r.cause || '';
     }else{
       const time = r.avgTime || '';
@@ -2534,11 +2534,11 @@
       r.secadora,
       r.secadas,
       r.avgTime || '',
-      ((r.stopHours !== undefined && r.stopHours !== null) ? r.stopHours : ''),
+      (r.stopHours != null ? r.stopHours : ''),
       r.cause || '',
       r.device || ''
     ]);
-    const csv = [headers, ...data].map(row => row.map(v => `"${String((v !== undefined && v !== null) ? v : '').replace(/"/g,'""')}"`).join(',')).join('\n');
+    const csv = [headers, ...data].map(function(row){ return row.map(function(v){ return '"' + String(v == null ? '' : v).split('\"').join('\"\"') + '"'; }).join(','); }).join('\n');
     const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -2574,9 +2574,9 @@
     const fullNameEl = $(`userFullName_${id}`);
     const roleEl = $(`userRole_${id}`);
     const passEl = $(`userPass_${id}`);
-    const fullName = String(((fullNameEl && fullNameEl.value) || '')).trim();
-    const role = ((roleEl && roleEl.value) || acc.role);
-    const newPass = String(((passEl && passEl.value) || '')).trim();
+    const fullName = String((fullNameEl && fullNameEl.value) || '').trim();
+    const role = (roleEl && roleEl.value) || acc.role;
+    const newPass = String((passEl && passEl.value) || '').trim();
 
     const updated = clone(acc);
     updated.fullName = fullName || updated.fullName || updated.name;
