@@ -1,695 +1,850 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Planta de Escaldado</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planta de Escaldado | Supervisión</title>
+  <script type="text/javascript" src="https://me.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=wt_tkcCbLLRx8hD7inE1t_zwosbspHDlWWED7VY20Q7fUGAIiISuE6M2yjtFBIKmnh7HVhy8SdmO2AgNQwp8JywgftWIVqTeqien4iG4_iVN8reqbPauebSCrLCWWQobq_VlpX3jz9J0JqAyNSca2ioSuBR0jaGO8OLO5pYtctpNGGPqbmV14LyhQGHe-3UswdOUNLpscQBa0ZXW73RvuaUPTLCZarkF8fRhptwK0AmeSjHXyL3kl9h1SMgkyTOG3aJUWREdsTrEp7_mKYOD3g" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --bg2:#edf2f7;
+      --shell:#ffffff;
+      --shell-2:#f8fbff;
+      --line:#d8e1ea;
+      --line-2:#c7d3e0;
+      --text:#10233d;
+      --muted:#607086;
+      --muted-2:#7a8ca1;
+      --blue:#0a6ed1;
+      --blue-2:#0f7be6;
+      --green:#2e7d32;
+      --green-soft:#e8f7ec;
+      --yellow:#b7791f;
+      --yellow-soft:#fff7e6;
+      --red:#c62828;
+      --red-soft:#ffebee;
+      --violet:#6a5acd;
+      --shadow:0 12px 28px rgba(16,35,61,.08);
+      --radius:18px;
+      --radius-lg:24px;
+    }
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color:var(--text);
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    }
 
-<style>
-:root{
-  --bg:#07111B;
-  --bg2:#0B1522;
-  --panel:#0F2032;
-  --panel2:#0C1826;
-  --panel3:#08101A;
-  --line:#264055;
-  --line2:#35506A;
-  --text:#F8FBFF;
-  --muted:#C7D4E1;
-  --muted2:#93A7B9;
-  --blue:#2563EB;
-  --blue2:#3B82F6;
-  --orange:#F59E0B;
-  --orange2:#F97316;
-  --yellow:#FACC15;
-  --green:#22C55E;
-  --red:#EF4444;
-  --shadow:0 18px 40px rgba(0,0,0,.28);
-  --radius:18px;
-}
+    button,input,select,textarea{font:inherit}
+    .hidden{display:none !important}
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
-body{
-  margin:0;
-  font-family:"Segoe UI", Arial, sans-serif;
-  background:
-    radial-gradient(circle at top left, rgba(59,130,246,.08), transparent 28%),
-    radial-gradient(circle at top right, rgba(245,158,11,.08), transparent 28%),
-    linear-gradient(180deg, var(--bg), var(--bg2));
-  color:var(--text);
-}
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns: 278px 1fr;
+    }
 
-.hidden{ display:none !important; }
-button, input, select{ font:inherit; }
-input, select{ outline:none; }
+    .sidebar{
+      background:#0f172a;
+      color:#e5eef9;
+      border-right:1px solid rgba(255,255,255,.06);
+      padding:18px 16px;
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:auto;
+    }
 
-.login-wrap{
-  min-height:100vh;
-  display:grid;
-  place-items:center;
-  padding:20px;
-}
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:8px 6px 16px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      margin-bottom:14px;
+    }
+    .brand-mark{
+      width:40px;height:40px;border-radius:13px;
+      background:linear-gradient(135deg, var(--blue), #19b6ff);
+      box-shadow:0 12px 26px rgba(10,110,209,.28);
+      flex:0 0 auto;
+    }
+    .brand h1{
+      margin:0;
+      font-size:1rem;
+      line-height:1.15;
+      font-weight:800;
+    }
+    .brand p{
+      margin:4px 0 0;
+      color:rgba(229,238,249,.74);
+      font-size:.82rem;
+    }
 
-.login-card{
-  width:min(480px, 100%);
-  background:linear-gradient(180deg, rgba(16,34,53,.98), rgba(10,19,30,.98));
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:24px;
-  box-shadow:var(--shadow);
-  padding:26px;
-}
+    .side-card{
+      margin-top:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+      border-radius:18px;
+      padding:14px;
+    }
+    .side-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .side-title strong{
+      font-size:.95rem;
+    }
 
-.brand{
-  display:flex;
-  gap:14px;
-  align-items:center;
-  margin-bottom:20px;
-}
-.brand-mark{
-  width:48px;
-  height:48px;
-  border-radius:15px;
-  background:linear-gradient(135deg, var(--blue), var(--orange));
-  box-shadow:0 10px 22px rgba(59,130,246,.22);
-  flex:0 0 auto;
-}
-.brand h1{
-  margin:0;
-  font-size:1.12rem;
-  line-height:1.2;
-}
-.brand p{
-  margin:4px 0 0;
-  color:var(--muted);
-  font-size:.9rem;
-}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:.78rem;
+      font-weight:800;
+      letter-spacing:.01em;
+      border:1px solid transparent;
+      white-space:nowrap;
+    }
+    .badge.admin{background:#e8f1ff;color:#0a4fb7;border-color:#c8dbff}
+    .badge.operador{background:#eaf7ec;color:#1f6b26;border-color:#cbe9d0}
+    .badge.session{background:#e8f7ec;color:#1f6b26;border-color:#cbe9d0}
+    .badge.warn{background:#fff4d6;color:#8c5b00;border-color:#f3d78e}
+    .badge.danger{background:#fde8e8;color:#a61b1b;border-color:#f3c4c4}
 
-.field{ margin-top:14px; }
-label{
-  display:block;
-  margin:0 0 8px;
-  color:var(--muted);
-  font-size:.9rem;
-}
-.input, .select{
-  width:100%;
-  border:1px solid var(--line);
-  background:#07111B;
-  color:var(--text);
-  border-radius:12px;
-  padding:11px 13px;
-  transition:.18s ease;
-  font-size:.95rem;
-}
-.input:focus, .select:focus{
-  border-color:rgba(245,158,11,.9);
-  box-shadow:0 0 0 3px rgba(245,158,11,.12);
-}
+    .side-meta{
+      margin:0;
+      color:rgba(229,238,249,.78);
+      font-size:.88rem;
+      line-height:1.45;
+    }
 
-.btn{
-  border:0;
-  border-radius:12px;
-  padding:11px 14px;
-  font-weight:700;
-  cursor:pointer;
-  transition:.2s ease;
-}
-.btn:hover{ transform:translateY(-1px); }
-.btn-primary{ background:linear-gradient(135deg, var(--orange2), #fb923c); color:#fff; }
-.btn-secondary{ background:linear-gradient(135deg, var(--yellow), #fde047); color:#111827; }
-.btn-danger{ background:#f87171; color:#111827; }
-.btn-ghost{
-  background:transparent;
-  color:var(--muted);
-  border:1px solid var(--line);
-}
-.btn-blue{
-  background:linear-gradient(135deg, var(--blue), var(--blue2));
-  color:#fff;
-}
-.btn-soft{
-  background:rgba(255,255,255,.05);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.08);
-}
+    .nav{
+      margin-top:14px;
+      display:grid;
+      gap:10px;
+    }
+    .nav button{
+      width:100%;
+      text-align:left;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.035);
+      color:#eff6ff;
+      cursor:pointer;
+      font-weight:700;
+      transition:.18s ease;
+    }
+    .nav button:hover{transform:translateY(-1px)}
+    .nav button.active{
+      background:linear-gradient(135deg, rgba(10,110,209,.22), rgba(25,182,255,.12));
+      border-color:rgba(90,171,255,.45);
+      box-shadow:0 0 0 1px rgba(255,255,255,.02) inset;
+    }
+    .nav .small{
+      font-size:.8rem;
+      color:rgba(229,238,249,.72);
+    }
 
-.helper{
-  color:var(--muted);
-  font-size:.84rem;
-  line-height:1.45;
-  margin-top:14px;
-}
+    .content{
+      padding:20px;
+      min-width:0;
+    }
+    .page{
+      max-width:1680px;
+      margin:0 auto;
+    }
 
-.password-panel{
-  margin-top:14px;
-  padding:14px;
-  border-radius:18px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.06);
-}
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+    .headline h2{
+      margin:0;
+      font-size:1.45rem;
+      letter-spacing:-.02em;
+    }
+    .headline p{
+      margin:6px 0 0;
+      color:var(--muted);
+      max-width:980px;
+      line-height:1.45;
+    }
+    .status-line{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .session-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#e8f7ec;
+      color:var(--green);
+      border:1px solid #cde8d1;
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:.8rem;
+      font-weight:800;
+    }
+    .dot{
+      width:9px;height:9px;border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 0 4px rgba(46,125,50,.1);
+    }
 
-.app{
-  min-height:100vh;
-  display:grid;
-  grid-template-columns:290px 1fr;
-}
+    .toolbar{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:14px;
+    }
+    .chips{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      border-radius:999px;
+      padding:9px 13px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+    .chip:hover{background:#f8fbff}
+    .chip.active{
+      border-color:rgba(10,110,209,.35);
+      background:linear-gradient(135deg, rgba(10,110,209,.12), rgba(25,182,255,.08));
+      color:#0b4ea2;
+    }
+    .chip.small{
+      padding:7px 11px;
+      font-size:.84rem;
+    }
 
-.sidebar{
-  background:linear-gradient(180deg, rgba(10,18,29,.98), rgba(8,14,22,.98));
-  border-right:1px solid rgba(255,255,255,.06);
-  padding:18px 16px;
-  position:sticky;
-  top:0;
-  height:100vh;
-  overflow:auto;
-}
+    .grid-kpis{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .kpi{
+      background:var(--shell);
+      border:1px solid var(--line);
+      border-radius:var(--radius-lg);
+      box-shadow:var(--shadow);
+      padding:16px;
+      min-height:126px;
+      position:relative;
+      overflow:hidden;
+    }
+    .kpi::after{
+      content:"";
+      position:absolute;
+      right:-20px;
+      bottom:-20px;
+      width:96px;height:96px;border-radius:50%;
+      background:radial-gradient(circle, rgba(10,110,209,.14), transparent 64%);
+    }
+    .kpi.green::after{background:radial-gradient(circle, rgba(46,125,50,.14), transparent 64%)}
+    .kpi.yellow::after{background:radial-gradient(circle, rgba(183,121,31,.14), transparent 64%)}
+    .kpi.red::after{background:radial-gradient(circle, rgba(198,40,40,.14), transparent 64%)}
+    .kpi .label{
+      color:var(--muted);
+      font-size:.84rem;
+      margin-bottom:8px;
+      font-weight:700;
+    }
+    .kpi .value{
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+    .kpi .sub{
+      margin-top:6px;
+      color:var(--muted-2);
+      font-size:.82rem;
+      line-height:1.35;
+    }
 
-.userbox{
-  margin-top:14px;
-  padding:16px;
-  border-radius:18px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.05);
-}
-.user-name{
-  margin:0 0 6px;
-  font-size:1.04rem;
-  font-weight:900;
-  word-break:break-word;
-}
-.user-meta{
-  margin:0;
-  color:var(--muted);
-  font-size:.9rem;
-}
+    .info-row{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr .8fr .8fr;
+      gap:12px;
+      margin-bottom:14px;
+    }
+    .info-card{
+      background:var(--shell);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:14px;
+      min-height:108px;
+    }
+    .info-card .label{
+      color:var(--muted);
+      font-size:.82rem;
+      margin-bottom:7px;
+      font-weight:700;
+    }
+    .info-card .value{
+      font-size:1.22rem;
+      font-weight:900;
+      line-height:1.25;
+    }
+    .info-card .sub{
+      margin-top:7px;
+      color:var(--muted-2);
+      font-size:.82rem;
+      line-height:1.45;
+    }
 
-.nav{
-  margin-top:16px;
-  display:grid;
-  gap:10px;
-}
-.nav button{
-  width:100%;
-  text-align:left;
-  padding:12px 14px;
-  background:#091520;
-  color:#fff;
-  border:1px solid var(--line);
-  border-radius:14px;
-  cursor:pointer;
-  font-weight:700;
-}
-.nav button.active{
-  border-color:rgba(245,158,11,.7);
-  background:linear-gradient(135deg, rgba(245,158,11,.16), rgba(59,130,246,.08));
-}
+    .section{
+      display:none;
+      margin-top:14px;
+    }
+    .section.active{display:block}
 
-.content{
-  padding:20px;
-}
+    .panel{
+      background:var(--shell);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    .panel h3{
+      margin:0 0 14px;
+      font-size:1.02rem;
+      letter-spacing:-.01em;
+    }
 
-.page-shell{
-  max-width:1640px;
-  margin:0 auto;
-}
+    .layout{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:16px;
+      align-items:start;
+    }
+    .stack{display:grid; gap:12px;}
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
 
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:14px;
-  flex-wrap:wrap;
-  margin-bottom:14px;
-}
-.title h2{
-  margin:0;
-  font-size:1.45rem;
-}
-.title p{
-  margin:6px 0 0;
-  color:var(--muted);
-}
-.pill{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:9px 13px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.04);
-  color:#fff;
-  font-size:.92rem;
-}
+    .field{display:grid; gap:8px;}
+    label{
+      color:#2f3e52;
+      font-size:.88rem;
+      font-weight:700;
+    }
+    .input,.select,textarea{
+      width:100%;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:11px 12px;
+      color:var(--text);
+      outline:none;
+      transition:.15s ease;
+    }
+    .input:focus,.select:focus,textarea:focus{
+      border-color:rgba(10,110,209,.55);
+      box-shadow:0 0 0 3px rgba(10,110,209,.11);
+    }
+    .input::placeholder,textarea::placeholder{color:#8a98aa}
+    textarea{min-height:100px;resize:vertical}
 
-.quickbar{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-  margin-bottom:16px;
-}
-.quickbar .spacer{ flex:1 1 auto; }
-.chip{
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.04);
-  color:#fff;
-  border-radius:999px;
-  padding:9px 13px;
-  font-weight:700;
-  cursor:pointer;
-}
-.chip.active{
-  border-color:rgba(245,158,11,.7);
-  background:linear-gradient(135deg, rgba(245,158,11,.16), rgba(59,130,246,.08));
-}
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      border:0;
+      border-radius:12px;
+      padding:11px 14px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.16s ease;
+      color:#fff;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-blue{background:linear-gradient(135deg, var(--blue), var(--blue-2))}
+    .btn-green{background:linear-gradient(135deg, #2e7d32, #46a049)}
+    .btn-ghost{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+    .btn-soft{
+      background:#eef4fb;
+      color:#173456;
+      border:1px solid #d7e2ee;
+    }
+    .btn-danger{background:linear-gradient(135deg, #c62828, #e14c4c)}
 
-.kpis{
-  display:grid;
-  grid-template-columns:repeat(6, minmax(0, 1fr));
-  gap:12px;
-  margin-bottom:12px;
-}
-.kpi{
-  background:linear-gradient(180deg, rgba(16,34,53,.95), rgba(12,24,38,.95));
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:20px;
-  padding:15px;
-  box-shadow:var(--shadow);
-  min-height:110px;
-  position:relative;
-  overflow:hidden;
-}
-.kpi::after{
-  content:"";
-  position:absolute;
-  right:-18px;
-  bottom:-18px;
-  width:92px;
-  height:92px;
-  border-radius:999px;
-  background:radial-gradient(circle, rgba(59,130,246,.18), transparent 65%);
-}
-.kpi.orange::after{ background:radial-gradient(circle, rgba(245,158,11,.18), transparent 65%); }
-.kpi.green::after{ background:radial-gradient(circle, rgba(34,197,94,.18), transparent 65%); }
-.kpi.red::after{ background:radial-gradient(circle, rgba(239,68,68,.18), transparent 65%); }
-.kpi .label{
-  color:var(--muted);
-  font-size:.86rem;
-  margin-bottom:8px;
-}
-.kpi .value{
-  font-size:1.95rem;
-  font-weight:900;
-  letter-spacing:-.02em;
-}
-.kpi .sub{
-  margin-top:6px;
-  color:var(--muted2);
-  font-size:.82rem;
-}
+    .helper,.small-note{
+      color:var(--muted);
+      font-size:.84rem;
+      line-height:1.5;
+    }
 
-.insights{
-  display:grid;
-  grid-template-columns:repeat(4, minmax(0, 1fr));
-  gap:12px;
-  margin-bottom:16px;
-}
-.insight{
-  border-radius:18px;
-  padding:14px;
-  background:linear-gradient(180deg, rgba(16,34,53,.94), rgba(10,19,30,.96));
-  border:1px solid rgba(255,255,255,.06);
-  box-shadow:var(--shadow);
-}
-.insight .label{
-  color:var(--muted);
-  font-size:.85rem;
-  margin-bottom:6px;
-}
-.insight .value{
-  font-size:1.35rem;
-  font-weight:900;
-}
-.insight .sub{
-  margin-top:6px;
-  color:var(--muted2);
-  font-size:.82rem;
-  line-height:1.35;
-}
+    .split{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:16px;
+    }
 
-.section{ margin-top:16px; display:none; }
-.section.active{ display:block; }
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+    }
+    table{
+      width:100%;
+      min-width:1360px;
+      border-collapse:separate;
+      border-spacing:0;
+      color:var(--text);
+    }
+    thead th{
+      position:sticky;
+      top:0;
+      z-index:2;
+      background:#eaf1fb;
+      color:#12304f;
+      text-align:left;
+      font-size:.75rem;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      padding:11px 10px;
+      border-bottom:1px solid var(--line);
+      white-space:nowrap;
+    }
+    tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid #edf2f7;
+      vertical-align:top;
+      font-size:.9rem;
+    }
+    tbody tr:nth-child(even){background:#fbfdff}
+    tbody tr:hover{background:#f6faff}
+    tfoot td{
+      padding:11px 10px;
+      font-weight:900;
+      background:#eef4fb;
+      border-top:1px solid var(--line);
+      white-space:nowrap;
+    }
 
-.panel{
-  background:linear-gradient(180deg, rgba(16,34,53,.95), rgba(10,19,30,.95));
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:22px;
-  box-shadow:var(--shadow);
-  padding:16px;
-}
-.panel h3{
-  margin:0 0 14px;
-  font-size:1.02rem;
-}
+    .compact-table table{min-width:1100px}
+    .compact-table thead th,.compact-table tbody td,.compact-table tfoot td{font-size:.86rem}
 
-.layout{
-  display:grid;
-  grid-template-columns:360px 1fr;
-  gap:16px;
-  align-items:start;
-}
-.stack{ display:grid; gap:12px; }
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-.actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.actions .btn{
-  width:auto;
-  min-width:136px;
-}
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+    }
 
-.subtle{
-  color:var(--muted);
-  font-size:.86rem;
-}
+    .card{
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:#fff;
+      box-shadow:var(--shadow);
+      padding:14px;
+    }
 
-.table-wrap{
-  overflow:auto;
-  border-radius:18px;
-  border:1px solid rgba(255,255,255,.06);
-  background:rgba(7,17,27,.52);
-}
+    .narrative{
+      display:grid;
+      gap:10px;
+    }
+    .narrative .line{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:11px 12px;
+      border-radius:14px;
+      background:#f8fbff;
+      border:1px solid #e7eef6;
+      line-height:1.45;
+    }
+    .narrative .line strong{min-width:122px}
+    .narrative .line span{color:var(--text)}
+    .narrative .line.warn{
+      background:#fff8e9;
+      border-color:#f4e1ae;
+    }
+    .narrative .line.ok{
+      background:#eefaf0;
+      border-color:#cce9d0;
+    }
 
-table{
-  width:100%;
-  min-width:1620px;
-  border-collapse:collapse;
-}
-thead th{
-  position:sticky;
-  top:0;
-  z-index:2;
-  background:linear-gradient(180deg, #173252, #11263E);
-  color:#E7F0F8;
-  text-transform:uppercase;
-  letter-spacing:.045em;
-  font-size:.75rem;
-  text-align:left;
-  padding:11px 10px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  white-space:nowrap;
-}
-tbody td{
-  padding:9px 10px;
-  border-bottom:1px solid rgba(255,255,255,.06);
-  vertical-align:top;
-  font-size:.9rem;
-  white-space:nowrap;
-}
-tbody tr:hover{ background:rgba(255,255,255,.03); }
-tfoot td{
-  padding:11px 10px;
-  font-weight:900;
-  border-top:1px solid rgba(255,255,255,.14);
-  background:linear-gradient(180deg, rgba(35,43,52,.92), rgba(22,30,40,.96));
-  white-space:nowrap;
-}
+    .summary-controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
 
-.badge{
-  display:inline-flex;
-  align-items:center;
-  padding:5px 9px;
-  border-radius:999px;
-  font-size:.76rem;
-  font-weight:800;
-  border:1px solid transparent;
-}
-.badge.admin{
-  background:rgba(37,99,235,.16);
-  color:#dce8ff;
-  border-color:rgba(37,99,235,.36);
-}
-.badge.operador{
-  background:rgba(34,197,94,.14);
-  color:#dfffea;
-  border-color:rgba(34,197,94,.32);
-}
-.badge.disabled{
-  background:rgba(239,68,68,.14);
-  color:#ffe0e0;
-  border-color:rgba(239,68,68,.32);
-}
-.badge.warn{
-  background:rgba(250,204,21,.14);
-  color:#fff4bf;
-  border-color:rgba(250,204,21,.32);
-}
+    .pill-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
 
-.table-actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.table-actions .btn{
-  padding:7px 10px;
-  border-radius:10px;
-  font-size:.78rem;
-  min-width:auto;
-}
+    .mini-list{
+      display:grid;
+      gap:8px;
+    }
+    .mini-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+    }
+    .mini-item .left{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      min-width:0;
+    }
+    .bar{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--blue);
+      flex:0 0 auto;
+    }
+    .bar.green{background:var(--green)}
+    .bar.yellow{background:var(--yellow)}
+    .bar.red{background:var(--red)}
+    .mini-item .txt{
+      min-width:0;
+      display:grid;
+      gap:3px;
+    }
+    .mini-item .txt .t{
+      font-weight:800;
+      font-size:.9rem;
+    }
+    .mini-item .txt .s{
+      color:var(--muted);
+      font-size:.8rem;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: 760px;
+    }
+    .mini-item .right{
+      font-weight:900;
+      white-space:nowrap;
+    }
 
-.chart-grid{
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:16px;
-}
-.chart-box{
-  height:300px;
-  padding:12px;
-  border-radius:18px;
-  background:rgba(7,17,27,.5);
-  border:1px solid rgba(255,255,255,.06);
-}
+    .logout-area{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
 
-.summary-controls{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:12px;
-}
-.summary-controls .btn.active{
-  outline:2px solid rgba(245,158,11,.35);
-  box-shadow:0 0 0 3px rgba(245,158,11,.08);
-}
+    .login-wrap{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:20px;
+    }
+    .login-card{
+      width:min(1080px, 100%);
+      display:grid;
+      grid-template-columns: 1.02fr .98fr;
+      overflow:hidden;
+      padding:0;
+      border-radius:32px;
+      border:1px solid #dbe7f4;
+      box-shadow:0 24px 70px rgba(16,35,61,.14);
+      background:#fff;
+    }
+    .login-aside{
+      position:relative;
+      padding:30px;
+      color:#fff;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,.18), transparent 22%),
+        radial-gradient(circle at 86% 14%, rgba(25,182,255,.22), transparent 18%),
+        linear-gradient(160deg, #0b1426 0%, #0f3b73 56%, #0a6ed1 100%);
+      overflow:hidden;
+      min-height:100%;
+    }
+    .login-aside::before,
+    .login-aside::after{
+      content:'';
+      position:absolute;
+      border-radius:999px;
+      pointer-events:none;
+      opacity:.34;
+      filter:blur(.2px);
+    }
+    .login-aside::before{width:180px;height:180px;right:-60px;top:-48px;background:rgba(255,255,255,.10)}
+    .login-aside::after{width:220px;height:220px;left:-90px;bottom:-94px;background:rgba(255,255,255,.07)}
+    .login-brandline{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+    .login-brandline .mark{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#fff,#bfe7ff);box-shadow:0 14px 30px rgba(0,0,0,.16)}
+    .login-brandline .brand-copy h1{margin:0;font-size:1.05rem;letter-spacing:-.02em}
+    .login-brandline .brand-copy p{margin:4px 0 0;color:rgba(255,255,255,.82);font-size:.9rem}
+    .login-aside h2{margin:0;font-size:2rem;line-height:1.08;letter-spacing:-.04em;max-width:11ch}
+    .login-aside .lead{margin:14px 0 18px;color:rgba(255,255,255,.88);line-height:1.55;max-width:42ch}
+    .login-points{display:grid;gap:10px;margin-top:18px}
+    .login-point{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:12px 14px}
+    .login-point .pico{width:32px;height:32px;border-radius:11px;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:0 0 auto}
+    .login-point .pico svg{width:16px;height:16px;stroke:#fff}
+    .login-point strong{display:block;font-size:.92rem;margin-bottom:2px}
+    .login-point span{display:block;color:rgba(255,255,255,.78);font-size:.84rem;line-height:1.35}
+    .login-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+    .metric-card{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:12px 12px 11px}
+    .metric-card .m-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .metric-card .m-top .k{font-size:.78rem;letter-spacing:.02em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:800}
+    .metric-card .m-top .bubble{width:30px;height:30px;border-radius:11px;display:grid;place-items:center;background:rgba(255,255,255,.14)}
+    .metric-card .m-top .bubble svg{width:15px;height:15px;stroke:#fff}
+    .metric-card .v{margin-top:10px;font-size:1.35rem;font-weight:900;letter-spacing:-.03em}
+    .metric-card .d{margin-top:4px;color:rgba(255,255,255,.75);font-size:.8rem;line-height:1.35}
+    .login-main{padding:28px;background:#fff}
+    .login-main .login-top{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+    .login-main .login-top .mark{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg, var(--blue), #19b6ff);box-shadow:0 14px 28px rgba(10,110,209,.25)}
+    .login-main .login-top h1{margin:0;font-size:1.15rem}
+    .login-main .login-top p{margin:4px 0 0;color:var(--muted);font-size:.92rem}
+    .login-hero{margin-top:0;margin-bottom:16px;padding:16px;border-radius:22px;background:
+      radial-gradient(circle at top left, rgba(10,110,209,.16), transparent 34%),
+      radial-gradient(circle at top right, rgba(25,182,255,.16), transparent 28%),
+      linear-gradient(180deg, #f7fbff, #eef5ff);
+      border:1px solid #d9e8ff;position:relative;overflow:hidden;}
+    .login-hero::before,.login-hero::after{content:'';position:absolute;inset:auto;border-radius:999px;opacity:.55;pointer-events:none}
+    .login-hero::before{width:82px;height:82px;right:-18px;top:-18px;background:linear-gradient(135deg, rgba(10,110,209,.18), rgba(25,182,255,.04))}
+    .login-hero::after{width:120px;height:120px;left:-40px;bottom:-46px;background:linear-gradient(135deg, rgba(24,126,255,.10), rgba(69,93,255,.02))}
+    .login-hero-grid{display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:10px;margin-top:12px}
+    .login-chip{
+      display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.78);
+      border:1px solid rgba(217,232,255,.95);font-size:.84rem;color:#294768;font-weight:700;box-shadow:0 8px 16px rgba(10,110,209,.06);
+    }
+    .login-chip svg{width:18px;height:18px;flex:0 0 auto;color:var(--blue)}
 
-.dryer-grid{
-  display:grid;
-  grid-template-columns:repeat(3, minmax(0, 1fr));
-  gap:12px;
-  margin-bottom:14px;
-}
-.dryer-card{
-  border-radius:18px;
-  padding:14px;
-  background:linear-gradient(180deg, rgba(16,34,53,.94), rgba(10,19,30,.96));
-  border:1px solid rgba(255,255,255,.06);
-}
-.dryer-card .head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:10px;
-}
-.dryer-card .name{
-  font-weight:900;
-  font-size:1rem;
-}
-.dryer-card .big{
-  font-size:1.5rem;
-  font-weight:900;
-  margin:0;
-}
-.dryer-card .tiny{
-  color:var(--muted2);
-  font-size:.82rem;
-  margin-top:6px;
-  line-height:1.4;
-}
-.status-dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  display:inline-block;
-}
-.status-ok{ background:var(--green); }
-.status-warn{ background:var(--yellow); }
-.status-bad{ background:var(--red); }
+    .two-col{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
+    .subtle{color:var(--muted);font-size:.84rem;line-height:1.45}
+    .admin-only{display:none}
+    .role-admin .admin-only:not(.section){display:revert}
+    .role-admin .admin-inline{display:inline-flex}
 
-.user-admin-card{
-  margin-top:16px;
-  padding:14px;
-  border-radius:18px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.06);
-}
-.user-item{
-  display:grid;
-  grid-template-columns:1.2fr .8fr .8fr 1fr auto;
-  gap:10px;
-  align-items:center;
-  padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-.user-item:last-child{ border-bottom:0; }
+    .soft-heading{font-size:.95rem;font-weight:900;letter-spacing:-.01em;margin:0 0 10px}
+    .access-log{min-width:1200px}
 
-.switch{
-  width:46px;
-  height:26px;
-  border-radius:999px;
-  background:#334155;
-  border:0;
-  position:relative;
-  cursor:pointer;
-  flex:0 0 auto;
-}
-.switch::after{
-  content:"";
-  position:absolute;
-  top:3px;
-  left:3px;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:#fff;
-  transition:.2s ease;
-}
-.switch.on{
-  background:linear-gradient(135deg, var(--orange2), var(--yellow));
-}
-.switch.on::after{ left:23px; }
+    .footer-note{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:.82rem;
+      line-height:1.45;
+    }
 
-.toggle-box{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color:var(--muted);
-  font-size:.9rem;
-}
+    .edit-banner{
+      display:none;
+      margin:0 0 14px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:#fff4d6;
+      border:1px solid #f3d78e;
+      color:#7a4b00;
+      font-weight:800;
+    }
+    .edit-banner.active{display:block}
 
-.small-note{
-  color:var(--muted2);
-  font-size:.82rem;
-  line-height:1.45;
-  margin-top:10px;
-}
+    .nav button .nav-ico{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:10px;background:rgba(255,255,255,.08);margin-right:10px;vertical-align:middle}
+    .nav button .nav-ico svg{width:16px;height:16px;stroke:currentColor}
+    .nav button.active .nav-ico{background:rgba(255,255,255,.16)}
+    .kpi .kpi-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+    .kpi .kpi-icon{width:36px;height:36px;border-radius:13px;display:grid;place-items:center;background:#f3f7fc;border:1px solid #deebf7;color:var(--blue)}
+    .kpi .kpi-icon svg{width:18px;height:18px;stroke:currentColor}
+    .topbar{align-items:center}
+    .headline .ribbon{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .headline .ribbon .badge{padding:5px 9px;font-size:.74rem}
+    .panel h3{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .section-title{display:inline-flex;align-items:center;gap:8px}
+    .section-title .sec-ico{width:28px;height:28px;border-radius:10px;background:#eef4fb;display:grid;place-items:center;color:var(--blue)}
+    .section-title .sec-ico svg{width:15px;height:15px;stroke:currentColor}
 
-.filter-strip{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-  margin-bottom:12px;
-}
-.filter-strip .tag{
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.04);
-  color:#fff;
-  border-radius:999px;
-  padding:8px 12px;
-  cursor:pointer;
-  font-weight:700;
-}
-.filter-strip .tag.active{
-  border-color:rgba(245,158,11,.72);
-  background:linear-gradient(135deg, rgba(245,158,11,.16), rgba(59,130,246,.08));
-}
+    @media (max-width: 1320px){
+      .grid-kpis{grid-template-columns:repeat(2, minmax(0, 1fr))}
+      .info-row{grid-template-columns:repeat(2, minmax(0, 1fr))}
+      .layout,.split{grid-template-columns:1fr}
+      .grid-2{grid-template-columns:1fr}
+    }
 
-@media (max-width: 1320px){
-  .kpis{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
-  .insights{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
-  .layout{ grid-template-columns:1fr; }
-  .chart-grid{ grid-template-columns:1fr; }
-  .dryer-grid{ grid-template-columns:1fr; }
-}
-@media (max-width: 760px){
-  .kpis, .insights, .row, .user-item{ grid-template-columns:1fr; }
-  .actions .btn{ width:100%; }
-  .sidebar{
-    position:relative;
-    height:auto;
-  }
-  .app{ grid-template-columns:1fr; }
-}
-</style>
+    @media (max-width: 760px){
+      .app{grid-template-columns:1fr}
+      .sidebar{
+        position:relative;
+        height:auto;
+      }
+      .grid-kpis,.info-row,.row,.two-col{grid-template-columns:1fr}
+      .content{padding:14px}
+      .panel{padding:14px}
+      .login-card{padding:18px}
+      .login-card{grid-template-columns:1fr}
+      .login-aside{display:none}
+    }
+  </style>
 </head>
 <body>
-
 <div id="loginView" class="login-wrap">
   <div class="login-card">
-    <div class="brand">
-      <div class="brand-mark"></div>
-      <div>
-        <h1>Planta de Escaldado</h1>
-        <p>Ingreso al sistema corporativo</p>
+    <div class="login-aside" aria-hidden="true">
+      <div class="login-brandline">
+        <div class="mark"></div>
+        <div class="brand-copy">
+          <h1>Planta de Escaldado</h1>
+          <p>Control corporativo · Operación y trazabilidad</p>
+        </div>
+      </div>
+
+      <h2>Panel corporativo para supervisar producción.</h2>
+      <p class="lead">Acceso limpio, navegación clara y lectura ejecutiva para registro, análisis, usuarios y bitácoras de acceso.</p>
+
+      <div class="login-points">
+        <div class="login-point">
+          <div class="pico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h7v7H4z"/><path d="M13 6h7v4h-7z"/><path d="M13 12h7v6h-7z"/><path d="M4 15h7v3H4z"/></svg>
+          </div>
+          <div><strong>Registro operativo</strong><span>Entrada rápida de secadas, turnos y causas.</span></div>
+        </div>
+        <div class="login-point">
+          <div class="pico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-9"/><path d="M21 6v5h-5"/></svg>
+          </div>
+          <div><strong>Resumen ejecutivo</strong><span>KPIs, causas agrupadas y lectura por periodo.</span></div>
+        </div>
+        <div class="login-point">
+          <div class="pico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V6l-8-4-8 4v6c0 6 8 10 8 10z"/><path d="M9.5 12.5 11.4 14.4 14.8 10.2"/></svg>
+          </div>
+          <div><strong>Bitácora y accesos</strong><span>Sesiones, dispositivo y control de usuarios.</span></div>
+        </div>
+      </div>
+
+      <div class="login-metrics">
+        <div class="metric-card">
+          <div class="m-top"><div class="k">Meta diaria</div><div class="bubble"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></svg></div></div>
+          <div class="v">6</div>
+          <div class="d">Objetivo total por día.</div>
+        </div>
+        <div class="metric-card">
+          <div class="m-top"><div class="k">Turnos</div><div class="bubble"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg></div></div>
+          <div class="v">2</div>
+          <div class="d">Día y noche.</div>
+        </div>
+        <div class="metric-card">
+          <div class="m-top"><div class="k">Secadoras</div><div class="bubble"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v16H6z"/><path d="M9 8h6"/><path d="M9 12h6"/></svg></div></div>
+          <div class="v">3</div>
+          <div class="d">Control por equipo.</div>
+        </div>
       </div>
     </div>
 
-    <div class="field">
-      <label for="loginUser">Usuario</label>
-      <input class="input" id="loginUser" autocomplete="username" placeholder="Usuario" />
-    </div>
+    <div class="login-main">
+      <div class="login-top">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1>Ingreso seguro</h1>
+          <p>Acceso privado para personal autorizado</p>
+        </div>
+      </div>
 
-    <div class="field">
-      <label for="loginPass">Contraseña</label>
-      <input class="input" id="loginPass" type="password" autocomplete="current-password" placeholder="Contraseña" />
-    </div>
+      <div class="login-hero" aria-hidden="true">
+        <div class="login-hero-grid">
+          <div class="login-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h7v7H4z"/><path d="M13 6h7v4h-7z"/><path d="M13 12h7v6h-7z"/><path d="M4 15h7v3H4z"/></svg>
+            <span>Panel</span>
+          </div>
+          <div class="login-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V6l-8-4-8 4v6c0 6 8 10 8 10z"/><path d="M9.5 12.5 11.4 14.4 14.8 10.2"/></svg>
+            <span>Seguro</span>
+          </div>
+          <div class="login-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M7 14l3-3 3 2 6-7"/></svg>
+            <span>KPI</span>
+          </div>
+        </div>
+      </div>
 
-    <div class="field">
-      <div class="actions">
-        <button class="btn btn-primary" id="loginBtn">Ingresar</button>
-        <button class="btn btn-ghost" id="toggleLoginChangeBtn" type="button">Cambiar contraseña</button>
+      <div class="two-col">
+        <div class="field">
+          <label for="loginUser">Usuario</label>
+          <input class="input" id="loginUser" placeholder="Usuario" autocomplete="username" />
+        </div>
+        <div class="field">
+          <label for="loginPass">Contraseña</label>
+          <input class="input" id="loginPass" type="password" placeholder="Contraseña" autocomplete="current-password" />
+        </div>
       </div>
-    </div>
 
-    <div id="loginChangePanel" class="password-panel hidden">
-      <div class="field" style="margin-top:0;">
-        <label for="loginChangeUser">Usuario</label>
-        <input class="input" id="loginChangeUser" placeholder="Usuario" />
+      <div class="actions" style="margin-top:16px;">
+        <button type="button" class="btn btn-blue" id="loginBtn">Ingresar</button>
+        <button class="btn btn-ghost" id="toggleChangeLoginBtn" type="button">Cambiar contraseña</button>
       </div>
-      <div class="field">
-        <label for="loginChangeOld">Contraseña actual</label>
-        <input class="input" id="loginChangeOld" type="password" placeholder="Actual" />
-      </div>
-      <div class="field">
-        <label for="loginChangeNew">Nueva contraseña</label>
-        <input class="input" id="loginChangeNew" type="password" placeholder="Nueva" />
-      </div>
-      <div class="field">
-        <label for="loginChangeConfirm">Confirmar nueva</label>
-        <input class="input" id="loginChangeConfirm" type="password" placeholder="Confirmar" />
-      </div>
-      <div class="actions">
-        <button class="btn btn-blue" id="loginChangeBtn">Actualizar contraseña</button>
-      </div>
-      <div class="small-note">
-        Este formulario permite cambiar una contraseña antes de iniciar sesión, siempre que conozcas la contraseña actual.
-      </div>
-    </div>
 
-    <div class="helper">
-      La sesión permanecerá abierta aunque regreses con el navegador o recargues la página, hasta que presiones “Salir” o el usuario sea deshabilitado.
+      <div id="loginChangePanel" class="card hidden" style="margin-top:14px; background:#f8fbff;">
+        <div class="two-col">
+          <div class="field">
+            <label for="loginChangeUser">Usuario</label>
+            <input class="input" id="loginChangeUser" placeholder="Usuario" />
+          </div>
+          <div class="field">
+            <label for="loginChangeOld">Contraseña actual</label>
+            <input class="input" id="loginChangeOld" type="password" placeholder="Actual" />
+          </div>
+        </div>
+        <div class="two-col" style="margin-top:12px;">
+          <div class="field">
+            <label for="loginChangeNew">Nueva contraseña</label>
+            <input class="input" id="loginChangeNew" type="password" placeholder="Nueva" />
+          </div>
+          <div class="field">
+            <label for="loginChangeConfirm">Confirmar nueva</label>
+            <input class="input" id="loginChangeConfirm" type="password" placeholder="Confirmar" />
+          </div>
+        </div>
+        <div class="actions" style="margin-top:12px;">
+          <button type="button" class="btn btn-green" id="loginChangeBtn">Actualizar contraseña</button>
+        </div>
+      </div>
+
+      <p class="helper" style="margin-top:14px;">
+        Acceso privado para personal autorizado.
+      </p>
     </div>
   </div>
 </div>
@@ -700,137 +855,164 @@ tfoot td{
       <div class="brand-mark"></div>
       <div>
         <h1>Planta de Escaldado</h1>
-        <p>Dashboard corporativo</p>
+        <p>Supervisión ejecutiva</p>
       </div>
     </div>
 
-    <div class="userbox">
-      <p class="user-name" id="currentUserName">ADMIN</p>
-      <p class="user-meta" id="currentUserMeta">Administrador</p>
-      <p class="user-meta" id="currentUserState">Activo</p>
+    <div class="side-card">
+      <div class="side-title">
+        <strong id="currentUserName">ADMIN</strong>
+        <span class="badge admin" id="currentUserRole">ADMIN</span>
+      </div>
+      <p class="side-meta" id="currentUserMeta">Panel ejecutivo</p>
+      <div style="margin-top:10px;">
+        <span class="badge session" id="sessionBadge"><span class="dot"></span> Sesión activa</span>
+      </div>
     </div>
 
     <div class="nav">
-      <button class="active" data-section-btn="sectionRecords" id="navRecordsBtn">Registros</button>
-      <button data-section-btn="sectionAnalytics" id="navAnalyticsBtn">Resumen ejecutivo</button>
-      <button data-section-btn="sectionUsers" id="navUsersBtn" class="hidden">Gestión de usuarios</button>
+      <button type="button" class="active" data-section-btn="sectionRecords" id="navRecordsBtn">
+        <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg></span>Registros
+        <div class="small">Captura operativa</div>
+      </button>
+      <button type="button" data-section-btn="sectionAnalytics" id="navAnalyticsBtn" class="admin-only">
+        <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M7 15l3-4 3 2 5-7"/></svg></span>Resumen ejecutivo
+        <div class="small">KPI, historia y causas</div>
+      </button>
+      <button type="button" data-section-btn="sectionUsers" id="navUsersBtn" class="admin-only">
+        <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Gestión de usuarios
+        <div class="small">Roles, accesos y trazas</div>
+      </button>
+      <button type="button" data-section-btn="sectionSettings" id="navSettingsBtn" class="admin-only">
+        <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v3"/><path d="M12 20v3"/><path d="M4.22 4.22 6.34 6.34"/><path d="M17.66 17.66 19.78 19.78"/><path d="M1 12h3"/><path d="M20 12h3"/><path d="M4.22 19.78 6.34 17.66"/><path d="M17.66 6.34 19.78 4.22"/><circle cx="12" cy="12" r="4"/></svg></span>Configuración
+        <div class="small">Ajustes del panel</div>
+      </button>
+      <button type="button" data-section-btn="sectionLogs" id="navLogsBtn" class="admin-only">
+        <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg></span>Bitácora de accesos
+        <div class="small">Dispositivos y sesiones</div>
+      </button>
     </div>
 
-    <div class="userbox" style="margin-top:18px;">
-      <div class="toggle-box" style="justify-content:space-between; margin-bottom:10px;">
-        <strong style="font-size:.95rem;">Cambiar contraseña</strong>
-        <span class="badge admin" id="pwdRoleBadge">Mi cuenta</span>
+    <div class="side-card">
+      <div class="side-title">
+        <strong>Mi cuenta</strong>
+        <span class="badge operador" id="pwdBadge">Operador</span>
       </div>
-
       <div class="stack">
-        <div class="field" style="margin-top:0;">
+        <div class="field">
           <label for="sidebarOldPass">Contraseña actual</label>
-          <input class="input" id="sidebarOldPass" type="password" placeholder="Actual" />
+          <input class="input" id="sidebarOldPass" type="password" />
         </div>
         <div class="field">
           <label for="sidebarNewPass">Nueva contraseña</label>
-          <input class="input" id="sidebarNewPass" type="password" placeholder="Nueva" />
+          <input class="input" id="sidebarNewPass" type="password" />
         </div>
         <div class="field">
           <label for="sidebarConfirmPass">Confirmar nueva</label>
-          <input class="input" id="sidebarConfirmPass" type="password" placeholder="Confirmar" />
+          <input class="input" id="sidebarConfirmPass" type="password" />
         </div>
         <div class="actions">
-          <button class="btn btn-blue" id="sidebarChangeBtn">Cambiar contraseña</button>
+          <button type="button" class="btn btn-blue" id="sidebarChangeBtn">Cambiar contraseña</button>
         </div>
       </div>
     </div>
 
-    <div class="userbox" style="margin-top:18px;">
-      <div class="actions">
-        <button class="btn btn-ghost" id="logoutBtn">Salir</button>
-      </div>
+    <div class="logout-area">
+      <button type="button" class="btn btn-ghost" id="logoutBtn">Salir</button>
     </div>
   </aside>
 
   <main class="content">
-    <div class="page-shell">
+    <div class="page">
+
       <div class="topbar">
-        <div class="title">
-          <h2>Panel de cumplimiento de producción</h2>
-          <p>Vista ejecutiva por día, semana, secadora, paros y tiempos promedio de secado.</p>
+        <div class="headline">
+          <h2>Panel de supervisión de secadas y paros</h2>
+          <p>
+            Vista ejecutiva para planta: cumplimiento, paros, causas agrupadas, lectura por secadora y narrativa semanal para supervisión.
+          </p>
+          <div class="ribbon">
+            <span class="badge admin">Control operativo</span>
+            <span class="badge warn">Meta diaria 6</span>
+            <span class="badge session">Bitácora activa</span>
+          </div>
         </div>
-        <div class="pill">Sesión activa</div>
+        <div class="status-line">
+          <span class="session-pill"><span class="dot"></span> Activo</span>
+          <span class="badge admin admin-only" id="roleFlag">ADMIN</span>
+        </div>
       </div>
 
-      <div class="quickbar">
-        <button class="chip" id="jumpRecordsBtn" type="button">Ir a registros</button>
-        <button class="chip" id="jumpAnalyticsBtn" type="button">Ir a resumen</button>
-        <button class="chip hidden" id="jumpUsersBtn" type="button">Ir a usuarios</button>
-        <div class="spacer"></div>
-        <button class="chip active" data-summary-view="dia" type="button">Por día</button>
-        <button class="chip" data-summary-view="semana" type="button">Por semana</button>
-        <button class="chip" data-summary-view="mes" type="button">Por mes</button>
+      <div class="toolbar admin-only">
+        <div class="chips">
+          <button type="button" class="chip active" data-summary-view="dia">Por día</button>
+          <button type="button" class="chip" data-summary-view="semana">Por semana</button>
+          <button type="button" class="chip" data-summary-view="mes">Por mes</button>
+          <button type="button" class="chip admin-only" id="jumpAnalyticsBtn">Ir a resumen</button>
+          <button type="button" class="chip admin-only" id="jumpUsersBtn">Ir a usuarios</button>
+          <button type="button" class="chip admin-only" id="jumpLogsBtn">Ir a bitácora</button>
+        </div>
+        <div class="chips">
+          <button type="button" class="chip small admin-only" id="exportCsvBtn">Exportar CSV</button>
+        </div>
       </div>
 
-      <div class="kpis">
+      <div class="grid-kpis admin-only">
         <div class="kpi green">
-          <div class="label">Producción del día</div>
+          <div class="kpi-head"><div class="label">Producción del día</div><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M6 17V9"/><path d="M12 17V5"/><path d="M18 17v-7"/></svg></div></div>
           <div class="value" id="kpiDayProd">0</div>
-          <div class="sub">Producción del día actual visible</div>
+          <div class="sub">Total visible según filtros activos.</div>
         </div>
-        <div class="kpi blue">
-          <div class="label">Meta diaria</div>
+        <div class="kpi yellow">
+          <div class="kpi-head"><div class="label">Meta diaria</div><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93 7.76 7.76"/><path d="M16.24 16.24 19.07 19.07"/><path d="M2 12h4"/><path d="M18 12h4"/><circle cx="12" cy="12" r="4"/></svg></div></div>
           <div class="value" id="kpiDayMeta">6</div>
-          <div class="sub">Objetivo por día</div>
+          <div class="sub">Referencia de cumplimiento diario.</div>
         </div>
-        <div class="kpi orange">
-          <div class="label">Cumplimiento diario</div>
+        <div class="kpi red">
+          <div class="kpi-head"><div class="label">Cumplimiento diario</div><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="m4 15 6-6 4 4 6-8"/></svg></div></div>
           <div class="value" id="kpiDayComp">0%</div>
-          <div class="sub">Avance contra la meta diaria</div>
+          <div class="sub">Avance contra la meta diaria.</div>
         </div>
         <div class="kpi green">
-          <div class="label">Producción semanal</div>
-          <div class="value" id="kpiWeekProd">0</div>
-          <div class="sub">Producción de la semana actual visible</div>
-        </div>
-        <div class="kpi blue">
-          <div class="label">Meta semanal</div>
-          <div class="value" id="kpiWeekMeta">42</div>
-          <div class="sub">Objetivo semanal</div>
-        </div>
-        <div class="kpi orange">
-          <div class="label">Cumplimiento semanal</div>
+          <div class="kpi-head"><div class="label">Cumplimiento semanal</div><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M6 3v4"/><path d="M18 3v4"/><rect x="4" y="7" width="16" height="14" rx="2"/><path d="M8 12h8"/></svg></div></div>
           <div class="value" id="kpiWeekComp">0%</div>
-          <div class="sub">Avance contra la meta semanal</div>
+          <div class="sub">Meta acumulada de la semana.</div>
         </div>
       </div>
 
-      <div class="insights">
-        <div class="insight">
-          <div class="label">Días sin secar</div>
-          <div class="value" id="insightDaysNoProd">0</div>
-          <div class="sub">Días con producción total igual a cero.</div>
+      <div class="info-row admin-only">
+        <div class="info-card">
+          <div class="label">Narrativa ejecutiva del periodo</div>
+          <div class="value" id="executiveNarrativeTitle">Lectura condensada para supervisión</div>
+          <div class="sub" id="executiveNarrativeText">
+            Se actualizará con el comportamiento de secadas, paros y causas agrupadas.
+          </div>
         </div>
-        <div class="insight">
-          <div class="label">Días bajo meta</div>
-          <div class="value" id="insightDaysBelow">0</div>
-          <div class="sub">Días con producción entre 1 y 5 secadas.</div>
+        <div class="info-card">
+          <div class="label">Secadora más afectada</div>
+          <div class="value" id="topStopDryer">—</div>
+          <div class="sub">Se calcula por horas de paro acumuladas.</div>
         </div>
-        <div class="insight">
-          <div class="label">Secadora con más paro</div>
-          <div class="value" id="insightTopStop">—</div>
-          <div class="sub">Según horas de paro acumuladas.</div>
-        </div>
-        <div class="insight">
+        <div class="info-card">
           <div class="label">Secadora más productiva</div>
-          <div class="value" id="insightTopProd">—</div>
-          <div class="sub">Según secadas acumuladas.</div>
+          <div class="value" id="topProdDryer">—</div>
+          <div class="sub">Se calcula por secadas acumuladas.</div>
+        </div>
+        <div class="info-card">
+          <div class="label">Días bajo meta / sin producción</div>
+          <div class="value" id="daysStatus">0 / 0</div>
+          <div class="sub">Identifica días que requieren atención.</div>
         </div>
       </div>
 
-      <section class="section active" id="sectionRecords">
+      <section id="sectionRecords" class="section active">
         <div class="layout">
           <div class="panel">
-            <h3>Nuevo registro</h3>
+            <h3><span class="section-title"><span class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg></span>Registro operativo</span></h3>
+            <div id="editBanner" class="edit-banner">[ MODO EDICIÓN ACTIVADO ]</div>
 
             <div class="stack">
-              <div class="field" style="margin-top:0;">
+              <div class="field">
                 <label for="regDate">Fecha</label>
                 <input class="input" type="date" id="regDate" />
               </div>
@@ -839,8 +1021,8 @@ tfoot td{
                 <div class="field">
                   <label for="regTurn">Turno</label>
                   <select class="select" id="regTurn">
-                    <option value="Día">Día</option>
-                    <option value="Noche">Noche</option>
+                    <option>Día</option>
+                    <option>Noche</option>
                   </select>
                 </div>
                 <div class="field">
@@ -855,12 +1037,48 @@ tfoot td{
 
               <div class="field">
                 <label for="regSecadas">Secadas</label>
-                <input class="input" type="number" min="0" step="1" id="regSecadas" placeholder="0 o un número entero" />
+                <input class="input" type="number" min="0" step="1" id="regSecadas" placeholder="0 o entero mayor" />
               </div>
 
-              <div class="field hidden" id="blockTime">
-                <label for="regAvgTime">Tiempo promedio de secada (duración)</label>
-                <input class="input" type="text" id="regAvgTime" placeholder="HH:MM" inputmode="numeric" />
+              <div class="field hidden" id="blockDuration">
+                <label>Tiempo de secado (HH:MM)</label>
+                <div class="row">
+                  <select id="horasSecado" class="select">
+                    <option value="">Horas</option>
+                    <option value="0">00</option>
+                    <option value="1">01</option>
+                    <option value="2">02</option>
+                    <option value="3">03</option>
+                    <option value="4">04</option>
+                    <option value="5">05</option>
+                    <option value="6">06</option>
+                    <option value="7">07</option>
+                    <option value="8">08</option>
+                    <option value="9">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                  </select>
+                  <select id="minutosSecado" class="select">
+                    <option value="">Min</option>
+                    <option value="0">00</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                  </select>
+                </div>
               </div>
 
               <div class="field hidden" id="blockStop">
@@ -870,30 +1088,29 @@ tfoot td{
 
               <div class="field hidden" id="blockCause">
                 <label for="regCause">Causa / justificación</label>
-                <input class="input" type="text" id="regCause" placeholder="Justificación" />
+                <textarea id="regCause" placeholder="Solo aplica para paro total (0 secadas)"></textarea>
               </div>
 
               <div class="actions">
-                <button class="btn btn-primary" id="saveRecordBtn">Guardar</button>
-                <button class="btn btn-secondary" id="exportCsvBtn">Exportar CSV</button>
+                <button type="button" class="btn btn-blue" id="saveRecordBtn">Guardar registro</button>
+                <button type="button" class="btn btn-green admin-only" id="exportCsvBtn2">Exportar CSV</button>
               </div>
 
               <div class="small-note">
-                El tiempo promedio se registra como duración, por ejemplo <strong>12:40</strong>, no como hora del reloj.
+                La justificación solo se solicita cuando la secadora queda en <strong>0 secadas</strong>. Para 1, 2 o 3 secadas no se pide causa.
               </div>
             </div>
           </div>
 
-          <div class="panel">
-            <h3>Consulta y visualización</h3>
-
+          <div class="panel admin-only">
+            <h3><span class="section-title"><span class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>Consulta compacta</span></h3>
             <div class="stack">
               <div class="row">
-                <div class="field" style="margin-top:0;">
+                <div class="field">
                   <label for="searchBox">Buscar</label>
-                  <input class="input" type="text" id="searchBox" placeholder="Usuario, causa, secadora o turno" />
+                  <input class="input" id="searchBox" placeholder="Usuario, turno, causa, secadora" />
                 </div>
-                <div class="field" style="margin-top:0;">
+                <div class="field">
                   <label for="filterDate">Filtrar por fecha</label>
                   <input class="input" type="date" id="filterDate" />
                 </div>
@@ -904,7 +1121,7 @@ tfoot td{
                 <select class="select" id="filterUser"></select>
               </div>
 
-              <div class="table-wrap">
+              <div class="table-wrap compact-table">
                 <table>
                   <thead>
                     <tr>
@@ -914,14 +1131,11 @@ tfoot td{
                       <th>Turno</th>
                       <th>Secadora</th>
                       <th>Secadas</th>
-                      <th>Meta D</th>
-                      <th>Cump. D</th>
-                      <th>Meta S</th>
-                      <th>Cump. S</th>
-                      <th>Tiempo prom.</th>
+                      <th>Tiempo secado</th>
                       <th>Horas paro</th>
-                      <th>Tipo</th>
+                      <th>Estado</th>
                       <th>Causa resumida</th>
+                      <th>Dispositivo</th>
                       <th>Acción</th>
                     </tr>
                   </thead>
@@ -933,1584 +1147,1461 @@ tfoot td{
         </div>
       </section>
 
-      <section class="section" id="sectionAnalytics">
+      <section id="sectionAnalytics" class="section">
         <div class="panel">
-          <h3>Resumen ejecutivo</h3>
+          <h3><span class="section-title"><span class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 16V9"/><path d="M12 16V5"/><path d="M17 16v-4"/></svg></span>Resumen ejecutivo</span></h3>
 
-          <div class="filter-strip">
-            <button class="tag active" data-summary-view="dia" type="button">Por día</button>
-            <button class="tag" data-summary-view="semana" type="button">Por semana</button>
-            <button class="tag" data-summary-view="mes" type="button">Por mes</button>
-          </div>
-
-          <div class="chart-grid">
-            <div class="chart-box">
-              <canvas id="trendChart"></canvas>
-            </div>
-            <div class="chart-box">
-              <canvas id="dryerChart"></canvas>
-            </div>
-          </div>
-
-          <div style="height:14px;"></div>
-
-          <h3 style="margin-top:0;">Resumen por secadora</h3>
-          <div class="dryer-grid" id="dryerCards"></div>
-
-          <div class="table-wrap" style="margin-bottom:14px;">
-            <table style="min-width:980px;">
-              <thead>
-                <tr>
-                  <th>Secadora</th>
-                  <th>Secadas</th>
-                  <th>Horas de paro</th>
-                  <th>Prom. secado</th>
-                  <th>Registros</th>
-                  <th>% del total</th>
-                  <th>Último registro</th>
-                </tr>
-              </thead>
-              <tbody id="dryerTableBody"></tbody>
-            </table>
-          </div>
-
-          <h3 style="margin-top:0;">Resumen consolidado</h3>
           <div class="summary-controls">
-            <button class="btn btn-primary active" type="button" data-summary-view="dia">Por día</button>
-            <button class="btn btn-secondary" type="button" data-summary-view="semana">Por semana</button>
-            <button class="btn btn-ghost" type="button" data-summary-view="mes">Por mes</button>
+            <button type="button" class="btn btn-blue active" data-summary-view="dia">Por día</button>
+            <button type="button" class="btn btn-soft" data-summary-view="semana">Por semana</button>
+            <button type="button" class="btn btn-ghost" data-summary-view="mes">Por mes</button>
           </div>
 
-          <div class="table-wrap">
-            <table style="min-width:1320px;">
+          <div class="grid-2">
+            <div class="card">
+              <p class="soft-heading">Narrativa automática</p>
+              <div class="narrative" id="narrativeBox"></div>
+            </div>
+
+            <div class="card">
+              <p class="soft-heading">Causas agrupadas</p>
+              <div class="mini-list" id="causeSummaryBox"></div>
+            </div>
+          </div>
+
+          <div style="height:14px"></div>
+
+          <div class="grid-2">
+            <div class="card">
+              <p class="soft-heading">Tendencia de secadas</p>
+              <div class="table-wrap" style="max-height:360px;">
+                <table class="access-log" style="min-width:960px;">
+                  <thead>
+                    <tr>
+                      <th>Periodo</th>
+                      <th>Secadas</th>
+                      <th>Meta</th>
+                      <th>Faltante</th>
+                      <th>Cumplimiento</th>
+                      <th>Horas de paro</th>
+                      <th>Secadora 1</th>
+                      <th>Secadora 2</th>
+                      <th>Secadora 3</th>
+                    </tr>
+                  </thead>
+                  <tbody id="summaryBody"></tbody>
+                  <tfoot id="summaryFoot"></tfoot>
+                </table>
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="soft-heading">Indicadores por secadora</p>
+              <div class="mini-list" id="dryerRankBox"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sectionUsers" class="section">
+        <div class="panel">
+          <h3><span class="section-title"><span class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Gestión de usuarios</span></h3>
+
+          <div class="grid-2">
+            <div class="card">
+              <p class="soft-heading">Nuevo usuario</p>
+              <div class="stack">
+                <div class="row">
+                  <div class="field">
+                    <label for="newUserName">Usuario</label>
+                    <input class="input" id="newUserName" placeholder="Nombre de usuario" />
+                  </div>
+                  <div class="field">
+                    <label for="newUserPass">Contraseña</label>
+                    <input class="input" id="newUserPass" type="password" placeholder="Contraseña" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="field">
+                    <label for="newUserRole">Rol</label>
+                    <select id="newUserRole" class="select">
+                      <option value="operador">Operador</option>
+                      <option value="admin">Administrador</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="newUserActive">Estado</label>
+                    <select id="newUserActive" class="select">
+                      <option value="true">Activo</option>
+                      <option value="false">Deshabilitado</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="actions">
+                  <button type="button" class="btn btn-blue" id="createUserBtn">Crear usuario</button>
+                </div>
+                <div class="small-note">Solo el ADMIN puede crear, editar o eliminar usuarios.</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="soft-heading">Usuarios existentes</p>
+              <div id="usersList" class="stack"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sectionSettings" class="section">
+        <div class="panel">
+          <h3>Configuración ejecutiva</h3>
+          <div class="grid-2">
+            <div class="card">
+              <p class="soft-heading">Metas y control</p>
+              <div class="stack">
+                <div class="row">
+                  <div class="field">
+                    <label for="metaDaily">Meta diaria</label>
+                    <input class="input" id="metaDaily" type="number" min="1" step="1" value="6" />
+                  </div>
+                  <div class="field">
+                    <label for="metaWeekly">Meta semanal</label>
+                    <input class="input" id="metaWeekly" type="number" min="1" step="1" value="42" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="field">
+                    <label for="companyName">Nombre del tablero</label>
+                    <input class="input" id="companyName" value="Planta de Escaldado" />
+                  </div>
+                  <div class="field">
+                    <label for="homeTheme">Tema visual</label>
+                    <select class="select" id="homeTheme">
+                      <option value="fiori">SAP Fiori claro</option>
+                      <option value="corporate">Corporativo azul</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="actions">
+                  <button type="button" class="btn btn-green" id="saveSettingsBtn">Guardar configuración</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="soft-heading">Panel de control</p>
+              <div class="mini-list" id="settingsPreviewBox"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sectionLogs" class="section">
+        <div class="panel">
+          <h3><span class="section-title"><span class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z"/><path d="M8 7h8"/><path d="M8 11h8"/><path d="M8 15h5"/></svg></span>Bitácora de accesos</span></h3>
+          <div class="table-wrap" style="max-height:520px;">
+            <table class="access-log">
               <thead>
                 <tr>
-                  <th>Periodo</th>
-                  <th>Semana</th>
-                  <th>Días</th>
-                  <th>Secadas</th>
-                  <th>Meta</th>
-                  <th>Faltante</th>
-                  <th>Cumplimiento</th>
-                  <th>Horas paro</th>
-                  <th>Secadora #1</th>
-                  <th>Secadora #2</th>
-                  <th>Secadora #3</th>
-                  <th>Prom. S1</th>
-                  <th>Prom. S2</th>
-                  <th>Prom. S3</th>
-                  <th>Justificación / Causa</th>
+                  <th>Fecha / hora</th>
+                  <th>Usuario</th>
+                  <th>Rol</th>
+                  <th>Dispositivo</th>
+                  <th>Plataforma</th>
+                  <th>Navegador</th>
+                  <th>IP / origen</th>
+                  <th>Estado</th>
                 </tr>
               </thead>
-              <tbody id="summaryBody"></tbody>
-              <tfoot id="summaryFoot"></tfoot>
+              <tbody id="logsBody"></tbody>
             </table>
           </div>
-        </div>
-      </section>
-
-      <section class="section" id="sectionUsers">
-        <div class="panel">
-          <h3>Gestión de usuarios</h3>
-          <div class="subtle">Visible solo para ADMIN.</div>
-
-          <div class="user-admin-card">
-            <div class="row">
-              <div class="field" style="margin-top:0;">
-                <label for="newUserName">Nuevo usuario</label>
-                <input class="input" id="newUserName" placeholder="Nombre de usuario" />
-              </div>
-              <div class="field" style="margin-top:0;">
-                <label for="newUserPass">Contraseña</label>
-                <input class="input" id="newUserPass" type="password" placeholder="Contraseña" />
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="field">
-                <label for="newUserRole">Rol</label>
-                <select class="select" id="newUserRole">
-                  <option value="operador">Operador</option>
-                  <option value="admin">Administrador</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="newUserActive">Estado</label>
-                <select class="select" id="newUserActive">
-                  <option value="true">Habilitado</option>
-                  <option value="false">Deshabilitado</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="actions">
-              <button class="btn btn-primary" id="createUserBtn">Crear usuario</button>
-            </div>
-          </div>
-
-          <div class="user-admin-card">
-            <div id="usersList"></div>
+          <div class="footer-note">
+            Esta bitácora permite ver qué usuario entró, desde qué dispositivo y con qué plataforma. Solo es visible para ADMIN.
           </div>
         </div>
       </section>
+
     </div>
   </main>
 </div>
 
 <script>
-firebase.initializeApp({
-  apiKey: "AIzaSyDxDg_Wv7JIePhOAAR-ZXHIttaiT4SlF8A",
-  authDomain: "escaldado-paros.firebaseapp.com",
-  databaseURL: "https://escaldado-paros-default-rtdb.firebaseio.com",
-  projectId: "escaldado-paros",
-  storageBucket: "escaldado-paros.firebasestorage.app",
-  messagingSenderId: "137301198349",
-  appId: "1:137301198349:web:cb4681d31b1b3ede107744",
-  measurementId: "G-9N55RHM7B3"
-});
 
-const db = firebase.database();
-const usersRef = db.ref("users");
-const recordsRef = db.ref("records");
+(() => {
+  function createFirebaseStub() {
+    const STORE_KEY = "__fbstub_planta_escaldado__";
+    const listeners = new Map();
 
-const DAILY_META = 6;
-const WEEKLY_META = 42;
-const SESSION_KEY = "planta_escaldado_session_v3";
-
-const defaultUsers = {
-  "ADMIN":  { name:"ADMIN",  pass:"1234", role:"admin",    active:true },
-  "SELVIN": { name:"SELVIN", pass:"1234", role:"operador", active:true },
-  "GADIEL": { name:"GADIEL", pass:"1234", role:"operador", active:true },
-  "JOSE":   { name:"JOSE",   pass:"1234", role:"operador", active:true },
-  "ADANS":  { name:"ADANS",  pass:"1234", role:"operador", active:false },
-  "JUAN":   { name:"JUAN",   pass:"1234", role:"operador", active:false },
-  "OSCAR":  { name:"OSCAR",  pass:"1234", role:"operador", active:false }
-};
-
-const $ = (id) => document.getElementById(id);
-
-let users = {};
-let records = [];
-let currentUser = null;
-let editingRecordId = null;
-let usersReady = false;
-let summaryView = "dia";
-let trendChart = null;
-let dryerChart = null;
-
-function clone(obj){
-  return JSON.parse(JSON.stringify(obj));
-}
-
-function normalizeUser(value){
-  return String(value || "").trim().toUpperCase();
-}
-
-function escapeHtml(value){
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function localISODate(date = new Date()){
-  const d = new Date(date);
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 10);
-}
-
-function parseDateISO(iso){
-  return new Date(`${iso}T00:00:00`);
-}
-
-function formatDateES(iso){
-  if(!iso) return "";
-  const [y, m, d] = iso.split("-");
-  return `${Number(d)}/${Number(m)}/${y}`;
-}
-
-function getISOWeekInfo(date){
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  const week = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-  return { year: d.getUTCFullYear(), week };
-}
-
-function weekKeyFromISO(iso){
-  const info = getISOWeekInfo(parseDateISO(iso));
-  return `${info.year}-W${String(info.week).padStart(2, "0")}`;
-}
-
-function sameISOWeek(iso, refInfo){
-  const info = getISOWeekInfo(parseDateISO(iso));
-  return info.year === refInfo.year && info.week === refInfo.week;
-}
-
-function fmtNum(value, digits = 0){
-  const n = Number(value) || 0;
-  if(digits === 0) return String(Math.round(n));
-  return Number.isInteger(n) ? String(n) : n.toFixed(digits);
-}
-
-function fmtHours(value){
-  const n = Number(value) || 0;
-  return Number.isInteger(n) ? String(n) : n.toFixed(1);
-}
-
-function getCurrentUserObject(){
-  if(!currentUser) return null;
-  return users[currentUser] || null;
-}
-
-function saveSession(user){
-  localStorage.setItem(SESSION_KEY, JSON.stringify({ user, ts: Date.now() }));
-}
-
-function clearSession(){
-  localStorage.removeItem(SESSION_KEY);
-}
-
-function loadSession(){
-  try{
-    const raw = localStorage.getItem(SESSION_KEY);
-    if(!raw) return null;
-    return JSON.parse(raw);
-  }catch{
-    return null;
-  }
-}
-
-function showView(view){
-  $("loginView").classList.toggle("hidden", view !== "login");
-  $("appView").classList.toggle("hidden", view !== "app");
-}
-
-function setSection(sectionId){
-  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-  const section = $(sectionId);
-  if(section) section.classList.add("active");
-  document.querySelectorAll("[data-section-btn]").forEach(b => b.classList.remove("active"));
-  const btn = document.querySelector(`[data-section-btn="${sectionId}"]`);
-  if(btn) btn.classList.add("active");
-}
-
-function openPicker(input){
-  if(typeof input.showPicker === "function") input.showPicker();
-  else{
-    input.focus();
-    input.click();
-  }
-}
-
-function summarizeCause(text){
-  const raw = String(text || "").trim();
-  if(!raw) return "—";
-  const lower = raw.toLowerCase();
-
-  const rules = [
-    ["sin justificación", "Sin justificación"],
-    ["paro total", "Paro total"],
-    ["paro parcial", "Paro parcial"],
-    ["arranque", "Arranque de turno"],
-    ["eléctr", "Paro eléctrico"],
-    ["electric", "Paro eléctrico"],
-    ["mecán", "Falla mecánica"],
-    ["motor", "Falla de motor"],
-    ["bomba", "Bomba de circulación"],
-    ["obstrucción", "Obstrucción"],
-    ["tanque", "Falla en tanque"],
-    ["vapor", "Falla por vapor"],
-    ["leito", "Problema en leito"]
-  ];
-  for(const [k, v] of rules){
-    if(lower.includes(k)) return v;
-  }
-
-  const firstSentence = raw.split(/[.;:]/)[0].trim();
-  const words = firstSentence.split(/\s+/).filter(Boolean);
-  if(words.length <= 8) return firstSentence;
-  return words.slice(0, 8).join(" ") + "…";
-}
-
-function classifyStop(record){
-  const secadas = Number(record.secadas) || 0;
-  const cause = String(record.cause || "").toLowerCase();
-  if(secadas === 0) return "Paro total";
-  if(secadas < DAILY_META) return "Paro parcial";
-  if(cause.includes("eléctr") || cause.includes("electric")) return "Eléctrico";
-  if(cause.includes("mecán")) return "Mecánico";
-  if(cause.includes("arranque")) return "Arranque";
-  if(cause.includes("bomba")) return "Bomba";
-  if(cause.includes("motor")) return "Motor";
-  if(cause.includes("obstrucción")) return "Obstrucción";
-  return "N/A";
-}
-
-function durationToMinutes(value){
-  const raw = String(value || "").trim();
-  if(!raw) return null;
-  const m = raw.match(/^(\d+):([0-5]\d)$/);
-  if(!m) return null;
-  const hours = Number(m[1]);
-  const mins = Number(m[2]);
-  if(!Number.isFinite(hours) || hours < 0) return null;
-  return (hours * 60) + mins;
-}
-
-function minutesToDuration(totalMinutes){
-  if(totalMinutes === null || totalMinutes === undefined || !Number.isFinite(Number(totalMinutes))) return "—";
-  const mins = Math.max(0, Math.round(Number(totalMinutes)));
-  const h = Math.floor(mins / 60);
-  const mm = mins % 60;
-  return `${String(h).padStart(2, "0")}:${String(mm).padStart(2, "0")} h`;
-}
-
-function averageMinutes(values){
-  const valid = values.filter(v => Number.isFinite(Number(v)));
-  if(valid.length === 0) return null;
-  const sum = valid.reduce((a,b) => a + Number(b), 0);
-  return sum / valid.length;
-}
-
-function getVisibleRecords(){
-  const me = getCurrentUserObject();
-  if(!me) return [];
-  if(me.role === "admin") return records.slice();
-  return records.filter(r => r.user === currentUser);
-}
-
-function sortRecordsForDisplay(list){
-  return list.slice().sort((a, b) => {
-    const da = a.date || "";
-    const dbv = b.date || "";
-    if(da !== dbv) return dbv.localeCompare(da);
-    return String(b.createdAt || "").localeCompare(String(a.createdAt || ""));
-  });
-}
-
-function buildDateTotals(list){
-  const map = {};
-  list.forEach(r => {
-    if(!r.date) return;
-    if(!map[r.date]) map[r.date] = 0;
-    map[r.date] += Number(r.secadas) || 0;
-  });
-  return map;
-}
-
-function buildWeekTotals(list){
-  const map = {};
-  list.forEach(r => {
-    if(!r.date) return;
-    const key = weekKeyFromISO(r.date);
-    if(!map[key]) map[key] = 0;
-    map[key] += Number(r.secadas) || 0;
-  });
-  return map;
-}
-
-function buildDailyTotals(list){
-  const map = {};
-  list.forEach(r => {
-    if(!r.date) return;
-    if(!map[r.date]){
-      map[r.date] = { secadas:0, stopHours:0, records:0 };
-    }
-    map[r.date].secadas += Number(r.secadas) || 0;
-    map[r.date].stopHours += Number(r.stopHours) || 0;
-    map[r.date].records += 1;
-  });
-  return map;
-}
-
-function buildDryerStats(list){
-  const stats = {
-    "1": { dryer:"1", secadas:0, stopHours:0, records:0, lastDate:"", avgDurations:[] },
-    "2": { dryer:"2", secadas:0, stopHours:0, records:0, lastDate:"", avgDurations:[] },
-    "3": { dryer:"3", secadas:0, stopHours:0, records:0, lastDate:"", avgDurations:[] }
-  };
-
-  list.forEach(r => {
-    const key = String(r.secadora || "");
-    if(!stats[key]) return;
-    stats[key].secadas += Number(r.secadas) || 0;
-    stats[key].stopHours += Number(r.stopHours) || 0;
-    stats[key].records += 1;
-    if(Number.isFinite(Number(r.avgTimeMinutes))){
-      stats[key].avgDurations.push(Number(r.avgTimeMinutes));
-    }
-    if(r.date && (!stats[key].lastDate || r.date > stats[key].lastDate)){
-      stats[key].lastDate = r.date;
-    }
-  });
-
-  return stats;
-}
-
-function buildExecutiveStats(list){
-  const today = localISODate();
-  const weekRef = getISOWeekInfo(new Date());
-  const dailyTotals = buildDailyTotals(list);
-  const dryerStats = buildDryerStats(list);
-
-  const dayRecords = list.filter(r => r.date === today);
-  const weekRecords = list.filter(r => r.date && sameISOWeek(r.date, weekRef));
-
-  const dayProduced = dayRecords.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
-  const weekProduced = weekRecords.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
-
-  const dayCompliance = DAILY_META > 0 ? (dayProduced / DAILY_META) * 100 : 0;
-  const weekCompliance = WEEKLY_META > 0 ? (weekProduced / WEEKLY_META) * 100 : 0;
-
-  const daysWithout = Object.values(dailyTotals).filter(v => v.secadas === 0).length;
-  const daysBelow = Object.values(dailyTotals).filter(v => v.secadas > 0 && v.secadas < DAILY_META).length;
-
-  const dryerByStop = Object.values(dryerStats).sort((a, b) => b.stopHours - a.stopHours)[0];
-  const dryerByProd = Object.values(dryerStats).sort((a, b) => b.secadas - a.secadas)[0];
-
-  return {
-    dayProduced,
-    weekProduced,
-    dayCompliance,
-    weekCompliance,
-    daysWithout,
-    daysBelow,
-    dryerByStop,
-    dryerByProd
-  };
-}
-
-function summarizeRecords(list, mode){
-  const map = {};
-
-  list.forEach(r => {
-    const isoDate = r.date;
-    if(!isoDate) return;
-
-    const date = parseDateISO(isoDate);
-    const secadas = Number(r.secadas) || 0;
-    const stopHours = Number(r.stopHours) || 0;
-    const secadora = String(r.secadora || "");
-    const cause = String(r.cause || "").trim();
-    const avgMin = Number(r.avgTimeMinutes);
-
-    let key = "";
-    let periodo = "";
-    let sortKey = "";
-    let semanaLabel = "";
-
-    if(mode === "dia"){
-      const info = getISOWeekInfo(date);
-      key = isoDate;
-      periodo = formatDateES(isoDate);
-      sortKey = isoDate;
-      semanaLabel = `S${String(info.week).padStart(2, "0")}`;
-    }else if(mode === "semana"){
-      const info = getISOWeekInfo(date);
-      const wk = String(info.week).padStart(2, "0");
-      key = `${info.year}-W${wk}`;
-      periodo = `Semana ${wk} / ${info.year}`;
-      sortKey = `${info.year}-${wk}`;
-      semanaLabel = `Semana ${wk}`;
-    }else{
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      key = `${date.getFullYear()}-${month}`;
-      periodo = `${month}/${date.getFullYear()}`;
-      sortKey = `${date.getFullYear()}-${month}`;
-      semanaLabel = "Mes";
+    function loadStore() {
+      try {
+        return JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
+      } catch {
+        return {};
+      }
     }
 
-    if(!map[key]){
-      map[key] = {
-        key,
-        periodo,
-        sortKey,
-        semana: semanaLabel,
-        diasSet: new Set(),
-        secadas: 0,
-        stopHours: 0,
-        s1: 0,
-        s2: 0,
-        s3: 0,
-        s1avg: [],
-        s2avg: [],
-        s3avg: [],
-        causas: new Set()
+    function saveStore(store) {
+      localStorage.setItem(STORE_KEY, JSON.stringify(store));
+    }
+
+    function pathParts(path) {
+      return String(path || "").split("/").filter(Boolean);
+    }
+
+    function getAt(store, path) {
+      const parts = pathParts(path);
+      let node = store;
+      for (const part of parts) {
+        if (node == null || typeof node !== "object" || !(part in node)) return undefined;
+        node = node[part];
+      }
+      return node;
+    }
+
+    function setAt(store, path, value) {
+      const parts = pathParts(path);
+      if (!parts.length) return;
+      let node = store;
+      for (let i = 0; i < parts.length - 1; i++) {
+        const p = parts[i];
+        if (!node[p] || typeof node[p] !== "object") node[p] = {};
+        node = node[p];
+      }
+      node[parts[parts.length - 1]] = value;
+    }
+
+    function removeAt(store, path) {
+      const parts = pathParts(path);
+      if (!parts.length) return;
+      let node = store;
+      for (let i = 0; i < parts.length - 1; i++) {
+        node = node?.[parts[i]];
+        if (!node || typeof node !== "object") return;
+      }
+      delete node[parts[parts.length - 1]];
+    }
+
+    function snapshotFrom(store, path) {
+      const val = getAt(store, path);
+      return {
+        exists: () => val !== undefined && val !== null && !(typeof val === "object" && Object.keys(val).length === 0),
+        val: () => {
+          if (val === undefined) return null;
+          return JSON.parse(JSON.stringify(val));
+        }
       };
     }
 
-    const row = map[key];
-    row.diasSet.add(isoDate);
-    row.secadas += secadas;
-    row.stopHours += stopHours;
-
-    if(secadora === "1"){
-      row.s1 += secadas;
-      if(Number.isFinite(avgMin)) row.s1avg.push(avgMin);
-    }
-    if(secadora === "2"){
-      row.s2 += secadas;
-      if(Number.isFinite(avgMin)) row.s2avg.push(avgMin);
-    }
-    if(secadora === "3"){
-      row.s3 += secadas;
-      if(Number.isFinite(avgMin)) row.s3avg.push(avgMin);
+    function emit(path) {
+      const store = loadStore();
+      for (const [listenerPath, fns] of listeners.entries()) {
+        if (path === listenerPath || path.startsWith(listenerPath + "/")) {
+          const snap = snapshotFrom(store, listenerPath);
+          fns.forEach(fn => {
+            try { fn(snap); } catch (e) { console.error(e); }
+          });
+        }
+      }
     }
 
-    if(cause){
-      row.causas.add(summarizeCause(cause));
-    }else if(secadas < DAILY_META){
-      row.causas.add("Sin justificación registrada");
-    }
-  });
-
-  return Object.values(map)
-    .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
-    .map(row => {
-      const dias = row.diasSet.size;
-      let meta = DAILY_META;
-      if(mode === "semana") meta = WEEKLY_META;
-      else if(mode === "mes") meta = dias * DAILY_META;
-
-      const faltante = Math.max(0, meta - row.secadas);
-      const cumplimiento = meta > 0 ? (row.secadas / meta) * 100 : 0;
-
+    function ref(path) {
       return {
-        periodo: row.periodo,
-        semana: row.semana,
-        dias,
-        secadas: row.secadas,
+        once: () => Promise.resolve(snapshotFrom(loadStore(), path)),
+        on: (event, cb) => {
+          if (event !== "value") return;
+          if (!listeners.has(path)) listeners.set(path, []);
+          listeners.get(path).push(cb);
+          try { cb(snapshotFrom(loadStore(), path)); } catch (e) { console.error(e); }
+        },
+        set: (value) => {
+          const store = loadStore();
+          setAt(store, path, JSON.parse(JSON.stringify(value)));
+          saveStore(store);
+          emit(path);
+          return Promise.resolve();
+        },
+        remove: () => {
+          const store = loadStore();
+          removeAt(store, path);
+          saveStore(store);
+          emit(path);
+          return Promise.resolve();
+        },
+        child: (childKey) => ref(path ? `${path}/${childKey}` : String(childKey)),
+        push: () => {
+          const key = `k_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+          return {
+            key,
+            set: (value) => ref(path ? `${path}/${key}` : key).set(value)
+          };
+        }
+      };
+    }
+
+    return {
+      initializeApp: () => {},
+      database: () => ({ ref })
+    };
+  }
+
+  if (typeof window.Chart === "undefined") {
+    window.Chart = function () { this.destroy = () => {}; };
+  }
+
+  if (typeof window.firebase === "undefined" || !window.firebase || !window.firebase.database) {
+    window.firebase = createFirebaseStub();
+  }
+
+  try {
+    firebase.initializeApp({
+      apiKey: "AIzaSyDxDg_Wv7JIePhOAAR-ZXHIttaiT4SlF8A",
+      authDomain: "escaldado-paros.firebaseapp.com",
+      databaseURL: "https://escaldado-paros-default-rtdb.firebaseio.com",
+      projectId: "escaldado-paros",
+      storageBucket: "escaldado-paros.firebasestorage.app",
+      messagingSenderId: "137301198349",
+      appId: "1:137301198349:web:cb4681d31b1b3ede107744",
+      measurementId: "G-9N55RHM7B3"
+    });
+  } catch (err) {
+    console.warn("Firebase init fallback:", err);
+  }
+
+  const db = firebase.database();
+  const usersRef = db.ref("users");
+  const recordsRef = db.ref("records");
+  const logsRef = db.ref("logs");
+  const settingsRef = db.ref("settings");
+
+  const DAILY_META_KEY = 'planta_meta_diaria';
+  const WEEKLY_META_KEY = 'planta_meta_semanal';
+  const SESSION_KEY = 'planta_session_v5';
+  const SUMMARY_VIEW_KEY = 'planta_summary_view_v5';
+
+  const defaultUsers = {
+    ADMIN:  { name:'ADMIN', pass:'1234', role:'admin', active:true },
+    SELVIN: { name:'SELVIN', pass:'1234', role:'operador', active:true },
+    GADIEL: { name:'GADIEL', pass:'1234', role:'operador', active:true },
+    JOSE:   { name:'JOSE', pass:'1234', role:'operador', active:true }
+  };
+
+  const defaultSettings = {
+    companyName:'Planta de Escaldado',
+    metaDaily:6,
+    metaWeekly:42,
+    theme:'fiori'
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  let users = {};
+  let records = [];
+  let logs = [];
+  let settings = { ...defaultSettings };
+  let currentUser = null;
+  let summaryView = localStorage.getItem(SUMMARY_VIEW_KEY) || 'dia';
+  let editingRecordId = null;
+  let loadedUsers = false;
+  let loadedRecords = false;
+  let loadedSettings = false;
+  let loadedLogs = false;
+
+  function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+  function normalizeUser(v){ return String(v || '').trim().toUpperCase(); }
+  function escapeHtml(v){
+    return String(v ?? '')
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'","&#039;");
+  }
+  function localISODate(date = new Date()){
+    const d = new Date(date);
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0,10);
+  }
+  function parseDateISO(iso){ return new Date(`${iso}T00:00:00`); }
+  function formatDateES(iso){
+    if(!iso) return '—';
+    const [y,m,d] = String(iso).split('-');
+    return `${Number(d)}/${Number(m)}/${y}`;
+  }
+  function getISOWeekInfo(date){
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const week = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return { year: d.getUTCFullYear(), week };
+  }
+  function weekKeyFromISO(iso){
+    const info = getISOWeekInfo(parseDateISO(iso));
+    return `${info.year}-W${String(info.week).padStart(2,'0')}`;
+  }
+  function sameISOWeek(iso, ref){
+    const info = getISOWeekInfo(parseDateISO(iso));
+    return info.year === ref.year && info.week === ref.week;
+  }
+  function fmt(n, digits = 0){
+    const v = Number(n) || 0;
+    return digits ? v.toFixed(digits) : String(Math.round(v));
+  }
+  function durationMinutes(hours, minutes){
+    if(hours === '' || minutes === '' || hours === null || minutes === null) return null;
+    return (Number(hours) * 60) + Number(minutes);
+  }
+  function minutesToHHMM(total){
+    if(total === null || total === undefined || !Number.isFinite(Number(total))) return '—';
+    const mins = Math.max(0, Math.round(Number(total)));
+    const h = String(Math.floor(mins / 60)).padStart(2,'0');
+    const m = String(mins % 60).padStart(2,'0');
+    return `${h}:${m} h`;
+  }
+  function average(arr){
+    const v = arr.filter(n => Number.isFinite(Number(n))).map(Number);
+    if(!v.length) return null;
+    return v.reduce((a,b)=>a+b,0) / v.length;
+  }
+  function hashPass(pass){
+    try{
+      return btoa(unescape(encodeURIComponent(String(pass || ''))));
+    }catch{
+      return String(pass || '');
+    }
+  }
+  function verifyPass(stored, entered){
+    if(stored === undefined || stored === null) return false;
+    const s = String(stored);
+    const e = String(entered || '');
+    return s === e || s === hashPass(e);
+  }
+  function getCurrentRole(){ return currentUser ? (users[currentUser]?.role || '') : ''; }
+  function isAdmin(){ return getCurrentRole() === 'admin'; }
+  function getDevice(){
+    const ua = navigator.userAgent || '';
+    if(/android/i.test(ua)) return 'Android';
+    if(/iphone/i.test(ua)) return 'iPhone';
+    if(/windows/i.test(ua)) return 'PC Windows';
+    if(/mac/i.test(ua)) return 'Mac';
+    return /mobile/i.test(ua) ? 'Smartphone' : 'Otro';
+  }
+  function detectDevice(){
+    const ua = navigator.userAgent || '';
+    const platform = navigator.platform || '';
+    const device = /iPhone/i.test(ua) ? 'iPhone'
+      : /Android/i.test(ua) ? 'Android'
+      : /iPad/i.test(ua) ? 'iPad'
+      : /Mac/i.test(platform) ? 'Mac'
+      : /Win/i.test(platform) ? 'Windows'
+      : /Linux/i.test(platform) ? 'Linux'
+      : /Mobile/i.test(ua) ? 'Smartphone'
+      : 'PC';
+
+    const browser = /Edg/i.test(ua) ? 'Edge'
+      : /Chrome/i.test(ua) ? 'Chrome'
+      : /Firefox/i.test(ua) ? 'Firefox'
+      : /Safari/i.test(ua) ? 'Safari'
+      : 'Otro';
+
+    return { device, browser, platform: platform || 'N/D' };
+  }
+  function setView(view){
+    $('loginView').classList.toggle('hidden', view !== 'login');
+    $('appView').classList.toggle('hidden', view !== 'app');
+  }
+  function setSection(id){
+    document.querySelectorAll('.section').forEach(s => {
+      s.classList.remove('active');
+      s.style.display = 'none';
+    });
+    const sec = $(id);
+    if(sec){
+      sec.classList.add('active');
+      sec.style.display = 'block';
+    }
+    document.querySelectorAll('[data-section-btn]').forEach(b => b.classList.remove('active'));
+    const btn = document.querySelector(`[data-section-btn="${id}"]`);
+    if(btn) btn.classList.add('active');
+  }
+
+  function saveSession(user){ localStorage.setItem(SESSION_KEY, JSON.stringify({ user, ts: Date.now() })); }
+  function loadSession(){
+    try{ const raw = localStorage.getItem(SESSION_KEY); return raw ? JSON.parse(raw) : null; }catch{ return null; }
+  }
+  function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+
+  function logAccess(entry){
+    const payload = {
+      ts: Date.now(),
+      user: entry.user || '—',
+      role: entry.role || '—',
+      device: entry.device || '—',
+      platform: entry.platform || '—',
+      browser: entry.browser || '—',
+      origin: entry.origin || '—',
+      ok: !!entry.ok
+    };
+    logsRef.push(payload);
+  }
+
+  function syncMeta(){
+    $('kpiDayMeta').textContent = settings.metaDaily;
+    $('kpiWeekComp').textContent = '0%';
+  }
+
+  function showRoleUI(){
+    const role = getCurrentRole();
+    document.body.classList.toggle('role-admin', role === 'admin');
+
+    document.querySelectorAll('.admin-only').forEach(el => {
+      const isSection = el.classList.contains('section');
+      if(role === 'admin'){
+        if(isSection){
+          el.style.display = el.classList.contains('active') ? 'block' : 'none';
+        }else if(el.tagName === 'BUTTON'){
+          el.style.display = 'inline-flex';
+        }else{
+          el.style.display = '';
+        }
+      }else{
+        el.style.display = 'none';
+      }
+    });
+
+    $('currentUserRole').textContent = role === 'admin' ? 'ADMIN' : 'OPERADOR';
+    $('currentUserRole').className = 'badge ' + (role === 'admin' ? 'admin' : 'operador');
+    $('pwdBadge').textContent = role === 'admin' ? 'Admin' : 'Operador';
+    $('pwdBadge').className = 'badge ' + (role === 'admin' ? 'admin' : 'operador');
+    $('sessionBadge').innerHTML = '<span class="dot"></span> Sesión activa';
+    $('sessionBadge').className = 'badge session';
+  }
+
+  function updateHeader(){
+    $('currentUserName').textContent = currentUser || '—';
+    $('currentUserMeta').textContent = isAdmin() ? 'Acceso ejecutivo con permisos completos' : 'Acceso operativo limitado';
+    $('roleFlag').style.display = isAdmin() ? 'inline-flex' : 'none';
+  }
+
+  function syncRecordFields(){
+    const secadas = Number($('regSecadas').value);
+    const zero = secadas === 0;
+    const positive = Number.isInteger(secadas) && secadas > 0;
+    $('blockDuration').classList.toggle('hidden', !positive);
+    $('blockStop').classList.toggle('hidden', !zero);
+    $('blockCause').classList.toggle('hidden', !(zero || (positive && secadas < settings.metaDaily)));
+  }
+
+  function summarizeCause(text, secadas){
+    if(Number(secadas) > 0) return '—';
+    const raw = String(text || '').trim();
+    if(!raw) return 'Sin justificación';
+    const lower = raw.toLowerCase();
+    if(lower.includes('mec')) return 'Falla mecánica';
+    if(lower.includes('elect')) return 'Falla eléctrica';
+    if(lower.includes('motor')) return 'Falla de motor';
+    if(lower.includes('bomba')) return 'Falla de bomba';
+    if(lower.includes('carga')) return 'Falta de carga';
+    if(lower.includes('program')) return 'Paro programado';
+    if(lower.includes('oper')) return 'Operativo';
+    return 'Otro';
+  }
+
+  function buildCauseStats(list){
+    const map = {};
+    list.forEach(r => {
+      if(Number(r.secadas) > 0) return;
+      const cause = summarizeCause(r.cause, r.secadas);
+      if(!map[cause]) map[cause] = 0;
+      map[cause]++;
+    });
+    return map;
+  }
+
+  function getVisibleRecords(){
+    return isAdmin() ? records.slice() : records.filter(r => r.user === currentUser);
+  }
+
+  function filterRecords(){
+    const base = getVisibleRecords();
+    const search = $('searchBox')?.value.trim().toLowerCase() || '';
+    const filterDate = $('filterDate')?.value || '';
+    const filterUser = $('filterUser')?.value || '';
+    return base.filter(r => {
+      const mSearch = !search ||
+        String(r.user || '').toLowerCase().includes(search) ||
+        String(r.turno || '').toLowerCase().includes(search) ||
+        String(r.secadora || '').includes(search) ||
+        String(r.cause || '').toLowerCase().includes(search) ||
+        String(r.date || '').includes(search) ||
+        String(r.device || '').toLowerCase().includes(search);
+
+      const mDate = !filterDate || r.date === filterDate;
+      const mUser = !filterUser || r.user === filterUser;
+      return mSearch && mDate && mUser;
+    });
+  }
+
+  function buildDailyTotals(list){
+    const map = {};
+    list.forEach(r => {
+      if(!r.date) return;
+      if(!map[r.date]) map[r.date] = { secadas:0, stopHours:0, count:0 };
+      map[r.date].secadas += Number(r.secadas) || 0;
+      map[r.date].stopHours += Number(r.stopHours) || 0;
+      map[r.date].count += 1;
+    });
+    return map;
+  }
+
+  function buildWeekTotals(list){
+    const map = {};
+    list.forEach(r => {
+      if(!r.date) return;
+      const wk = weekKeyFromISO(r.date);
+      if(!map[wk]) map[wk] = { secadas:0, stopHours:0, count:0 };
+      map[wk].secadas += Number(r.secadas) || 0;
+      map[wk].stopHours += Number(r.stopHours) || 0;
+      map[wk].count += 1;
+    });
+    return map;
+  }
+
+  function buildDryerStats(list){
+    const stats = {
+      '1': { secadas:0, stopHours:0, count:0, avgMin:[], last:'' },
+      '2': { secadas:0, stopHours:0, count:0, avgMin:[], last:'' },
+      '3': { secadas:0, stopHours:0, count:0, avgMin:[], last:'' }
+    };
+    list.forEach(r => {
+      const k = String(r.secadora || '');
+      if(!stats[k]) return;
+      stats[k].secadas += Number(r.secadas) || 0;
+      stats[k].stopHours += Number(r.stopHours) || 0;
+      stats[k].count += 1;
+      if(Number.isFinite(Number(r.avgMinutes))) stats[k].avgMin.push(Number(r.avgMinutes));
+      if(r.date && (!stats[k].last || r.date > stats[k].last)) stats[k].last = r.date;
+    });
+    return stats;
+  }
+
+  function summaryRows(list, mode){
+    const map = {};
+    list.forEach(r => {
+      if(!r.date) return;
+      const d = parseDateISO(r.date);
+      let key, period, wkLabel, sortKey;
+      if(mode === 'dia'){
+        key = r.date;
+        period = formatDateES(r.date);
+        wkLabel = `S${String(getISOWeekInfo(d).week).padStart(2,'0')}`;
+        sortKey = r.date;
+      }else if(mode === 'semana'){
+        const info = getISOWeekInfo(d);
+        key = `${info.year}-W${String(info.week).padStart(2,'0')}`;
+        period = `Semana ${String(info.week).padStart(2,'0')} / ${info.year}`;
+        wkLabel = `Semana ${String(info.week).padStart(2,'0')}`;
+        sortKey = `${info.year}-${String(info.week).padStart(2,'0')}`;
+      }else{
+        const month = String(d.getMonth()+1).padStart(2,'0');
+        key = `${d.getFullYear()}-${month}`;
+        period = `${month}/${d.getFullYear()}`;
+        wkLabel = 'Mes';
+        sortKey = key;
+      }
+
+      if(!map[key]){
+        map[key] = {
+          key, period, wkLabel, sortKey,
+          days:new Set(),
+          secadas:0,
+          stopHours:0,
+          s1:0,s2:0,s3:0,
+          s1avg:[], s2avg:[], s3avg:[],
+          causes: new Set()
+        };
+      }
+      const row = map[key];
+      row.days.add(r.date);
+      row.secadas += Number(r.secadas) || 0;
+      row.stopHours += Number(r.stopHours) || 0;
+      if(String(r.secadora) === '1'){ row.s1 += Number(r.secadas) || 0; if(Number.isFinite(Number(r.avgMinutes))) row.s1avg.push(Number(r.avgMinutes)); }
+      if(String(r.secadora) === '2'){ row.s2 += Number(r.secadas) || 0; if(Number.isFinite(Number(r.avgMinutes))) row.s2avg.push(Number(r.avgMinutes)); }
+      if(String(r.secadora) === '3'){ row.s3 += Number(r.secadas) || 0; if(Number.isFinite(Number(r.avgMinutes))) row.s3avg.push(Number(r.avgMinutes)); }
+
+      if(Number(r.secadas) === 0){
+        row.causes.add(summarizeCause(r.cause, r.secadas));
+      }
+    });
+
+    return Object.values(map).sort((a,b)=>a.sortKey.localeCompare(b.sortKey)).map(r => {
+      const dias = r.days.size;
+      const meta = mode === 'dia' ? settings.metaDaily : mode === 'semana' ? settings.metaWeekly : dias * settings.metaDaily;
+      const faltante = Math.max(0, meta - r.secadas);
+      const cumplimiento = meta > 0 ? (r.secadas / meta) * 100 : 0;
+      return {
+        period: r.period,
+        week: r.wkLabel,
+        days: dias,
+        secadas: r.secadas,
         meta,
         faltante,
-        cumplimiento: cumplimiento.toFixed(1),
-        stopHours: row.stopHours,
-        s1: row.s1,
-        s2: row.s2,
-        s3: row.s3,
-        s1avg: minutesToDuration(averageMinutes(row.s1avg)),
-        s2avg: minutesToDuration(averageMinutes(row.s2avg)),
-        s3avg: minutesToDuration(averageMinutes(row.s3avg)),
-        causa: [...row.causas].join(" | ")
+        cumplimiento,
+        stopHours: r.stopHours,
+        s1: r.s1, s2: r.s2, s3: r.s3,
+        s1avg: minutesToHHMM(average(r.s1avg)),
+        s2avg: minutesToHHMM(average(r.s2avg)),
+        s3avg: minutesToHHMM(average(r.s3avg)),
+        cause: [...r.causes].join(' · ') || '—'
       };
     });
-}
-
-function renderExecutiveKpis(list){
-  const stats = buildExecutiveStats(list);
-  $("kpiDayProd").textContent = fmtNum(stats.dayProduced, 0);
-  $("kpiDayMeta").textContent = DAILY_META;
-  $("kpiDayComp").textContent = `${isFinite(stats.dayCompliance) ? stats.dayCompliance.toFixed(1) : "0.0"}%`;
-
-  $("kpiWeekProd").textContent = fmtNum(stats.weekProduced, 0);
-  $("kpiWeekMeta").textContent = WEEKLY_META;
-  $("kpiWeekComp").textContent = `${isFinite(stats.weekCompliance) ? stats.weekCompliance.toFixed(1) : "0.0"}%`;
-
-  $("insightDaysNoProd").textContent = fmtNum(stats.daysWithout, 0);
-  $("insightDaysBelow").textContent = fmtNum(stats.daysBelow, 0);
-  $("insightTopStop").textContent = stats.dryerByStop ? `Secadora ${stats.dryerByStop.dryer}` : "—";
-  $("insightTopProd").textContent = stats.dryerByProd ? `Secadora ${stats.dryerByProd.dryer}` : "—";
-}
-
-function renderChartTrend(list){
-  const totals = buildDailyTotals(list);
-  const dates = Object.keys(totals).sort((a, b) => a.localeCompare(b));
-
-  if(trendChart){
-    trendChart.destroy();
-    trendChart = null;
   }
 
-  const ctx = $("trendChart").getContext("2d");
-  trendChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: dates.map(formatDateES),
-      datasets: [{
-        label: "Secadas por día",
-        data: dates.map(d => totals[d].secadas),
-        backgroundColor: "rgba(245,158,11,.9)",
-        borderColor: "rgba(245,158,11,1)",
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{
-        legend:{ labels:{ color:"#fff" } }
-      },
-      scales:{
-        x:{ ticks:{ color:"#c7d4e1" }, grid:{ color:"rgba(255,255,255,.06)" } },
-        y:{ beginAtZero:true, ticks:{ color:"#c7d4e1" }, grid:{ color:"rgba(255,255,255,.06)" } }
-      }
-    }
-  });
-}
+  function computeExecutive(list){
+    const today = localISODate();
+    const weekRef = getISOWeekInfo(new Date());
+    const dayRecords = list.filter(r => r.date === today);
+    const weekRecords = list.filter(r => r.date && sameISOWeek(r.date, weekRef));
+    const dailyTotals = buildDailyTotals(list);
+    const dryerStats = buildDryerStats(list);
 
-function renderChartDryers(list){
-  const dryerStats = buildDryerStats(list);
+    const dayProduced = dayRecords.reduce((a,b)=>a+(Number(b.secadas)||0),0);
+    const weekProduced = weekRecords.reduce((a,b)=>a+(Number(b.secadas)||0),0);
+    const dayComp = settings.metaDaily ? (dayProduced / settings.metaDaily) * 100 : 0;
+    const weekComp = settings.metaWeekly ? (weekProduced / settings.metaWeekly) * 100 : 0;
 
-  if(dryerChart){
-    dryerChart.destroy();
-    dryerChart = null;
+    const daysWithout = Object.values(dailyTotals).filter(v => v.secadas === 0).length;
+    const daysBelow = Object.values(dailyTotals).filter(v => v.secadas > 0 && v.secadas < settings.metaDaily).length;
+
+    const topStop = Object.entries(dryerStats).sort((a,b)=>b[1].stopHours - a[1].stopHours)[0];
+    const topProd = Object.entries(dryerStats).sort((a,b)=>b[1].secadas - a[1].secadas)[0];
+
+    return { dayProduced, weekProduced, dayComp, weekComp, daysWithout, daysBelow, topStop, topProd, dryerStats };
   }
 
-  const ctx = $("dryerChart").getContext("2d");
-  dryerChart = new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: ["Secadora 1", "Secadora 2", "Secadora 3"],
-      datasets: [{
-        data: [
-          dryerStats["1"].secadas,
-          dryerStats["2"].secadas,
-          dryerStats["3"].secadas
-        ],
-        backgroundColor: [
-          "rgba(59,130,246,.9)",
-          "rgba(245,158,11,.9)",
-          "rgba(34,197,94,.9)"
-        ],
-        borderColor: "#0B1522",
-        borderWidth: 2
-      }]
-    },
-    options: {
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{
-        legend:{
-          position:"bottom",
-          labels:{ color:"#fff" }
-        }
-      }
-    }
-  });
-}
+  function buildNarrative(list){
+    const ex = computeExecutive(list);
+    const rows = summaryRows(list, summaryView);
+    const totalSec = rows.reduce((a,b)=>a+(Number(b.secadas)||0),0);
+    const totalMeta = rows.reduce((a,b)=>a+(Number(b.meta)||0),0);
+    const cum = totalMeta ? (totalSec / totalMeta) * 100 : 0;
+    const weekInfo = summaryView === 'semana' ? rows[0]?.week || '—' : `Semana ${String(getISOWeekInfo(new Date()).week).padStart(2,'0')}`;
+    const causeStats = Object.entries(buildCauseStats(list)).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    const causeText = causeStats.length
+      ? causeStats.map(([k,v]) => `${k} (${v})`).join(' · ')
+      : 'Sin causas críticas';
 
-function renderDryerCards(list){
-  const container = $("dryerCards");
-  const tableBody = $("dryerTableBody");
-  const dryerStats = buildDryerStats(list);
-  const totalSecadas = list.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
+    return [
+      { type:'ok', label:`Periodo ${weekInfo}`, text:`Producción: ${fmt(totalSec)} / ${fmt(totalMeta)} (${cum.toFixed(1)}%)` },
+      { type:'warn', label:'Resumen operativo', text:`Días sin producción: ${fmt(ex.daysWithout)} · Días bajo meta: ${fmt(ex.daysBelow)}` },
+      { type:'ok', label:'Principales causas', text:causeText },
+      { type:'ok', label:'Enfoque', text:`Priorizar corrección de causa raíz y validación de paros vs. producción.` }
+    ];
+  }
 
-  container.innerHTML = "";
-  tableBody.innerHTML = "";
-
-  ["1", "2", "3"].forEach(num => {
-    const s = dryerStats[num];
-    const stopClass = s.stopHours >= 8 ? "status-bad" : (s.stopHours >= 4 ? "status-warn" : "status-ok");
-    const last = s.lastDate ? formatDateES(s.lastDate) : "—";
-    const percent = totalSecadas > 0 ? ((s.secadas / totalSecadas) * 100) : 0;
-    const avgDur = minutesToDuration(averageMinutes(s.avgDurations));
-
-    const card = document.createElement("div");
-    card.className = "dryer-card";
-    card.innerHTML = `
-      <div class="head">
-        <div class="name">Secadora ${num}</div>
-        <span class="badge ${s.stopHours >= 8 ? "disabled" : s.stopHours >= 4 ? "warn" : "admin"}">
-          <span class="status-dot ${stopClass}"></span>
-          ${s.stopHours >= 8 ? "Crítica" : s.stopHours >= 4 ? "Alerta" : "Normal"}
-        </span>
+  function renderNarrative(list){
+    const box = $('narrativeBox');
+    if(!box) return;
+    const nar = buildNarrative(list);
+    box.innerHTML = nar.map(item => `
+      <div class="line ${item.type}">
+        <strong>${item.label}</strong>
+        <span>${item.text}</span>
       </div>
-      <p class="big">${fmtNum(s.secadas, 0)} secadas</p>
-      <div class="tiny">
-        Horas de paro: <strong>${fmtHours(s.stopHours)}</strong><br/>
-        Promedio de secado: <strong>${avgDur}</strong><br/>
-        Registros: <strong>${fmtNum(s.records, 0)}</strong><br/>
-        Aporte al total: <strong>${percent.toFixed(1)}%</strong><br/>
-        Último registro: <strong>${last}</strong>
-      </div>
-    `;
-    container.appendChild(card);
-
-    tableBody.innerHTML += `
-      <tr>
-        <td>Secadora ${num}</td>
-        <td>${escapeHtml(s.secadas)}</td>
-        <td>${escapeHtml(fmtHours(s.stopHours))}</td>
-        <td>${escapeHtml(avgDur)}</td>
-        <td>${escapeHtml(s.records)}</td>
-        <td>${escapeHtml(percent.toFixed(1))}%</td>
-        <td>${escapeHtml(last)}</td>
-      </tr>
-    `;
-  });
-}
-
-function renderTable(list){
-  const tbody = $("recordsBody");
-  tbody.innerHTML = "";
-
-  if(list.length === 0){
-    tbody.innerHTML = `<tr><td colspan="15" style="padding:16px;color:#c8d2dd;">No hay registros para mostrar.</td></tr>`;
-    return;
+    `).join('');
   }
 
-  const isAdmin = getCurrentUserObject() && getCurrentUserObject().role === "admin";
-  const dateTotals = buildDateTotals(list);
-  const weekTotals = buildWeekTotals(list);
-  const sorted = sortRecordsForDisplay(list);
+  function renderCauseSummary(list){
+    const box = $('causeSummaryBox');
+    if(!box) return;
+    const stats = buildCauseStats(list);
+    const items = Object.entries(stats).sort((a,b)=>b[1]-a[1]);
 
-  sorted.forEach(r => {
-    const dayTotal = dateTotals[r.date] || 0;
-    const weekTotal = weekTotals[weekKeyFromISO(r.date)] || 0;
-    const dayComp = DAILY_META > 0 ? ((dayTotal / DAILY_META) * 100) : 0;
-    const weekComp = WEEKLY_META > 0 ? ((weekTotal / WEEKLY_META) * 100) : 0;
+    if(!items.length){
+      box.innerHTML = `<div class="mini-item"><div class="left"><span class="bar green"></span><div class="txt"><div class="t">Sin causas críticas</div><div class="s">No hay paros totales en el filtro actual.</div></div></div><div class="right">0</div></div>`;
+      return;
+    }
 
-    const avgTime = r.secadas > 0 ? (r.avgTime || "—") : "—";
-    const stopHours = r.secadas === 0 ? (r.stopHours ?? "—") : "—";
-    const type = classifyStop(r);
-    const cause = summarizeCause(r.cause);
-    const rowStatus = r.secadas === 0 ? "background:rgba(239,68,68,.08);" : (r.secadas < DAILY_META ? "background:rgba(250,204,21,.06);" : "");
+    box.innerHTML = items.map(([k,v]) => `
+      <div class="mini-item">
+        <div class="left">
+          <span class="bar ${v > 4 ? 'red' : v > 2 ? 'yellow' : 'green'}"></span>
+          <div class="txt">
+            <div class="t">${escapeHtml(k)}</div>
+            <div class="s">${escapeHtml(k)} · acumulado en el periodo filtrado</div>
+          </div>
+        </div>
+        <div class="right">${v}</div>
+      </div>
+    `).join('');
+  }
 
-    tbody.innerHTML += `
-      <tr style="${rowStatus}">
-        <td>${escapeHtml(r.user)}</td>
-        <td>${escapeHtml(r.date)}</td>
-        <td>${escapeHtml(r.date ? `S${String(getISOWeekInfo(parseDateISO(r.date)).week).padStart(2, "0")}` : "—")}</td>
-        <td>${escapeHtml(r.turno)}</td>
-        <td>${escapeHtml(r.secadora)}</td>
-        <td>${escapeHtml(r.secadas)}</td>
-        <td>${escapeHtml(DAILY_META)}</td>
-        <td style="font-weight:800; color:${dayComp >= 100 ? '#22C55E' : dayComp >= 80 ? '#FACC15' : '#EF4444'};">${escapeHtml(dayComp.toFixed(1))}%</td>
-        <td>${escapeHtml(WEEKLY_META)}</td>
-        <td style="font-weight:800; color:${weekComp >= 100 ? '#22C55E' : weekComp >= 80 ? '#FACC15' : '#EF4444'};">${escapeHtml(weekComp.toFixed(1))}%</td>
-        <td>${escapeHtml(avgTime)}</td>
-        <td>${escapeHtml(stopHours)}</td>
-        <td>${escapeHtml(type)}</td>
-        <td title="${escapeHtml(r.cause || "")}">${escapeHtml(cause)}</td>
-        <td>
-          ${isAdmin ? `
-            <div class="table-actions">
-              <button class="btn btn-primary" onclick="editRecord('${escapeHtml(r.id)}')">Editar</button>
-              <button class="btn btn-danger" onclick="deleteRecord('${escapeHtml(r.id)}')">Eliminar</button>
+  function renderDryerRank(list){
+    const box = $('dryerRankBox');
+    if(!box) return;
+    const stats = buildDryerStats(list);
+    const total = list.reduce((a,b)=>a+(Number(b.secadas)||0),0);
+
+    box.innerHTML = ['1','2','3'].map(num => {
+      const s = stats[num];
+      const pct = total ? ((s.secadas/total)*100) : 0;
+      const avg = minutesToHHMM(average(s.avgMin));
+      return `
+        <div class="mini-item">
+          <div class="left">
+            <span class="bar ${s.stopHours >= 8 ? 'red' : s.stopHours >= 4 ? 'yellow' : 'green'}"></span>
+            <div class="txt">
+              <div class="t">Secadora ${num}</div>
+              <div class="s">Paro: ${fmt(s.stopHours,1)} h · Promedio secado: ${avg} · Registros: ${s.count}</div>
             </div>
-          ` : "—"}
-        </td>
-      </tr>
-    `;
-  });
-}
-
-function renderSummaryTable(list){
-  const tbody = $("summaryBody");
-  const tfoot = $("summaryFoot");
-  tbody.innerHTML = "";
-  tfoot.innerHTML = "";
-
-  const rows = summarizeRecords(list, summaryView);
-
-  if(rows.length === 0){
-    tbody.innerHTML = `<tr><td colspan="15" style="padding:16px;color:#c8d2dd;">No hay datos para resumir.</td></tr>`;
-    return;
+          </div>
+          <div class="right">${pct.toFixed(1)}%</div>
+        </div>
+      `;
+    }).join('');
   }
 
-  rows.forEach(r => {
-    const cumplimiento = Number(r.cumplimiento);
-    const stateColor = cumplimiento >= 100 ? "color:#22C55E;" : (cumplimiento >= 80 ? "color:#FACC15;" : "color:#EF4444;");
-    tbody.innerHTML += `
+  function renderExecutiveKpis(list){
+    const ex = computeExecutive(list);
+    $('kpiDayProd').textContent = fmt(ex.dayProduced);
+    $('kpiWeekComp').textContent = `${ex.weekComp.toFixed(1)}%`;
+    $('kpiDayComp').textContent = `${ex.dayComp.toFixed(1)}%`;
+    $('topStopDryer').textContent = ex.topStop ? `Secadora ${ex.topStop[0]}` : '—';
+    $('topProdDryer').textContent = ex.topProd ? `Secadora ${ex.topProd[0]}` : '—';
+    $('daysStatus').textContent = `${fmt(ex.daysBelow)} / ${fmt(ex.daysWithout)}`;
+
+    const rows = summaryRows(list, summaryView);
+    const secadas = rows.reduce((a,b)=>a+(Number(b.secadas)||0),0);
+    const meta = rows.reduce((a,b)=>a+(Number(b.meta)||0),0);
+    const comp = meta ? (secadas/meta)*100 : 0;
+    $('executiveNarrativeTitle').textContent = `Resumen ${summaryView.toUpperCase()} · ${comp.toFixed(1)}%`;
+    $('executiveNarrativeText').textContent = rows.length
+      ? `Lectura ejecutiva lista para supervisión.`
+      : 'No hay datos con los filtros actuales.';
+  }
+
+  function renderSummaryTable(list){
+    const rows = summaryRows(list, summaryView);
+    const tbody = $('summaryBody');
+    const tfoot = $('summaryFoot');
+    if(!tbody || !tfoot) return;
+    tbody.innerHTML = '';
+
+    if(!rows.length){
+      tbody.innerHTML = `<tr><td colspan="9" style="padding:16px;color:var(--muted);">No hay datos para mostrar en este periodo.</td></tr>`;
+      tfoot.innerHTML = '';
+      return;
+    }
+
+    rows.forEach(r => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${escapeHtml(r.period)}</td>
+          <td>${escapeHtml(r.secadas)}</td>
+          <td>${escapeHtml(r.meta)}</td>
+          <td>${escapeHtml(r.faltante)}</td>
+          <td style="font-weight:900; color:${r.cumplimiento >= 100 ? '#2e7d32' : r.cumplimiento >= 80 ? '#b7791f' : '#c62828'}">${r.cumplimiento.toFixed(1)}%</td>
+          <td>${escapeHtml(fmt(r.stopHours,1))} h</td>
+          <td>${escapeHtml(r.s1)}</td>
+          <td>${escapeHtml(r.s2)}</td>
+          <td>${escapeHtml(r.s3)}</td>
+        </tr>
+      `;
+    });
+
+    const totalSec = rows.reduce((a,b)=>a+(Number(b.secadas)||0),0);
+    const totalMeta = rows.reduce((a,b)=>a+(Number(b.meta)||0),0);
+    const totalFal = rows.reduce((a,b)=>a+(Number(b.faltante)||0),0);
+    const totalStop = rows.reduce((a,b)=>a+(Number(b.stopHours)||0),0);
+    const totalCum = totalMeta ? (totalSec/totalMeta)*100 : 0;
+    const totalS1 = rows.reduce((a,b)=>a+(Number(b.s1)||0),0);
+    const totalS2 = rows.reduce((a,b)=>a+(Number(b.s2)||0),0);
+    const totalS3 = rows.reduce((a,b)=>a+(Number(b.s3)||0),0);
+    tfoot.innerHTML = `
       <tr>
-        <td>${escapeHtml(r.periodo)}</td>
-        <td>${escapeHtml(r.semana)}</td>
-        <td>${escapeHtml(r.dias)}</td>
-        <td>${escapeHtml(r.secadas)}</td>
-        <td>${escapeHtml(r.meta)}</td>
-        <td>${escapeHtml(r.faltante)}</td>
-        <td style="${stateColor} font-weight:900;">${escapeHtml(r.cumplimiento)}%</td>
-        <td>${escapeHtml(fmtHours(r.stopHours))}</td>
-        <td>${escapeHtml(r.s1)}</td>
-        <td>${escapeHtml(r.s2)}</td>
-        <td>${escapeHtml(r.s3)}</td>
-        <td>${escapeHtml(r.s1avg)}</td>
-        <td>${escapeHtml(r.s2avg)}</td>
-        <td>${escapeHtml(r.s3avg)}</td>
-        <td>${escapeHtml(r.causa || "—")}</td>
+        <td>TOTALES</td>
+        <td>${fmt(totalSec)}</td>
+        <td>${fmt(totalMeta)}</td>
+        <td>${fmt(totalFal)}</td>
+        <td style="color:${totalCum >= 100 ? '#2e7d32' : totalCum >= 80 ? '#b7791f' : '#c62828'}">${totalCum.toFixed(1)}%</td>
+        <td>${fmt(totalStop,1)} h</td>
+        <td>${fmt(totalS1)}</td>
+        <td>${fmt(totalS2)}</td>
+        <td>${fmt(totalS3)}</td>
       </tr>
     `;
-  });
-
-  const totalSecadas = rows.reduce((acc, r) => acc + (Number(r.secadas) || 0), 0);
-  const totalMeta = rows.reduce((acc, r) => acc + (Number(r.meta) || 0), 0);
-  const totalFaltante = rows.reduce((acc, r) => acc + (Number(r.faltante) || 0), 0);
-  const totalStop = rows.reduce((acc, r) => acc + (Number(r.stopHours) || 0), 0);
-  const s1 = rows.reduce((acc, r) => acc + (Number(r.s1) || 0), 0);
-  const s2 = rows.reduce((acc, r) => acc + (Number(r.s2) || 0), 0);
-  const s3 = rows.reduce((acc, r) => acc + (Number(r.s3) || 0), 0);
-  const totalCumpl = totalMeta > 0 ? (totalSecadas / totalMeta) * 100 : 0;
-
-  const s1All = [];
-  const s2All = [];
-  const s3All = [];
-  rows.forEach(r => {
-    if(r.s1avg && r.s1avg !== "—") s1All.push(durationToMinutes(r.s1avg));
-    if(r.s2avg && r.s2avg !== "—") s2All.push(durationToMinutes(r.s2avg));
-    if(r.s3avg && r.s3avg !== "—") s3All.push(durationToMinutes(r.s3avg));
-  });
-
-  const footerS1 = minutesToDuration(averageMinutes(s1All));
-  const footerS2 = minutesToDuration(averageMinutes(s2All));
-  const footerS3 = minutesToDuration(averageMinutes(s3All));
-
-  tfoot.innerHTML = `
-    <tr>
-      <td colspan="2">TOTALES</td>
-      <td>${escapeHtml(rows.reduce((acc, r) => acc + (Number(r.dias) || 0), 0))}</td>
-      <td>${escapeHtml(totalSecadas)}</td>
-      <td>${escapeHtml(totalMeta)}</td>
-      <td>${escapeHtml(totalFaltante)}</td>
-      <td style="color:${totalCumpl >= 100 ? '#22C55E' : totalCumpl >= 80 ? '#FACC15' : '#EF4444'};">${escapeHtml(totalCumpl.toFixed(1))}%</td>
-      <td>${escapeHtml(fmtHours(totalStop))}</td>
-      <td>${escapeHtml(s1)}</td>
-      <td>${escapeHtml(s2)}</td>
-      <td>${escapeHtml(s3)}</td>
-      <td>${escapeHtml(footerS1)}</td>
-      <td>${escapeHtml(footerS2)}</td>
-      <td>${escapeHtml(footerS3)}</td>
-      <td>${list.some(r => Number(r.secadas) === 0) ? "Incluye días sin producción" : "Sin alertas severas"}</td>
-    </tr>
-  `;
-}
-
-function renderUserFilter(){
-  const select = $("filterUser");
-  if(!select) return;
-
-  const allNames = Object.values(users).map(u => u.name);
-  const unique = [...new Set(allNames)].sort((a,b) => {
-    if(a === "ADMIN") return -1;
-    if(b === "ADMIN") return 1;
-    return a.localeCompare(b);
-  });
-
-  select.innerHTML = `<option value="">Todos</option>`;
-  unique.forEach(name => {
-    select.innerHTML += `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`;
-  });
-
-  const me = getCurrentUserObject();
-  if(me && me.role === "admin"){
-    $("navUsersBtn").classList.remove("hidden");
-    $("jumpUsersBtn").classList.remove("hidden");
-  }else{
-    $("navUsersBtn").classList.add("hidden");
-    $("jumpUsersBtn").classList.add("hidden");
-  }
-}
-
-function renderUsersAdmin(){
-  const container = $("usersList");
-  const me = getCurrentUserObject();
-  const isAdmin = me && me.role === "admin";
-
-  $("navUsersBtn").classList.toggle("hidden", !isAdmin);
-  $("jumpUsersBtn").classList.toggle("hidden", !isAdmin);
-
-  if(!isAdmin){
-    container.innerHTML = "";
-    return;
   }
 
-  const list = Object.values(users).sort((a,b) => {
-    if(a.name === "ADMIN") return -1;
-    if(b.name === "ADMIN") return 1;
-    return a.name.localeCompare(b.name);
-  });
+  function renderRecords(list){
+    const tbody = $('recordsBody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    if(!list.length){
+      tbody.innerHTML = `<tr><td colspan="12" style="padding:16px;color:var(--muted);">No hay registros para mostrar.</td></tr>`;
+      return;
+    }
+    const dayTotals = buildDailyTotals(list);
+    const weekTotals = buildWeekTotals(list);
 
-  container.innerHTML = `
-    <div style="display:grid;grid-template-columns:1.2fr .8fr .8fr 1fr auto;gap:10px;color:var(--muted);font-size:.8rem;padding:2px 0 10px;">
-      <div>Usuario</div>
-      <div>Rol</div>
-      <div>Estado</div>
-      <div>Contraseña</div>
-      <div>Acción</div>
-    </div>
-  `;
+    list.slice().sort((a,b) => (b.date || '').localeCompare(a.date || '') || String(b.createdAt || '').localeCompare(String(a.createdAt || '')))
+      .forEach(r => {
+        const dayTotal = dayTotals[r.date]?.secadas || 0;
+        const weekTotal = weekTotals[r.date ? weekKeyFromISO(r.date) : '']?.secadas || 0;
+        const dayComp = settings.metaDaily ? (dayTotal / settings.metaDaily) * 100 : 0;
+        const weekComp = settings.metaWeekly ? (weekTotal / settings.metaWeekly) * 100 : 0;
+        const status = Number(r.secadas) === 0 ? 'Paro total' : (Number(r.secadas) < settings.metaDaily ? 'Bajo meta' : 'Cumple');
+        const cause = summarizeCause(r.cause, r.secadas);
 
-  list.forEach(u => {
-    const row = document.createElement("div");
-    row.className = "user-item";
-    row.innerHTML = `
-      <div>
-        <div style="font-weight:800;">
-          ${escapeHtml(u.name)}
-          ${u.role === "admin" ? `<span class="badge admin" style="margin-left:8px;">Administrador</span>` : `<span class="badge operador" style="margin-left:8px;">Operador</span>`}
+        tbody.innerHTML += `
+          <tr>
+            <td>${escapeHtml(r.user)}</td>
+            <td>${escapeHtml(formatDateES(r.date))}</td>
+            <td>${escapeHtml(r.date ? 'S' + String(getISOWeekInfo(parseDateISO(r.date)).week).padStart(2,'0') : '—')}</td>
+            <td>${escapeHtml(r.turno)}</td>
+            <td>${escapeHtml(r.secadora)}</td>
+            <td>${escapeHtml(r.secadas)}</td>
+            <td>${escapeHtml(r.secadas > 0 ? (r.avgTime || '—') : '—')}</td>
+            <td>${escapeHtml(r.secadas === 0 ? (r.stopHours ?? '—') : '—')}</td>
+            <td><span class="badge ${Number(r.secadas) === 0 ? 'danger' : Number(r.secadas) < settings.metaDaily ? 'warn' : 'operador'}">${escapeHtml(status)}</span></td>
+            <td title="${escapeHtml(r.cause || '')}">${escapeHtml(cause)}</td>
+            <td>${escapeHtml(r.device || '—')}</td>
+            <td>
+              ${isAdmin() ? `<div class="actions"><button type="button" class="btn btn-soft" onclick="window.__editRecord('${escapeHtml(r.id)}')">Editar</button><button type="button" class="btn btn-danger" onclick="window.__deleteRecord('${escapeHtml(r.id)}')">Eliminar</button></div>` : '—'}
+            </td>
+          </tr>
+        `;
+      });
+  }
+
+  function renderUsers(){
+    const box = $('usersList');
+    if(!box) return;
+    if(!isAdmin()){
+      box.innerHTML = '';
+      return;
+    }
+    const arr = Object.values(users).sort((a,b)=>{
+      if(a.name === 'ADMIN') return -1;
+      if(b.name === 'ADMIN') return 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    box.innerHTML = arr.map(u => `
+      <div class="mini-item" style="align-items:flex-start;">
+        <div class="left" style="align-items:flex-start;">
+          <span class="bar ${u.active ? (u.role === 'admin' ? 'yellow' : 'green') : 'red'}"></span>
+          <div class="txt" style="min-width:0;">
+            <div class="t">${escapeHtml(u.name)} <span class="badge ${u.role === 'admin' ? 'admin' : 'operador'}">${escapeHtml(u.role.toUpperCase())}</span></div>
+            <div class="s">Estado: ${u.active ? 'Activo' : 'Deshabilitado'} · Contraseña: ${u.pass ? '••••' : '—'}</div>
+          </div>
+        </div>
+        <div class="right" style="display:grid; gap:6px;">
+          <button type="button" class="btn btn-soft" style="padding:8px 10px;" onclick="window.__toggleUser('${escapeHtml(u.name)}')">${u.active ? 'Activo' : 'Activar'}</button>
+          ${u.name !== 'ADMIN' ? `<button type="button" class="btn btn-danger" style="padding:8px 10px;" onclick="window.__removeUser('${escapeHtml(u.name)}')">Eliminar</button>` : ''}
         </div>
       </div>
+    `).join('');
+  }
 
-      <div>
-        <select class="select" data-role="${escapeHtml(u.name)}" ${u.name === "ADMIN" ? "disabled" : ""}>
-          <option value="operador" ${u.role === "operador" ? "selected" : ""}>Operador</option>
-          <option value="admin" ${u.role === "admin" ? "selected" : ""}>Administrador</option>
-        </select>
-      </div>
+  function renderLogs(){
+    const box = $('logsBody');
+    if(!box) return;
+    if(!isAdmin()){
+      box.innerHTML = '';
+      return;
+    }
+    const arr = logs.slice().sort((a,b)=>(b.ts||0)-(a.ts||0));
+    if(!arr.length){
+      box.innerHTML = `<tr><td colspan="8" style="padding:16px;color:var(--muted);">Sin registros de acceso.</td></tr>`;
+      return;
+    }
+    box.innerHTML = arr.map(l => `
+      <tr>
+        <td>${new Date(l.ts).toLocaleString()}</td>
+        <td>${escapeHtml(l.user)}</td>
+        <td>${escapeHtml(String(l.role || '').toUpperCase())}</td>
+        <td>${escapeHtml(l.device)}</td>
+        <td>${escapeHtml(l.platform)}</td>
+        <td>${escapeHtml(l.browser)}</td>
+        <td>${escapeHtml(l.origin || '—')}</td>
+        <td><span class="badge ${l.ok ? 'operador' : 'danger'}">${l.ok ? 'OK' : 'DENEGADO'}</span></td>
+      </tr>
+    `).join('');
+  }
 
-      <div class="toggle-box">
-        <button class="switch ${u.active ? "on" : ""}" data-active="${escapeHtml(u.name)}" ${u.name === "ADMIN" ? "disabled" : ""}></button>
-        <span class="badge ${u.active ? (u.role === "admin" ? "admin" : "operador") : "disabled"}">${u.active ? "Activo" : "Deshabilitado"}</span>
-      </div>
+  function renderSettings(){
+    $('companyName').value = settings.companyName || 'Planta de Escaldado';
+    $('metaDaily').value = settings.metaDaily || 6;
+    $('metaWeekly').value = settings.metaWeekly || 42;
+    $('homeTheme').value = settings.theme || 'fiori';
 
-      <div>
-        <input class="input" data-pass="${escapeHtml(u.name)}" type="password" placeholder="Nueva contraseña" />
-      </div>
-
-      <div class="actions">
-        <button class="btn btn-secondary" data-saveuser="${escapeHtml(u.name)}">Guardar</button>
-        ${u.name === "ADMIN" ? "" : `<button class="btn btn-danger" data-deluser="${escapeHtml(u.name)}">Eliminar</button>`}
-      </div>
+    $('settingsPreviewBox').innerHTML = `
+      <div class="mini-item"><div class="left"><span class="bar green"></span><div class="txt"><div class="t">Meta diaria</div><div class="s">Configurada para el tablero operativo</div></div></div><div class="right">${settings.metaDaily}</div></div>
+      <div class="mini-item"><div class="left"><span class="bar yellow"></span><div class="txt"><div class="t">Meta semanal</div><div class="s">Acumulado por semana ISO</div></div></div><div class="right">${settings.metaWeekly}</div></div>
+      <div class="mini-item"><div class="left"><span class="bar blue"></span><div class="txt"><div class="t">Tema</div><div class="s">Estilo corporativo activo</div></div></div><div class="right">${settings.theme}</div></div>
     `;
-    container.appendChild(row);
-  });
+  }
 
-  container.querySelectorAll("[data-active]").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      try{
-        const name = btn.getAttribute("data-active");
-        if(name === "ADMIN") return;
-        const updated = clone(users[name]);
-        updated.active = !updated.active;
-        await usersRef.child(name).set(updated);
-      }catch(err){
-        console.error(err);
-        alert("No se pudo actualizar el estado del usuario.");
-      }
+  function refreshSummaryButtons(){
+    document.querySelectorAll('[data-summary-view]').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-summary-view') === summaryView);
     });
-  });
+  }
 
-  container.querySelectorAll("[data-saveuser]").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      try{
-        const name = btn.getAttribute("data-saveuser");
-        const roleSel = container.querySelector(`[data-role="${name}"]`);
-        const passInp = container.querySelector(`[data-pass="${name}"]`);
-        const newRole = roleSel ? roleSel.value : users[name].role;
-        const newPass = passInp ? passInp.value.trim() : "";
+  function refreshAll(){
+    const filtered = filterRecords();
+    renderExecutiveKpis(filtered);
+    renderNarrative(filtered);
+    renderCauseSummary(filtered);
+    renderDryerRank(filtered);
+    renderSummaryTable(filtered);
+    renderRecords(filtered);
+    renderUsers();
+    renderLogs();
+    renderSettings();
+    fillUserFilter();
+    refreshSummaryButtons();
+  }
 
-        if(name === "ADMIN" && newRole !== "admin"){
-          alert("ADMIN siempre debe conservar rol de administrador.");
-          return;
-        }
-
-        const updated = clone(users[name]);
-        updated.role = newRole;
-        if(newPass) updated.pass = newPass;
-
-        await usersRef.child(name).set(updated);
-        if(passInp) passInp.value = "";
-        alert("Usuario actualizado.");
-      }catch(err){
-        console.error(err);
-        alert("No se pudo actualizar el usuario.");
-      }
+  function fillUserFilter(){
+    const sel = $('filterUser');
+    if(!sel) return;
+    const names = [...new Set(Object.values(users).map(u => u.name))].sort((a,b)=>{
+      if(a === 'ADMIN') return -1;
+      if(b === 'ADMIN') return 1;
+      return a.localeCompare(b);
     });
-  });
-
-  container.querySelectorAll("[data-deluser]").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      try{
-        const name = btn.getAttribute("data-deluser");
-
-        if(name === currentUser){
-          alert("No puedes eliminar tu propio usuario.");
-          return;
-        }
-        if(!confirm(`¿Eliminar al usuario ${name}?`)) return;
-
-        await usersRef.child(name).remove();
-      }catch(err){
-        console.error(err);
-        alert("No se pudo eliminar el usuario.");
-      }
-    });
-  });
-}
-
-function renderChartsAndReports(list){
-  renderExecutiveKpis(list);
-  renderChartTrend(list);
-  renderChartDryers(list);
-  renderDryerCards(list);
-  renderSummaryTable(list);
-}
-
-function refreshAll(){
-  if(!currentUser){
-    renderUserFilter();
-    renderUsersAdmin();
-    return;
+    const prev = sel.value;
+    sel.innerHTML = `<option value="">Todos</option>` + names.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+    sel.value = prev || '';
   }
 
-  const base = getVisibleRecords();
-  const search = $("searchBox").value.trim().toLowerCase();
-  const filterDate = $("filterDate").value;
-  const filterUser = $("filterUser").value;
-
-  const filtered = base.filter(r => {
-    const matchesSearch =
-      !search ||
-      String(r.user || "").toLowerCase().includes(search) ||
-      String(r.cause || "").toLowerCase().includes(search) ||
-      String(r.secadora || "").includes(search) ||
-      String(r.turno || "").toLowerCase().includes(search) ||
-      String(r.date || "").includes(search);
-
-    const matchesDate = !filterDate || r.date === filterDate;
-    const matchesUser = !filterUser || r.user === filterUser;
-
-    return matchesSearch && matchesDate && matchesUser;
-  });
-
-  renderChartsAndReports(filtered);
-  renderTable(filtered);
-  renderUserFilter();
-  renderUsersAdmin();
-}
-
-function clearRecordForm(){
-  $("regDate").value = localISODate();
-  $("regTurn").value = "Día";
-  $("regDryer").value = "1";
-  $("regSecadas").value = "";
-  $("regAvgTime").value = "";
-  $("regStopHours").value = "";
-  $("regCause").value = "";
-  syncRecordFields();
-}
-
-function syncRecordFields(){
-  const value = $("regSecadas").value;
-
-  if(value === ""){
-    $("blockTime").classList.add("hidden");
-    $("blockStop").classList.add("hidden");
-    $("blockCause").classList.add("hidden");
-    return;
+  function clearRecordForm(){
+    $('regDate').value = localISODate();
+    $('regTurn').value = 'Día';
+    $('regDryer').value = '1';
+    $('regSecadas').value = '';
+    $('horasSecado').value = '';
+    $('minutosSecado').value = '';
+    $('regStopHours').value = '';
+    $('regCause').value = '';
+    $('editBanner').classList.remove('active');
+    syncRecordFields();
   }
 
-  const secadas = Number(value);
-  const isZero = secadas === 0;
-  const isPositive = Number.isInteger(secadas) && secadas > 0;
-  const needsJustify = Number.isInteger(secadas) && secadas > 0 && secadas < DAILY_META;
-
-  $("blockTime").classList.toggle("hidden", !isPositive);
-  $("blockStop").classList.toggle("hidden", !isZero);
-  $("blockCause").classList.toggle("hidden", !(isZero || needsJustify));
-
-  if(isZero){
-    $("regAvgTime").value = "";
-    $("regCause").placeholder = "Justifica el paro total";
-  }else if(needsJustify){
-    $("regCause").placeholder = "Justifica por qué no se alcanzó la meta diaria";
-  }else{
-    $("regCause").placeholder = "Justificación opcional";
-  }
-}
-
-function syncCurrentUserUI(){
-  const me = getCurrentUserObject();
-  if(!me) return;
-
-  $("currentUserName").textContent = me.name;
-  $("currentUserMeta").textContent = me.role === "admin" ? "Administrador" : "Operador";
-  $("currentUserState").textContent = me.active ? "Activo" : "Deshabilitado";
-  $("pwdRoleBadge").textContent = me.role === "admin" ? "Admin" : "Operador";
-
-  $("navUsersBtn").classList.toggle("hidden", me.role !== "admin");
-  $("jumpUsersBtn").classList.toggle("hidden", me.role !== "admin");
-
-  if(me.role !== "admin"){
-    $("sectionUsers").classList.remove("active");
-    setSection("sectionRecords");
-  }
-}
-
-function tryRestoreSession(){
-  const session = loadSession();
-  if(!session || !session.user || !usersReady) return;
-
-  const account = users[session.user];
-  if(account && account.active){
-    currentUser = session.user;
-    showView("app");
-    syncCurrentUserUI();
-    clearRecordForm();
-    renderUserFilter();
-    renderUsersAdmin();
-    refreshAll();
-  }else{
-    clearSession();
-  }
-}
-
-async function login(){
-  try{
-    if(!usersReady){
-      alert("Firebase todavía está cargando. Espera un momento.");
+  function login(){
+    if(!(loadedUsers && loadedRecords && loadedSettings && loadedLogs)){
+      alert('Firebase todavía está cargando. Espera un momento.');
       return;
     }
 
-    const user = normalizeUser($("loginUser").value);
-    const pass = String($("loginPass").value || "");
-
-    if(!user || !pass){
-      alert("Datos incompletos.");
-      return;
-    }
-
+    const user = normalizeUser($('loginUser').value);
+    const pass = String($('loginPass').value || '');
+    const ua = detectDevice();
     const account = users[user];
 
-    if(!account){
-      alert("Usuario o contraseña incorrectos.");
+    if(!user || !pass){
+      alert('Completa usuario y contraseña.');
       return;
     }
-    if(!account.active){
-      alert("Este usuario está deshabilitado.");
-      return;
-    }
-    if(account.pass !== pass){
-      alert("Usuario o contraseña incorrectos.");
+    if(!account || !account.active || !verifyPass(account.pass, pass)){
+      logAccess({ user: user || '—', role: account?.role || '—', device: ua.device, platform: ua.platform, browser: ua.browser, origin:'Login', ok:false });
+      alert('Usuario o contraseña incorrectos.');
       return;
     }
 
     currentUser = user;
-    editingRecordId = null;
-    $("loginPass").value = "";
     saveSession(user);
-    showView("app");
-    syncCurrentUserUI();
+    logAccess({ user, role: account.role, device: ua.device, platform: ua.platform, browser: ua.browser, origin:'Login', ok:true });
+
+    $('loginPass').value = '';
+    setView('app');
+    showRoleUI();
+    updateHeader();
     clearRecordForm();
-    renderUserFilter();
-    renderUsersAdmin();
     refreshAll();
-  }catch(err){
-    console.error(err);
-    alert("No se pudo iniciar sesión.");
-  }
-}
-
-function logout(){
-  currentUser = null;
-  editingRecordId = null;
-  clearSession();
-  $("loginPass").value = "";
-  $("loginChangeOld").value = "";
-  $("loginChangeNew").value = "";
-  $("loginChangeConfirm").value = "";
-  $("sidebarOldPass").value = "";
-  $("sidebarNewPass").value = "";
-  $("sidebarConfirmPass").value = "";
-  showView("login");
-  renderUserFilter();
-  renderUsersAdmin();
-}
-
-async function updatePassword(userName, oldPass, newPass, confirmPass){
-  const user = normalizeUser(userName);
-  const account = users[user];
-
-  if(!user || !account){
-    alert("Usuario no encontrado.");
-    return false;
-  }
-  if(!oldPass || !newPass || !confirmPass){
-    alert("Completa todos los campos de contraseña.");
-    return false;
-  }
-  if(account.pass !== oldPass){
-    alert("La contraseña actual no coincide.");
-    return false;
-  }
-  if(newPass.length < 4){
-    alert("La nueva contraseña debe tener al menos 4 caracteres.");
-    return false;
-  }
-  if(newPass !== confirmPass){
-    alert("La nueva contraseña y la confirmación no coinciden.");
-    return false;
   }
 
-  const updated = clone(account);
-  updated.pass = newPass;
-  await usersRef.child(user).set(updated);
-  return true;
-}
-
-async function changePasswordFromLogin(){
-  try{
-    const user = $("loginChangeUser").value;
-    const oldPass = $("loginChangeOld").value;
-    const newPass = $("loginChangeNew").value;
-    const confirmPass = $("loginChangeConfirm").value;
-
-    const ok = await updatePassword(user, oldPass, newPass, confirmPass);
-    if(ok){
-      $("loginChangeOld").value = "";
-      $("loginChangeNew").value = "";
-      $("loginChangeConfirm").value = "";
-      alert("Contraseña actualizada correctamente.");
+  function logout(){
+    if(currentUser){
+      const ua = detectDevice();
+      const account = users[currentUser];
+      logAccess({ user: currentUser, role: account?.role || '—', device: ua.device, platform: ua.platform, browser: ua.browser, origin:'Logout', ok:true });
     }
-  }catch(err){
-    console.error(err);
-    alert("No se pudo cambiar la contraseña.");
+    currentUser = null;
+    clearSession();
+    setView('login');
   }
-}
 
-async function changePasswordFromSidebar(){
-  try{
-    if(!currentUser){
-      alert("Primero inicia sesión.");
-      return;
-    }
-
-    const oldPass = $("sidebarOldPass").value;
-    const newPass = $("sidebarNewPass").value;
-    const confirmPass = $("sidebarConfirmPass").value;
-
-    const ok = await updatePassword(currentUser, oldPass, newPass, confirmPass);
-    if(ok){
-      $("sidebarOldPass").value = "";
-      $("sidebarNewPass").value = "";
-      $("sidebarConfirmPass").value = "";
-      alert("Contraseña actualizada correctamente.");
-    }
-  }catch(err){
-    console.error(err);
-    alert("No se pudo cambiar la contraseña.");
+  async function changePassword(userName, oldPass, newPass, confirmPass){
+    const user = normalizeUser(userName);
+    const acc = users[user];
+    if(!acc){ alert('Usuario no encontrado.'); return false; }
+    if(!oldPass || !newPass || !confirmPass){ alert('Completa todos los campos.'); return false; }
+    if(!verifyPass(acc.pass, oldPass)){ alert('La contraseña actual no coincide.'); return false; }
+    if(newPass.length < 4){ alert('La nueva contraseña debe tener al menos 4 caracteres.'); return false; }
+    if(newPass !== confirmPass){ alert('La confirmación no coincide.'); return false; }
+    const updated = clone(acc);
+    updated.pass = hashPass(newPass);
+    await usersRef.child(user).set(updated);
+    return true;
   }
-}
 
-async function saveRecord(){
-  try{
-    if(!currentUser){
-      alert("Primero inicia sesión.");
-      return;
-    }
+  function saveRecord(){
+    if(!currentUser){ alert('Primero inicia sesión.'); return; }
 
-    const date = $("regDate").value;
-    const turno = $("regTurn").value;
-    const secadora = Number($("regDryer").value);
-    const secadas = Number($("regSecadas").value);
+    const date = $('regDate').value;
+    const turno = $('regTurn').value;
+    const secadora = String($('regDryer').value);
+    const secadas = Number($('regSecadas').value);
 
-    if(!date){
-      alert("Selecciona una fecha.");
-      return;
-    }
-    if(!Number.isInteger(secadas) || secadas < 0){
-      alert("Secadas debe ser un número entero igual o mayor que 0.");
-      return;
-    }
+    if(!date){ alert('Selecciona una fecha.'); return; }
+    if(!Number.isInteger(secadas) || secadas < 0){ alert('Secadas debe ser un entero mayor o igual a 0.'); return; }
 
-    const isZero = secadas === 0;
-    const needsJustify = secadas > 0 && secadas < DAILY_META;
-    const isPositive = secadas > 0;
-
-    let avgTime = "";
-    let avgTimeMinutes = null;
+    const zero = secadas === 0;
+    const positive = secadas > 0;
+    let avgTime = '';
+    let avgMinutes = null;
     let stopHours = 0;
-    let cause = String($("regCause").value || "").trim();
+    let cause = String($('regCause').value || '').trim();
+    const device = getDevice();
 
-    if(isZero){
-      stopHours = Number($("regStopHours").value);
-      if(!Number.isFinite(stopHours) || stopHours < 0){
-        alert("Ingresa horas de paro válidas.");
-        return;
-      }
-      if(!cause){
-        cause = "Paro total / sin producción";
-      }
+    if(positive){
+      const h = $('horasSecado').value;
+      const m = $('minutosSecado').value;
+      if(h === '' || m === ''){ alert('Selecciona horas y minutos del tiempo de secado.'); return; }
+      avgTime = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+      avgMinutes = durationMinutes(h, m);
+    }
+    if(zero){
+      stopHours = Number($('regStopHours').value);
+      if(!Number.isFinite(stopHours) || stopHours < 0){ alert('Ingresa horas de paro válidas.'); return; }
     }
 
-    if(isPositive){
-      avgTime = String($("regAvgTime").value || "").trim();
-      avgTimeMinutes = durationToMinutes(avgTime);
-      if(avgTimeMinutes === null){
-        alert("El tiempo promedio debe tener formato HH:MM, por ejemplo 12:40.");
-        return;
-      }
-    }
-
-    if(needsJustify && !cause){
-      alert("Ingresa la justificación porque no se alcanzó la meta diaria.");
+    if(zero && !cause){
+      alert('El paro total requiere justificación.');
       return;
     }
 
     const record = {
-      id: editingRecordId || "",
+      id: editingRecordId || '',
       user: currentUser,
       date,
       turno,
       secadora,
       secadas,
-      avgTime: isPositive ? avgTime : "",
-      avgTimeMinutes: isPositive ? avgTimeMinutes : null,
-      stopHours: isZero ? stopHours : 0,
-      cause: (isZero || needsJustify) ? cause : "",
-      createdAt: new Date().toISOString()
+      avgTime,
+      avgMinutes,
+      stopHours: zero ? stopHours : 0,
+      cause: zero ? cause : '',
+      device,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     if(editingRecordId){
       record.id = editingRecordId;
-      await recordsRef.child(editingRecordId).set(record);
+      recordsRef.child(editingRecordId).set(record);
       editingRecordId = null;
     }else{
       const newRef = recordsRef.push();
       record.id = newRef.key;
-      await newRef.set(record);
+      newRef.set(record);
     }
 
+    $('editBanner').classList.remove('active');
     clearRecordForm();
-    refreshAll();
-  }catch(err){
-    console.error(err);
-    alert("No se pudo guardar el registro.");
-  }
-}
-
-function editRecord(id){
-  const me = getCurrentUserObject();
-  if(!me || me.role !== "admin"){
-    alert("Solo ADMIN puede editar.");
-    return;
   }
 
-  const r = records.find(x => x.id === id);
-  if(!r) return;
-
-  editingRecordId = id;
-  $("regDate").value = r.date || localISODate();
-  $("regTurn").value = r.turno || "Día";
-  $("regDryer").value = String(r.secadora || "1");
-  $("regSecadas").value = String(r.secadas ?? "");
-  syncRecordFields();
-
-  if(Number(r.secadas) === 0){
-    $("regStopHours").value = r.stopHours ?? "";
-    $("regCause").value = r.cause || "";
-  }else{
-    $("regAvgTime").value = r.avgTime || "";
-    $("regCause").value = r.cause || "";
-  }
-
-  setSection("sectionRecords");
-  $("regDate").scrollIntoView({ behavior:"smooth", block:"center" });
-}
-
-async function deleteRecord(id){
-  try{
-    const me = getCurrentUserObject();
-    if(!me || me.role !== "admin"){
-      alert("Solo ADMIN puede eliminar.");
-      return;
+  function editRecord(id){
+    if(!isAdmin()) return;
+    const r = records.find(x => x.id === id);
+    if(!r) return;
+    editingRecordId = id;
+    $('editBanner').classList.add('active');
+    $('regDate').value = r.date || localISODate();
+    $('regTurn').value = r.turno || 'Día';
+    $('regDryer').value = String(r.secadora || '1');
+    $('regSecadas').value = String(r.secadas ?? '');
+    syncRecordFields();
+    if(Number(r.secadas) === 0){
+      $('regStopHours').value = r.stopHours ?? '';
+      $('regCause').value = r.cause || '';
+    }else{
+      const time = r.avgTime || '';
+      if(time.includes(':')){
+        const [h,m] = time.split(':');
+        $('horasSecado').value = String(Number(h));
+        $('minutosSecado').value = String(Number(m));
+      }
+      $('regCause').value = '';
     }
-    if(!confirm("¿Eliminar este registro?")) return;
-    await recordsRef.child(id).remove();
-  }catch(err){
-    console.error(err);
-    alert("No se pudo eliminar el registro.");
+    setSection('sectionRecords');
+    $('regDate').scrollIntoView({behavior:'smooth', block:'center'});
   }
-}
 
-function exportCsv(){
-  const list = getVisibleRecords();
-  const headers = [
-    "Usuario","Fecha","Semana","Turno","Secadora","Secadas","Meta diaria","Cump. diaria","Meta semanal","Cump. semanal",
-    "Tiempo promedio","Horas de paro","Tipo","Causa"
-  ];
+  function deleteRecord(id){
+    if(!isAdmin()) return;
+    if(!confirm('¿Eliminar este registro?')) return;
+    recordsRef.child(id).remove();
+  }
 
-  const dateTotals = buildDateTotals(list);
-  const weekTotals = buildWeekTotals(list);
-
-  const rows = list.map(r => {
-    const dayTotal = dateTotals[r.date] || 0;
-    const weekTotal = weekTotals[weekKeyFromISO(r.date)] || 0;
-    const dayComp = DAILY_META > 0 ? ((dayTotal / DAILY_META) * 100) : 0;
-    const weekComp = WEEKLY_META > 0 ? ((weekTotal / WEEKLY_META) * 100) : 0;
-
-    return [
+  function exportCsv(){
+    const rows = filterRecords();
+    const headers = ['Usuario','Fecha','Semana','Turno','Secadora','Secadas','Tiempo secado','Horas paro','Causa','Dispositivo'];
+    const data = rows.map(r => [
       r.user,
       r.date,
-      r.date ? `S${String(getISOWeekInfo(parseDateISO(r.date)).week).padStart(2,"0")}` : "",
+      r.date ? `S${String(getISOWeekInfo(parseDateISO(r.date)).week).padStart(2,'0')}` : '',
       r.turno,
       r.secadora,
       r.secadas,
-      DAILY_META,
-      dayComp.toFixed(1),
-      WEEKLY_META,
-      weekComp.toFixed(1),
-      r.avgTime || "",
-      r.stopHours ?? "",
-      classifyStop(r),
-      r.cause || ""
-    ];
-  });
-
-  const csv = [headers, ...rows]
-    .map(row => row.map(v => `"${String(v ?? "").replaceAll('"', '""')}"`).join(","))
-    .join("\n");
-
-  const blob = new Blob([csv], { type:"text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "reporte_planta_escaldado.csv";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-async function createUser(){
-  try{
-    const me = getCurrentUserObject();
-    if(!me || me.role !== "admin"){
-      alert("Solo ADMIN puede crear usuarios.");
-      return;
-    }
-
-    const name = normalizeUser($("newUserName").value);
-    const pass = String($("newUserPass").value || "").trim();
-    const role = $("newUserRole").value;
-    const active = $("newUserActive").value === "true";
-
-    if(!name){
-      alert("Escribe un nombre de usuario.");
-      return;
-    }
-    if(!pass){
-      alert("Escribe una contraseña.");
-      return;
-    }
-    if(users[name]){
-      alert("Ese usuario ya existe.");
-      return;
-    }
-
-    const newUser = { name, pass, role, active };
-    await usersRef.child(name).set(newUser);
-
-    $("newUserName").value = "";
-    $("newUserPass").value = "";
-    $("newUserRole").value = "operador";
-    $("newUserActive").value = "true";
-  }catch(err){
-    console.error(err);
-    alert("No se pudo crear el usuario.");
+      r.avgTime || '',
+      r.stopHours ?? '',
+      r.cause || '',
+      r.device || ''
+    ]);
+    const csv = [headers, ...data].map(row => row.map(v => `"${String(v ?? '').replaceAll('"','""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'planta_escaldado.csv';
+    a.click();
+    URL.revokeObjectURL(url);
   }
-}
 
-function bindEvents(){
-  $("loginBtn").addEventListener("click", login);
-  $("logoutBtn").addEventListener("click", logout);
-  $("saveRecordBtn").addEventListener("click", saveRecord);
-  $("exportCsvBtn").addEventListener("click", exportCsv);
-  $("createUserBtn").addEventListener("click", createUser);
-  $("sidebarChangeBtn").addEventListener("click", changePasswordFromSidebar);
-  $("loginChangeBtn").addEventListener("click", changePasswordFromLogin);
+  async function createUser(){
+    if(!isAdmin()) return;
+    const name = normalizeUser($('newUserName').value);
+    const pass = String($('newUserPass').value || '').trim();
+    const role = $('newUserRole').value;
+    const active = $('newUserActive').value === 'true';
+    if(!name || !pass){ alert('Escribe usuario y contraseña.'); return; }
+    if(users[name]){ alert('Ese usuario ya existe.'); return; }
+    await usersRef.child(name).set({ name, pass: hashPass(pass), role, active });
+    $('newUserName').value = '';
+    $('newUserPass').value = '';
+    $('newUserRole').value = 'operador';
+    $('newUserActive').value = 'true';
+  }
 
-  $("toggleLoginChangeBtn").addEventListener("click", () => {
-    const panel = $("loginChangePanel");
-    panel.classList.toggle("hidden");
-    $("toggleLoginChangeBtn").textContent = panel.classList.contains("hidden") ? "Cambiar contraseña" : "Ocultar cambio";
-  });
+  async function toggleUser(name){
+    if(!isAdmin()) return;
+    if(name === 'ADMIN') return;
+    const updated = clone(users[name]);
+    updated.active = !updated.active;
+    await usersRef.child(name).set(updated);
+  }
 
-  $("regSecadas").addEventListener("input", syncRecordFields);
-  $("searchBox").addEventListener("input", refreshAll);
-  $("filterDate").addEventListener("change", refreshAll);
-  $("filterUser").addEventListener("change", refreshAll);
+  async function removeUser(name){
+    if(!isAdmin()) return;
+    if(name === 'ADMIN') return;
+    if(name === currentUser) return alert('No puedes eliminar tu propio usuario.');
+    if(!confirm(`¿Eliminar usuario ${name}?`)) return;
+    await usersRef.child(name).remove();
+  }
 
-  $("regDate").addEventListener("dblclick", () => openPicker($("regDate")));
-  $("filterDate").addEventListener("dblclick", () => openPicker($("filterDate")));
+  async function saveSettings(){
+    if(!isAdmin()) return;
+    settings.companyName = $('companyName').value.trim() || 'Planta de Escaldado';
+    settings.metaDaily = Math.max(1, Number($('metaDaily').value) || 6);
+    settings.metaWeekly = Math.max(1, Number($('metaWeekly').value) || 42);
+    settings.theme = $('homeTheme').value;
+    await settingsRef.set(settings);
+    localStorage.setItem(DAILY_META_KEY, String(settings.metaDaily));
+    localStorage.setItem(WEEKLY_META_KEY, String(settings.metaWeekly));
+    renderSettings();
+    refreshAll();
+  }
 
-  $("jumpRecordsBtn").addEventListener("click", () => setSection("sectionRecords"));
-  $("jumpAnalyticsBtn").addEventListener("click", () => setSection("sectionAnalytics"));
-  $("jumpUsersBtn").addEventListener("click", () => setSection("sectionUsers"));
-
-  document.querySelectorAll("[data-section-btn]").forEach(btn => {
-    btn.addEventListener("click", () => setSection(btn.getAttribute("data-section-btn")));
-  });
-
-  document.querySelectorAll("[data-summary-view]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      summaryView = btn.getAttribute("data-summary-view");
-
-      document.querySelectorAll("[data-summary-view]").forEach(x => x.classList.remove("active"));
-      document.querySelectorAll(".filter-strip .tag").forEach(x => x.classList.remove("active"));
-
-      document.querySelectorAll(`[data-summary-view="${summaryView}"]`).forEach(x => x.classList.add("active"));
-
+  function restoreSession(){
+    const ses = loadSession();
+    if(!ses || !ses.user) return;
+    const acc = users[ses.user];
+    if(acc && acc.active){
+      currentUser = ses.user;
+      setView('app');
+      showRoleUI();
+      updateHeader();
+      clearRecordForm();
       refreshAll();
-    });
-  });
-}
+    }else{
+      clearSession();
+    }
+  }
 
-function attachRealtimeListeners(){
-  usersRef.on("value", async (snapshot) => {
-    try{
-      if(!snapshot.exists()){
-        await usersRef.set(defaultUsers);
-        return;
+  function bind(){
+    $('loginBtn').addEventListener('click', login);
+    $('logoutBtn').addEventListener('click', logout);
+    $('saveRecordBtn').addEventListener('click', saveRecord);
+    $('createUserBtn').addEventListener('click', createUser);
+    $('sidebarChangeBtn').addEventListener('click', async () => {
+      const ok = await changePassword(
+        currentUser,
+        $('sidebarOldPass').value,
+        $('sidebarNewPass').value,
+        $('sidebarConfirmPass').value
+      );
+      if(ok){
+        $('sidebarOldPass').value = '';
+        $('sidebarNewPass').value = '';
+        $('sidebarConfirmPass').value = '';
+        alert('Contraseña actualizada.');
       }
+    });
+    $('loginChangeBtn').addEventListener('click', async () => {
+      const ok = await changePassword(
+        $('loginChangeUser').value,
+        $('loginChangeOld').value,
+        $('loginChangeNew').value,
+        $('loginChangeConfirm').value
+      );
+      if(ok){
+        $('loginChangeOld').value = '';
+        $('loginChangeNew').value = '';
+        $('loginChangeConfirm').value = '';
+        alert('Contraseña actualizada.');
+      }
+    });
+    $('toggleChangeLoginBtn').addEventListener('click', () => {
+      $('loginChangePanel').classList.toggle('hidden');
+    });
 
+    $('regSecadas').addEventListener('input', syncRecordFields);
+    $('searchBox').addEventListener('input', refreshAll);
+    $('filterDate').addEventListener('change', refreshAll);
+    $('filterUser').addEventListener('change', refreshAll);
+
+    $('jumpAnalyticsBtn').addEventListener('click', ()=>setSection('sectionAnalytics'));
+    $('jumpUsersBtn').addEventListener('click', ()=>setSection('sectionUsers'));
+    $('jumpLogsBtn').addEventListener('click', ()=>setSection('sectionLogs'));
+
+    $('exportCsvBtn').addEventListener('click', exportCsv);
+    $('exportCsvBtn2').addEventListener('click', exportCsv);
+    $('saveSettingsBtn').addEventListener('click', saveSettings);
+
+    document.querySelectorAll('[data-section-btn]').forEach(btn => {
+      btn.addEventListener('click', () => setSection(btn.getAttribute('data-section-btn')));
+    });
+
+    document.querySelectorAll('[data-summary-view]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        summaryView = btn.getAttribute('data-summary-view');
+        localStorage.setItem(SUMMARY_VIEW_KEY, summaryView);
+        refreshAll();
+      });
+    });
+
+    window.__editRecord = editRecord;
+    window.__deleteRecord = deleteRecord;
+    window.__toggleUser = toggleUser;
+    window.__removeUser = removeUser;
+  }
+
+  function initDefaultData(){
+    return Promise.all([
+      usersRef.once('value').then(snap => {
+        if(!snap.exists()) return usersRef.set(defaultUsers);
+      }),
+      recordsRef.once('value').then(snap => {
+        if(!snap.exists()) return recordsRef.set({});
+      }),
+      logsRef.once('value').then(snap => {
+        if(!snap.exists()) return logsRef.set({});
+      }),
+      settingsRef.once('value').then(snap => {
+        if(!snap.exists()) return settingsRef.set(defaultSettings);
+      })
+    ]);
+  }
+
+  function attachRealtimeListeners(){
+    usersRef.on('value', (snapshot) => {
       users = snapshot.val() || {};
-      usersReady = true;
-      renderUserFilter();
-
+      loadedUsers = true;
+      fillUserFilter();
+      renderUsers();
       if(currentUser){
         const me = users[currentUser];
         if(!me || !me.active){
           logout();
           return;
         }
-        syncCurrentUserUI();
-        renderUsersAdmin();
+        showRoleUI();
+        updateHeader();
         refreshAll();
       }else{
-        tryRestoreSession();
-        renderUsersAdmin();
+        restoreSession();
       }
-    }catch(error){
-      console.error("Error leyendo users:", error);
-      alert("Error leyendo usuarios desde Firebase.");
-    }
-  }, (error) => {
-    console.error("Error leyendo users:", error);
-    alert("Error leyendo usuarios desde Firebase.");
-  });
+    }, (error) => {
+      console.error('Error leyendo users:', error);
+      alert('Error leyendo usuarios desde Firebase.');
+    });
 
-  recordsRef.on("value", (snapshot) => {
-    try{
-      const raw = snapshot.exists() ? snapshot.val() : {};
+    recordsRef.on('value', (snapshot) => {
+      const raw = snapshot.val() || {};
       records = Object.entries(raw).map(([id, val]) => ({ ...val, id: val.id || id }));
-      if(currentUser){
-        refreshAll();
+      loadedRecords = true;
+      if(currentUser) refreshAll();
+    }, (error) => {
+      console.error('Error leyendo records:', error);
+      alert('Error leyendo registros desde Firebase.');
+    });
+
+    logsRef.on('value', (snapshot) => {
+      const raw = snapshot.val() || {};
+      logs = Object.values(raw);
+      loadedLogs = true;
+      if(currentUser) renderLogs();
+    }, (error) => {
+      console.error('Error leyendo logs:', error);
+      alert('Error leyendo bitácora desde Firebase.');
+    });
+
+    settingsRef.on('value', (snapshot) => {
+      settings = snapshot.val() || { ...defaultSettings };
+      loadedSettings = true;
+      localStorage.setItem(DAILY_META_KEY, String(settings.metaDaily || 6));
+      localStorage.setItem(WEEKLY_META_KEY, String(settings.metaWeekly || 42));
+      syncMeta();
+      renderSettings();
+      refreshAll();
+    }, (error) => {
+      console.error('Error leyendo settings:', error);
+      alert('Error leyendo configuración desde Firebase.');
+    });
+  }
+
+  function populateInitialUI(){
+    $('regDate').value = localISODate();
+    $('filterDate').value = '';
+    syncRecordFields();
+    fillUserFilter();
+    showRoleUI();
+    updateHeader();
+    renderSettings();
+    refreshSummaryButtons();
+  }
+
+  async function init(){
+    bind();
+    populateInitialUI();
+    setView('login');
+    await initDefaultData();
+    attachRealtimeListeners();
+    const waitReady = setInterval(() => {
+      if(loadedUsers && loadedRecords && loadedSettings && loadedLogs){
+        clearInterval(waitReady);
+        restoreSession();
+        if(!currentUser) setView('login');
       }
-    }catch(error){
-      console.error("Error leyendo records:", error);
-      alert("Error leyendo registros desde Firebase.");
-    }
-  }, (error) => {
-    console.error("Error leyendo records:", error);
-    alert("Error leyendo registros desde Firebase.");
-  });
-}
+    }, 250);
+  }
 
-window.editRecord = editRecord;
-window.deleteRecord = deleteRecord;
-
-function init(){
-  bindEvents();
-  attachRealtimeListeners();
-  $("regDate").value = localISODate();
-  $("filterDate").value = "";
-  syncRecordFields();
-  renderUserFilter();
-  showView("login");
-}
-
-init();
+  init();
+})();
 </script>
 </body>
 </html>
