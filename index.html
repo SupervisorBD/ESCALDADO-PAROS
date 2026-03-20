@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Planta de Escaldado | Supervisión</title>
-  <script type="text/javascript" src="https://me.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=wt_tkcCbLLRx8hD7inE1t_zwosbspHDlWWED7VY20Q7fUGAIiISuE6M2yjtFBIKmnh7HVhy8SdmO2AgNQwp8JywgftWIVqTeqien4iG4_iVN8reqbPauebSCrLCWWQobq_VlpX3jz9J0JqAyNSca2ioSuBR0jaGO8OLO5pYtctpNGGPqbmV14LyhQGHe-3UswdOUNLpscQBa0ZXW73RvuaUPTLCZarkF8fRhptwK0AmeSjHXyL3kl9h1SMgkyTOG3aJUWREdsTrEp7_mKYOD3g" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="text/javascript" src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=FC6BTZZkQ-JVsWh6UIdQd1Vmz60__Fw_n4N4ptVBWafphWp1FJtPYKbI_YxfzxKTGvwrSoJ3j6u_zOfVlYEbqM3PRFYSg5O3PaZmLAhxBPW8W7J64JyTkJDlT6PzUoV8P5JmclUH3Co66pCPu_C8r44wfU0V49vu7Xitr7XKi-vyMEIjRQQUVkHVAO8eQRdKN2m5gWz94gXehPGYCxaMJxPrn0YfGU7sLB3Elmov3Y2GdYHM9Sb-7dniuuLic7Dmirq0l9oG_9pBoMlxLHnkJw" charset="UTF-8"></script><script type="text/javascript" src="https://me.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=wt_tkcCbLLRx8hD7inE1t_zwosbspHDlWWED7VY20Q7fUGAIiISuE6M2yjtFBIKmnh7HVhy8SdmO2AgNQwp8JywgftWIVqTeqien4iG4_iVN8reqbPauebSCrLCWWQobq_VlpX3jz9J0JqAyNSca2ioSuBR0jaGO8OLO5pYtctpNGGPqbmV14LyhQGHe-3UswdOUNLpscQBa0ZXW73RvuaUPTLCZarkF8fRhptwK0AmeSjHXyL3kl9h1SMgkyTOG3aJUWREdsTrEp7_mKYOD3g" charset="UTF-8"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
   <style>
@@ -39,7 +39,7 @@
       background:
         linear-gradient(180deg, var(--bg), var(--bg2));
       color:var(--text);
-      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      font-family: "72","Segoe UI", Arial, Helvetica, sans-serif;
     }
 
     button,input,select,textarea{font:inherit}
@@ -248,79 +248,96 @@
 
     .grid-kpis{
       display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap:12px;
       margin-bottom:12px;
     }
     .kpi{
       background:var(--shell);
-      border:1px solid var(--line);
-      border-radius:var(--radius-lg);
-      box-shadow:var(--shadow);
-      padding:16px;
-      min-height:126px;
+      border:1px solid var(--line-2);
+      border-radius:12px;
+      box-shadow:none;
+      padding:12px 12px 10px;
+      min-height:108px;
       position:relative;
       overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
     }
     .kpi::after{
       content:"";
       position:absolute;
-      right:-20px;
-      bottom:-20px;
-      width:96px;height:96px;border-radius:50%;
-      background:radial-gradient(circle, rgba(10,110,209,.14), transparent 64%);
+      right:-18px;
+      bottom:-18px;
+      width:72px;height:72px;border-radius:50%;
+      background:radial-gradient(circle, rgba(10,110,209,.08), transparent 66%);
     }
-    .kpi.green::after{background:radial-gradient(circle, rgba(46,125,50,.14), transparent 64%)}
-    .kpi.yellow::after{background:radial-gradient(circle, rgba(183,121,31,.14), transparent 64%)}
-    .kpi.red::after{background:radial-gradient(circle, rgba(198,40,40,.14), transparent 64%)}
+    .kpi.green::after{background:radial-gradient(circle, rgba(46,125,50,.08), transparent 66%)}
+    .kpi.yellow::after{background:radial-gradient(circle, rgba(183,121,31,.08), transparent 66%)}
+    .kpi.red::after{background:radial-gradient(circle, rgba(198,40,40,.08), transparent 66%)}
     .kpi .label{
       color:var(--muted);
-      font-size:.84rem;
-      margin-bottom:8px;
+      font-size:.72rem;
+      margin-bottom:4px;
       font-weight:700;
+      letter-spacing:.01em;
     }
     .kpi .value{
-      font-size:2rem;
+      font-size:1.42rem;
       font-weight:900;
       letter-spacing:-.03em;
+      line-height:1.05;
     }
     .kpi .sub{
-      margin-top:6px;
+      margin-top:4px;
       color:var(--muted-2);
-      font-size:.82rem;
-      line-height:1.35;
+      font-size:.73rem;
+      line-height:1.25;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
     }
 
     .info-row{
       display:grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap:12px;
       margin-bottom:14px;
     }
     .info-card{
       background:var(--shell);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:14px;
+      border:1px solid var(--line-2);
+      border-radius:12px;
+      box-shadow:none;
+      padding:12px 12px 10px;
       min-height:108px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
     }
     .info-card .label{
       color:var(--muted);
-      font-size:.82rem;
-      margin-bottom:7px;
+      font-size:.72rem;
+      margin-bottom:4px;
       font-weight:700;
+      letter-spacing:.01em;
     }
     .info-card .value{
-      font-size:1.22rem;
+      font-size:1.02rem;
       font-weight:900;
-      line-height:1.25;
+      line-height:1.15;
     }
     .info-card .sub{
-      margin-top:7px;
+      margin-top:4px;
       color:var(--muted-2);
-      font-size:.82rem;
-      line-height:1.45;
+      font-size:.73rem;
+      line-height:1.28;
+      display:-webkit-box;
+      -webkit-line-clamp:3;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
     }
 
     .section{
@@ -564,9 +581,135 @@
       white-space:nowrap;
       max-width: 760px;
     }
-    .mini-item .right{
+
+    .user-card{
+      border:1px solid var(--line-2);
+      border-radius:12px;
+      background:#fff;
+      box-shadow:none;
+      padding:10px;
+      display:grid;
+      gap:8px;
+    }
+    .user-card .user-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+    }
+    .user-card .user-main{
+      min-width:0;
+      display:grid;
+      gap:3px;
+    }
+    .user-card .user-top-right{
+      min-width:0;
+      display:grid;
+      justify-items:end;
+      gap:4px;
+      text-align:right;
+      flex:0 0 260px;
+      max-width:260px;
+    }
+    .user-card .user-fullname{
       font-weight:900;
+      font-size:.9rem;
+      line-height:1.15;
+      max-width:260px;
+      overflow:hidden;
+      text-overflow:ellipsis;
       white-space:nowrap;
+    }
+    .user-card .user-meta{
+      color:var(--muted);
+      font-size:.8rem;
+      line-height:1.35;
+    }
+    .user-chip-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .user-toggle{
+      border:0;
+      border-radius:999px;
+      padding:8px 12px;
+      font-weight:900;
+      font-size:.78rem;
+      cursor:pointer;
+      min-width:64px;
+      color:#fff;
+      box-shadow:none;
+    }
+    .user-toggle.on{background:linear-gradient(135deg, #2e7d32, #46a049)}
+    .user-toggle.off{background:linear-gradient(135deg, #b71c1c, #e14c4c)}
+    .user-btn-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .icon-btn{
+      width:34px;
+      height:34px;
+      border-radius:11px;
+      border:1px solid var(--line);
+      background:#fff;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      box-shadow:none;
+      color:var(--red);
+    }
+    .icon-btn svg{
+      width:16px;
+      height:16px;
+      stroke:currentColor;
+    }
+    .user-pass-wrap{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8px;
+      align-items:end;
+    }
+    .user-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .span-2{
+      grid-column:1 / -1;
+    }
+    .user-pass-toggle{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:800;
+      color:var(--text);
+      cursor:pointer;
+      min-width:54px;
+    }
+    .user-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .user-actions .left-actions,
+    .user-actions .right-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .user-actions .btn{
+      padding:9px 11px;
+      border-radius:11px;
+      font-size:.84rem;
     }
 
     .logout-area{
@@ -659,6 +802,12 @@
     .subtle{color:var(--muted);font-size:.84rem;line-height:1.45}
     .admin-only{display:none}
     .role-admin .admin-only:not(.section){display:revert}
+    .role-admin .grid-kpis.admin-only,
+    .role-admin .info-row.admin-only{
+      display:grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap:12px;
+    }
     .role-admin .admin-inline{display:inline-flex}
 
     .soft-heading{font-size:.95rem;font-weight:900;letter-spacing:-.01em;margin:0 0 10px}
@@ -697,20 +846,14 @@
     .section-title .sec-ico{width:28px;height:28px;border-radius:10px;background:#eef4fb;display:grid;place-items:center;color:var(--blue)}
     .section-title .sec-ico svg{width:15px;height:15px;stroke:currentColor}
 
-    @media (max-width: 1320px){
-      .grid-kpis{grid-template-columns:repeat(2, minmax(0, 1fr))}
-      .info-row{grid-template-columns:repeat(2, minmax(0, 1fr))}
-      .layout,.split{grid-template-columns:1fr}
-      .grid-2{grid-template-columns:1fr}
-    }
-
     @media (max-width: 760px){
       .app{grid-template-columns:1fr}
       .sidebar{
         position:relative;
         height:auto;
       }
-      .grid-kpis,.info-row,.row,.two-col{grid-template-columns:1fr}
+      .grid-kpis,.info-row{grid-template-columns:repeat(2, minmax(0, 1fr))}
+      .row,.two-col{grid-template-columns:1fr}
       .content{padding:14px}
       .panel{padding:14px}
       .login-card{padding:18px}
@@ -893,30 +1036,6 @@
       </button>
     </div>
 
-    <div class="side-card">
-      <div class="side-title">
-        <strong>Mi cuenta</strong>
-        <span class="badge operador" id="pwdBadge">Operador</span>
-      </div>
-      <div class="stack">
-        <div class="field">
-          <label for="sidebarOldPass">Contraseña actual</label>
-          <input class="input" id="sidebarOldPass" type="password" />
-        </div>
-        <div class="field">
-          <label for="sidebarNewPass">Nueva contraseña</label>
-          <input class="input" id="sidebarNewPass" type="password" />
-        </div>
-        <div class="field">
-          <label for="sidebarConfirmPass">Confirmar nueva</label>
-          <input class="input" id="sidebarConfirmPass" type="password" />
-        </div>
-        <div class="actions">
-          <button type="button" class="btn btn-blue" id="sidebarChangeBtn">Cambiar contraseña</button>
-        </div>
-      </div>
-    </div>
-
     <div class="logout-area">
       <button type="button" class="btn btn-ghost" id="logoutBtn">Salir</button>
     </div>
@@ -983,9 +1102,9 @@
       <div class="info-row admin-only">
         <div class="info-card">
           <div class="label">Narrativa ejecutiva del periodo</div>
-          <div class="value" id="executiveNarrativeTitle">Lectura condensada para supervisión</div>
+          <div class="value" id="executiveNarrativeTitle">Resumen ejecutivo</div>
           <div class="sub" id="executiveNarrativeText">
-            Se actualizará con el comportamiento de secadas, paros y causas agrupadas.
+            Se actualizará con el comportamiento del periodo.
           </div>
         </div>
         <div class="info-card">
@@ -1219,6 +1338,12 @@
                   <div class="field">
                     <label for="newUserPass">Contraseña</label>
                     <input class="input" id="newUserPass" type="password" placeholder="Contraseña" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="field span-2">
+                    <label for="newUserFullName">Nombre completo</label>
+                    <input class="input" id="newUserFullName" placeholder="Nombre completo del operador" />
                   </div>
                 </div>
                 <div class="row">
@@ -1480,10 +1605,10 @@
   const SUMMARY_VIEW_KEY = 'planta_summary_view_v5';
 
   const defaultUsers = {
-    ADMIN:  { name:'ADMIN', pass:'1234', role:'admin', active:true },
-    SELVIN: { name:'SELVIN', pass:'1234', role:'operador', active:true },
-    GADIEL: { name:'GADIEL', pass:'1234', role:'operador', active:true },
-    JOSE:   { name:'JOSE', pass:'1234', role:'operador', active:true }
+    ADMIN:  { name:'ADMIN', fullName:'ADMIN', pass:'1234', role:'admin', active:true },
+    SELVIN: { name:'SELVIN', fullName:'SELVIN', pass:'1234', role:'operador', active:true },
+    GADIEL: { name:'GADIEL', fullName:'GADIEL', pass:'1234', role:'operador', active:true },
+    JOSE:   { name:'JOSE', fullName:'JOSE', pass:'1234', role:'operador', active:true }
   };
 
   const defaultSettings = {
@@ -1495,10 +1620,10 @@
 
   const $ = (id) => document.getElementById(id);
 
-  let users = {};
+  let users = clone(defaultUsers);
   let records = [];
   let logs = [];
-  let settings = { ...defaultSettings };
+  let settings = clone(defaultSettings);
   let currentUser = null;
   let summaryView = localStorage.getItem(SUMMARY_VIEW_KEY) || 'dia';
   let editingRecordId = null;
@@ -1509,6 +1634,14 @@
 
   function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
   function normalizeUser(v){ return String(v || '').trim().toUpperCase(); }
+  function userLabel(u){
+    const full = String(u?.fullName || '').trim();
+    const name = String(u?.name || '').trim();
+    return full || name || '—';
+  }
+  function userSafeId(name){
+    return 'u_' + String(name || '').replace(/[^a-zA-Z0-9_-]/g, '_');
+  }
   function escapeHtml(v){
     return String(v ?? '')
       .replaceAll('&','&amp;')
@@ -1672,15 +1805,13 @@
 
     $('currentUserRole').textContent = role === 'admin' ? 'ADMIN' : 'OPERADOR';
     $('currentUserRole').className = 'badge ' + (role === 'admin' ? 'admin' : 'operador');
-    $('pwdBadge').textContent = role === 'admin' ? 'Admin' : 'Operador';
-    $('pwdBadge').className = 'badge ' + (role === 'admin' ? 'admin' : 'operador');
     $('sessionBadge').innerHTML = '<span class="dot"></span> Sesión activa';
     $('sessionBadge').className = 'badge session';
   }
 
   function updateHeader(){
-    $('currentUserName').textContent = currentUser || '—';
-    $('currentUserMeta').textContent = isAdmin() ? 'Acceso ejecutivo con permisos completos' : 'Acceso operativo limitado';
+    $('currentUserName').textContent = userLabel(users[currentUser] || { name: currentUser }) || currentUser || '—';
+    $('currentUserMeta').textContent = `${currentUser || '—'} · ${isAdmin() ? 'Acceso ejecutivo con permisos completos' : 'Acceso operativo limitado'}`;
     $('roleFlag').style.display = isAdmin() ? 'inline-flex' : 'none';
   }
 
@@ -2046,16 +2177,12 @@
 
     list.slice().sort((a,b) => (b.date || '').localeCompare(a.date || '') || String(b.createdAt || '').localeCompare(String(a.createdAt || '')))
       .forEach(r => {
-        const dayTotal = dayTotals[r.date]?.secadas || 0;
-        const weekTotal = weekTotals[r.date ? weekKeyFromISO(r.date) : '']?.secadas || 0;
-        const dayComp = settings.metaDaily ? (dayTotal / settings.metaDaily) * 100 : 0;
-        const weekComp = settings.metaWeekly ? (weekTotal / settings.metaWeekly) * 100 : 0;
         const status = Number(r.secadas) === 0 ? 'Paro total' : (Number(r.secadas) < settings.metaDaily ? 'Bajo meta' : 'Cumple');
         const cause = summarizeCause(r.cause, r.secadas);
 
         tbody.innerHTML += `
           <tr>
-            <td>${escapeHtml(r.user)}</td>
+            <td>${escapeHtml(userLabel(users[r.user] || { name: r.user }))}<div class="small-note" style="margin-top:2px;">@${escapeHtml(r.user)}</div></td>
             <td>${escapeHtml(formatDateES(r.date))}</td>
             <td>${escapeHtml(r.date ? 'S' + String(getISOWeekInfo(parseDateISO(r.date)).week).padStart(2,'0') : '—')}</td>
             <td>${escapeHtml(r.turno)}</td>
@@ -2084,24 +2211,67 @@
     const arr = Object.values(users).sort((a,b)=>{
       if(a.name === 'ADMIN') return -1;
       if(b.name === 'ADMIN') return 1;
-      return a.name.localeCompare(b.name);
+      const aName = (a.fullName || a.name || '').toString();
+      const bName = (b.fullName || b.name || '').toString();
+      return aName.localeCompare(bName);
     });
 
-    box.innerHTML = arr.map(u => `
-      <div class="mini-item" style="align-items:flex-start;">
-        <div class="left" style="align-items:flex-start;">
-          <span class="bar ${u.active ? (u.role === 'admin' ? 'yellow' : 'green') : 'red'}"></span>
-          <div class="txt" style="min-width:0;">
-            <div class="t">${escapeHtml(u.name)} <span class="badge ${u.role === 'admin' ? 'admin' : 'operador'}">${escapeHtml(u.role.toUpperCase())}</span></div>
-            <div class="s">Estado: ${u.active ? 'Activo' : 'Deshabilitado'} · Contraseña: ${u.pass ? '••••' : '—'}</div>
+    box.innerHTML = arr.map(u => {
+      const id = userSafeId(u.name);
+      const active = !!u.active;
+      const roleClass = u.role === 'admin' ? 'admin' : 'operador';
+      return `
+        <div class="user-card">
+          <div class="user-top">
+            <div class="user-main">
+              <div class="user-meta">@${escapeHtml(u.name)} · <span class="badge ${roleClass}">${escapeHtml(String(u.role || 'operador').toUpperCase())}</span></div>
+            </div>
+            <div class="user-top-right">
+              <div class="user-fullname">${escapeHtml(userLabel(u))}</div>
+              <button type="button" class="user-toggle ${active ? 'on' : 'off'}" onclick="window.__toggleUser('${escapeHtml(u.name)}')">${active ? 'ON' : 'OFF'}</button>
+            </div>
+          </div>
+
+          <div class="user-grid">
+            <div class="field">
+              <label for="userFullName_${id}">Nombre completo</label>
+              <input class="input" id="userFullName_${id}" value="${escapeHtml(u.fullName || u.name || '')}" placeholder="Nombre completo" />
+            </div>
+            <div class="field">
+              <label for="userRole_${id}">Rol</label>
+              <select class="select" id="userRole_${id}">
+                <option value="operador" ${u.role === 'operador' ? 'selected' : ''}>Operador</option>
+                <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Administrador</option>
+              </select>
+            </div>
+            <div class="user-pass-wrap span-2">
+              <div class="field">
+                <label for="userPass_${id}">Nueva contraseña</label>
+                <input class="input" id="userPass_${id}" type="password" placeholder="Dejar en blanco para no cambiar" />
+              </div>
+              <button type="button" class="user-pass-toggle" id="userPassToggle_${id}" onclick="window.__toggleUserPasswordField('${id}')">Ver</button>
+            </div>
+          </div>
+
+          <div class="user-actions">
+            <div class="left-actions">
+              <button type="button" class="btn btn-soft" onclick="window.__saveUserProfile('${escapeHtml(u.name)}')">Guardar cambios</button>
+            </div>
+            <div class="right-actions">
+              ${u.name !== 'ADMIN' ? `<button type="button" class="icon-btn" title="Eliminar usuario" onclick="window.__removeUser('${escapeHtml(u.name)}')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18"/>
+                  <path d="M8 6V4h8v2"/>
+                  <path d="M6 6l1 14h10l1-14"/>
+                  <path d="M10 10v6"/>
+                  <path d="M14 10v6"/>
+                </svg>
+              </button>` : ''}
+            </div>
           </div>
         </div>
-        <div class="right" style="display:grid; gap:6px;">
-          <button type="button" class="btn btn-soft" style="padding:8px 10px;" onclick="window.__toggleUser('${escapeHtml(u.name)}')">${u.active ? 'Activo' : 'Activar'}</button>
-          ${u.name !== 'ADMIN' ? `<button type="button" class="btn btn-danger" style="padding:8px 10px;" onclick="window.__removeUser('${escapeHtml(u.name)}')">Eliminar</button>` : ''}
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function renderLogs(){
@@ -2173,7 +2343,11 @@
       return a.localeCompare(b);
     });
     const prev = sel.value;
-    sel.innerHTML = `<option value="">Todos</option>` + names.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+    sel.innerHTML = `<option value="">Todos</option>` + names.map(n => {
+      const u = users[n] || { name:n, fullName:n };
+      const label = `${userLabel(u)} (@${n})`;
+      return `<option value="${escapeHtml(n)}">${escapeHtml(label)}</option>`;
+    }).join('');
     sel.value = prev || '';
   }
 
@@ -2191,9 +2365,8 @@
   }
 
   function login(){
-    if(!(loadedUsers && loadedRecords && loadedSettings && loadedLogs)){
-      alert('Firebase todavía está cargando. Espera un momento.');
-      return;
+    if(!Object.keys(users || {}).length){
+      users = clone(defaultUsers);
     }
 
     const user = normalizeUser($('loginUser').value);
@@ -2375,16 +2548,42 @@
   async function createUser(){
     if(!isAdmin()) return;
     const name = normalizeUser($('newUserName').value);
+    const fullName = String($('newUserFullName').value || '').trim();
     const pass = String($('newUserPass').value || '').trim();
     const role = $('newUserRole').value;
     const active = $('newUserActive').value === 'true';
-    if(!name || !pass){ alert('Escribe usuario y contraseña.'); return; }
+    if(!name || !pass || !fullName){ alert('Escribe usuario, nombre completo y contraseña.'); return; }
     if(users[name]){ alert('Ese usuario ya existe.'); return; }
-    await usersRef.child(name).set({ name, pass: hashPass(pass), role, active });
+    await usersRef.child(name).set({ name, fullName, pass: hashPass(pass), role, active });
     $('newUserName').value = '';
+    $('newUserFullName').value = '';
     $('newUserPass').value = '';
     $('newUserRole').value = 'operador';
     $('newUserActive').value = 'true';
+  }
+
+  async function saveUserProfile(name){
+    if(!isAdmin()) return;
+    const user = normalizeUser(name);
+    const acc = users[user];
+    if(!acc) return;
+    const id = userSafeId(user);
+    const fullNameEl = $(`userFullName_${id}`);
+    const roleEl = $(`userRole_${id}`);
+    const passEl = $(`userPass_${id}`);
+    const fullName = String(fullNameEl?.value || '').trim();
+    const role = roleEl?.value || acc.role;
+    const newPass = String(passEl?.value || '').trim();
+
+    const updated = clone(acc);
+    updated.fullName = fullName || updated.fullName || updated.name;
+    updated.role = role;
+    if(newPass){
+      if(newPass.length < 4){ alert('La nueva contraseña debe tener al menos 4 caracteres.'); return; }
+      updated.pass = hashPass(newPass);
+    }
+    await usersRef.child(user).set(updated);
+    if(passEl) passEl.value = '';
   }
 
   async function toggleUser(name){
@@ -2393,6 +2592,9 @@
     const updated = clone(users[name]);
     updated.active = !updated.active;
     await usersRef.child(name).set(updated);
+    if(name === currentUser && !updated.active){
+      logout();
+    }
   }
 
   async function removeUser(name){
@@ -2401,6 +2603,15 @@
     if(name === currentUser) return alert('No puedes eliminar tu propio usuario.');
     if(!confirm(`¿Eliminar usuario ${name}?`)) return;
     await usersRef.child(name).remove();
+  }
+
+  function toggleUserPasswordField(id){
+    const input = $(`userPass_${id}`);
+    const btn = $(`userPassToggle_${id}`);
+    if(!input || !btn) return;
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.textContent = show ? 'Ocultar' : 'Ver';
   }
 
   async function saveSettings(){
@@ -2437,20 +2648,6 @@
     $('logoutBtn').addEventListener('click', logout);
     $('saveRecordBtn').addEventListener('click', saveRecord);
     $('createUserBtn').addEventListener('click', createUser);
-    $('sidebarChangeBtn').addEventListener('click', async () => {
-      const ok = await changePassword(
-        currentUser,
-        $('sidebarOldPass').value,
-        $('sidebarNewPass').value,
-        $('sidebarConfirmPass').value
-      );
-      if(ok){
-        $('sidebarOldPass').value = '';
-        $('sidebarNewPass').value = '';
-        $('sidebarConfirmPass').value = '';
-        alert('Contraseña actualizada.');
-      }
-    });
     $('loginChangeBtn').addEventListener('click', async () => {
       const ok = await changePassword(
         $('loginChangeUser').value,
@@ -2498,6 +2695,8 @@
     window.__deleteRecord = deleteRecord;
     window.__toggleUser = toggleUser;
     window.__removeUser = removeUser;
+    window.__saveUserProfile = saveUserProfile;
+    window.__toggleUserPasswordField = toggleUserPasswordField;
   }
 
   function initDefaultData(){
